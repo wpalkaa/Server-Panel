@@ -1,0 +1,22 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  display: flex
+}
+
+.navbar {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-logo {
+  text-align: center;
+  font-size: 3rem;
+  color: blue;
+  padding: 1rem;
+}

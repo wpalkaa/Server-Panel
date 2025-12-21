@@ -1,0 +1,10 @@
+.graph-loading {
+    width: 400px;
+    height: 250px;
+    border: 1px solid #dddddd;
+    margin-left: 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
