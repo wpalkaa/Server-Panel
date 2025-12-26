@@ -2,7 +2,9 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
-
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
+require('dotenv').config
 
 const app = express();
 const server = http.createServer(app);
@@ -15,9 +17,64 @@ const io = new Server( server, {
     allowEIO3: true
 } );
 
+const PORT = process.env.PORT;
+const SECRET_KEY = process.env.SECRET_KEY;
+
+
+app.use(express.json());
+app.use(cors({
+    origin: "http://localhost:3000", // Allowing requests from Nextjs server
+    methods: ["GET", "POST"],
+    credentials: true
+}))
+
+
+const USERS = [
+    {
+        login: 'admin',
+        password: 'admin'
+    }
+];
+
+
 app.get('/', (req, res) => {
     res.send("I am connected");
 })
+
+app.post('/api/login', (req, res) => {
+    console.log(`Login request received for:\n${JSON.stringify(req.body)}`)
+    const { login, password } = req.body;
+
+    const user = USERS.find( u => u.login === login && u.password === password);
+
+    if( user ) {
+        console.log(`Login request approved.`)
+        resData = {
+            token: 'tokenikratata',
+            user: { login: login }
+        }
+        res.cookie('user_session', JSON.stringify(resData), {
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7d 24h 60min 60s 1000s = 7d
+            httpOnly: false,
+            path: '/'
+        })
+
+        return res.status(200).json({
+            success: true
+        });
+    }
+
+    console.log('Login request rejected - wrong login or password.')
+    
+    return res.status(401).json({
+        success: false,
+        message: 'Nieprawidłowy login lub hasło'
+    })
+
+})
+
+
+
 
 // ============ WebSocket handling ============
 
@@ -69,7 +126,6 @@ io.on('connection', (socket) => {
 });
 
 
-
-server.listen(8000, () => {
-    console.log("HTTP server and WebSocket are listening on port 8000");
+server.listen(PORT, () => {
+    console.log(`HTTP server and WebSocket are listening on port ${PORT}`);
 });
