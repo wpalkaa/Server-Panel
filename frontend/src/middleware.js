@@ -1,20 +1,51 @@
 
 import { NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
-export default function middleware( request ) {
 
-    const session = request.cookies.get('user_session');
+
+async function tokenValidation( token ) {
+    
+    try {
+        const SECRET = process.env.SECRET_KEY;
+        const encodedSECRET = new TextEncoder().encode( SECRET );
+
+        await jwtVerify( token, encodedSECRET );
+        return true;
+    }
+    catch( error ) {
+        return false;
+    }
+};
+
+
+export default async function middleware( request ) {
+
+    const sessionCookie = request.cookies.get('user_session');
     const { pathname } = request.nextUrl;
 
-    // If session, redirect from login
-    if( pathname === '/login' ) {
-        if( session ) {
-            return NextResponse.redirect( new URL( '/', request.url) );
+
+    if( sessionCookie ) {
+
+        // Validate token
+        const isValid = await tokenValidation( sessionCookie.value );
+        
+        // Valid session, redirect from login to home or proceed
+        if( isValid ) {
+            if( pathname === '/login' ) {
+                return NextResponse.redirect( new URL('/', request.url) );
+            }
+            return NextResponse.next();
         }
-        return NextResponse.next()
+
+        // Invalid session, redirect to login and delete cookie
+        const response = NextResponse.redirect( new URL('/login', request.url) );
+        response.cookies.delete( 'user_session' );
+        return response;
     }
+
     // If no session, redirect to login
-    if( !session ) {
+    if( !sessionCookie && pathname !== '/login' ) {
         return NextResponse.redirect( new URL('/login', request.url) );
     }
 

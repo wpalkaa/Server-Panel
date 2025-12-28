@@ -1,4 +1,4 @@
-- LoginForm => zmienic tu na formik
+- LoginForm => zmienic tu na formik (wymagania projektu)
+- LoginForm => pozmieniać by jak najwięcej było server-side
 
-- Poczytaj o JSONWebToken, co to, użyj w server.js
-- Ogarnij też .env
+- System plików - css, dodawanie, usuwanie, głównie front teraz

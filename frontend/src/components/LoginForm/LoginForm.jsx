@@ -75,7 +75,7 @@ export default function LoginForm() {
                 login: loginValue,
                 password: passValue
             };
-            const response = await axios.post(`${API.URL}/api/login`, data, {
+            const response = await axios.post(`${API.URL}/api/auth/login`, data, {
                 withCredentials: true
             });
 

@@ -37,7 +37,8 @@ export default function LiveGraph({ chartId }) {
     useEffect( () => {
         console.log("Connecting to WebSocket for chart ", chartId);
         // const socket = io("http://localhost:8000");
-        const socket = io(API.URL); 
+        // const socket = io(API.URL); 
+        const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
 
         socket.on("connect", () => {
             setIsConnected(true);
@@ -71,7 +72,7 @@ export default function LiveGraph({ chartId }) {
             socket.off("disconnect");
             socket.off("data update");
             socket.off("connect_error");
-            socket.close();
+            socket.disconnect();
             console.log(`Debug: Charts ${chartId} WebSocket disconnected.`);
             
             setIsConnected(false);

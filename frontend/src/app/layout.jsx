@@ -21,6 +21,8 @@ export default function RootLayout({ children }) {
           </ul>
         </aside>  
         {children}
+
+        <script src="https://kit.fontawesome.com/c0e27db627.js" crossOrigin="anonymous"></script>
       </body>
     </html>
   );
