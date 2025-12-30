@@ -1,6 +1,12 @@
 
-export default function FileRow( {file} ) {
+import ContextMenu from '@/components/ContextMenu/ContextMenu';
+import './FileRow.css';
 
+import { useState, useEffect } from 'react';
+
+export default function FileRow( {file, onNavigate} ) {
+
+    const [position, setPosition] = useState(undefined);
 
     function getFileIcon() {
         const icons = {
@@ -20,19 +26,51 @@ export default function FileRow( {file} ) {
             '.mp3':  "fa-regular fa-file-audio",
             '.mp4':  "fa-regular fa-file-video",
         };
+        if( file.name === '..' ) return '';
 
         const fileType = file.type.toLowerCase(); 
 
         if( file.isDirectory ) return icons['dir'];
         return icons[fileType] || "fa-regular fa-file"
+    };
+
+    function handleShowMore(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if( file.name === '..' ) return;
+        console.log( e.clientX, e.clientY)
+
+        setPosition( {
+            x: e.clientX + 8,
+            y: e.clientY - 100
+        } );
     }
 
-    return (
-        <div className="file-row">
-            <i className={getFileIcon()} />
-            <div className="file-name">{file.name}</div>
 
-            <div className="file-show-more">...</div>
+
+    return (
+        <div 
+            className="file-row" 
+            onContextMenu={handleShowMore}
+            onClick={onNavigate}    
+        >
+            <div className="file-identity">
+                { file.isDirectory && (<i className="fa-solid fa-greater-than"></i>) }
+                <i className={getFileIcon()} style={{marginLeft: !file.isDirectory ? '1rem' : '0'}} />
+                <div className="file-name">{file.name}</div>
+            </div>
+
+            { file.name !== '..' && (
+                <div className="file-show-more" onClick={handleShowMore}>...</div>
+                )}
+
+            { position && ( 
+                <ContextMenu 
+                    file={file} 
+                    position={position}
+                    setPosition={setPosition}
+                    />)}
         </div>
     )
 }

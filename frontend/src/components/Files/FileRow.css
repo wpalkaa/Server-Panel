@@ -1,0 +1,32 @@
+
+.file-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    height: 1.5rem;
+}
+.file-row:hover {
+    background-color: gainsboro;
+    cursor: pointer;
+}
+
+.file-identity {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.file-show-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1px solid black;
+    border-radius: 8px;
+}
+
+.fa-greater-than {
+    font-size: 0.5rem;
+    color: rgb(80, 80, 80);
+}
