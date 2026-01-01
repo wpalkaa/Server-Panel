@@ -4,7 +4,7 @@ import './FileRow.css';
 
 import { useState, useEffect } from 'react';
 
-export default function FileRow( {file, onNavigate} ) {
+export default function FileRow( {file, onNavigate, handleRename} ) {
 
     const [position, setPosition] = useState(undefined);
 
@@ -39,7 +39,6 @@ export default function FileRow( {file, onNavigate} ) {
         e.stopPropagation();
 
         if( file.name === '..' ) return;
-        console.log( e.clientX, e.clientY)
 
         setPosition( {
             x: e.clientX + 8,
@@ -70,6 +69,7 @@ export default function FileRow( {file, onNavigate} ) {
                     file={file} 
                     position={position}
                     setPosition={setPosition}
+                    onRenameClick={handleRename}
                     />)}
         </div>
     )

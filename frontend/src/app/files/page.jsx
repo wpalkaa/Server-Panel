@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
-import FileRow from "@/components/Files/FileRow"
-import './files.css'
+import FileRow from "@/components/Files/FileRow";
+import RenameModal from "@/components/RenameModal/RenameModal";
+import './files.css';
+import axios from 'axios';
 
 
 // ========== API LAYOUT ==========
@@ -14,7 +16,7 @@ import './files.css'
 //                     isDirectory: stats.isDirectory(),
 //                     size: stats.size,
 //                     lastModified: stats.mtime,
-//                     birthTime: stats.birthTime,             
+//                     birthTime: stats.birthTime,  
 //                 };
 // ========== API LAYOUT ==========
 
@@ -23,11 +25,11 @@ export default function FilesPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const currentPath = searchParams.get('path') || '/'
+    const currentPath = searchParams.get('path') || '/';
 
     const [files, setFiles] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-
+    const [fileToRename, setFileToRename] = useState(null);
 
     
     async function fetchFiles(path) {
@@ -35,13 +37,14 @@ export default function FilesPage() {
 
         try {
             const baseURL = process.env.NEXT_PUBLIC_SERVER_URL;
-            const API_URL = new URL( `/api/files/listFiles${path}`, baseURL );
-            
-            const response = await fetch(API_URL.toString());
-            const data = await response.json();
+            const API_URL = new URL( `/api/files/listFiles`, baseURL );
+
+            const response = await axios.post(API_URL, {path} )
+            const data = response.data;
+            console.log(`Debug: fetched data: ${response}`);
 
             if( data.success ) {
-                console.log("Debug: data:\n", data)
+                console.log("Debug: Fetched files:\n", data)
                 let finalFiles = data.files;
 
                 // FinalFiles sort - directories first, then alphabetical order
@@ -115,12 +118,27 @@ export default function FilesPage() {
                     )
                         : 
                     files.map( (file, index) => 
-                        <li key={`file-row#${index}`} >
-                            <FileRow  file={file} onNavigate={() => handleClick(file)} />
+                        <li key={`file-row#${index}`} className="file-line" >
+                            <FileRow  
+                                file={file} 
+                                onNavigate={() => handleClick(file)}
+                                handleRename={() => setFileToRename(file)} 
+                            />
                         </li>
                     )}
                     
                 </ul>
+
+                {/* File Rename Modal */}
+                {fileToRename && (
+                    <RenameModal 
+                        file={fileToRename}
+                        filePath={currentPath+`/${fileToRename.name}`}
+                        onClose={() => setFileToRename(null)}
+                        fetchFiles={() => fetchFiles(currentPath)}
+                    />)
+                }
+
             </div>
         </div>
     )

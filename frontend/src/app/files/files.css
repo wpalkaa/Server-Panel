@@ -38,12 +38,13 @@ body {
 }
 
 
-
-li,ul {
+.file-line, .file-list {
     margin: 0;
     list-style: none;
     padding: 0;
+
 }
+
 .file-row:hover {
     background-color: gainsboro;
 }

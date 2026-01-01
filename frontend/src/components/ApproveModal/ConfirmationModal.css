@@ -1,0 +1,65 @@
+.modal-overlay {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-container {
+    background-color: white;
+    border: 1px solid gainsboro;
+    border-radius: 16px;
+    padding: 3rem;
+    margin-bottom: 20rem;
+}
+
+.modal-container h1 {
+    margin: 0 0 1rem 0;
+    text-decoration: underline;
+    font-size: 1.3rem;
+    text-underline-offset: 0.5rem;
+    font-weight: 500;
+}
+
+.modal-message {
+    margin: 1rem 0 1rem 0;
+    font-size: 1.1rem;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    white-space: nowrap;
+}
+.modal-container button {
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    flex: 1;
+}
+
+.submit-button {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid gray;
+}
+.submit-button:hover {
+    background-color: #45a049;
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+    border: 1px solid gray;
+}
+.cancel-button:hover {
+    background-color: #da190b;
+}

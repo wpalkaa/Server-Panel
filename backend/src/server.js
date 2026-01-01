@@ -27,7 +27,7 @@ const io = new Server( server, {
 app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:3000', // Allowing requests from Nextjs server
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PATCH"],
     credentials: true
 }))
 
