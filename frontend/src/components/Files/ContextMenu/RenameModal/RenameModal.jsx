@@ -1,11 +1,13 @@
 
 import { useState } from 'react';
-import axios from 'axios';
 
-import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import ConfirmationModal from '../../../ConfirmationModal/ConfirmationModal';
 import './RenameModal.css';
 
-export default function RenameModal( {file, filePath, onClose, fetchFiles} ) {
+export default function RenameModal( {file, onSubmit, onClose} ) {
+
+
+    const fileExtension = file.name.split('.').pop();
 
     const [newName, setNewName] = useState(file.name);
     const [error, setError] = useState('');
@@ -13,6 +15,8 @@ export default function RenameModal( {file, filePath, onClose, fetchFiles} ) {
 
     const [warn, setWarn] = useState('')
     const [needApprove, setNeedApprove] = useState(false);
+
+
 
 
     function handleChange(e) {
@@ -24,7 +28,7 @@ export default function RenameModal( {file, filePath, onClose, fetchFiles} ) {
             setError("Nazwa nie może być pusta");
         } else if( illegalSymbols.test(name) ) {
             setError("Nazwa zawiera niedowzwolone znaki: \\,/,:,*,?,<,>,|");
-        } else if( !file.isDirectory && name.split('.').pop() !== file.name.split('.').pop() && file.name.indexOf('.') !== 0 ) {
+        } else if( !file.isDirectory && fileExtension !== name.split('.').pop() && file.name.indexOf('.') !== 0 ) {
             setWarn('Uwaga: Zmieniasz rozszerzenie pliku')
         }
         else {
@@ -47,34 +51,10 @@ export default function RenameModal( {file, filePath, onClose, fetchFiles} ) {
             return;
         };
 
-        await renameFile();
+        onSubmit(newName)
+        setNeedApprove(false);
+        setError('');
     }
-    async function renameFile() {
-        setIsLoading(true);
-
-        try {
-            const API_URL = new URL(`/api/files/rename`, process.env.NEXT_PUBLIC_SERVER_URL);
-            
-            console.log(filePath)
-            const response = await axios.patch(API_URL, { path: filePath, newName: newName} );
-
-            if( response?.data?.success ) {
-                fetchFiles();
-                onClose();
-            }; 
-
-        } catch (error) {
-            setError(error.response?.data?.message || "Bład serwera" );
-            setTimeout( () => {
-                setError('');
-            },1000);
-        } finally {
-            setNeedApprove(false);
-            setWarn('');
-            setIsLoading(false);
-        }
-    }
-
 
     function selectOnlyFileName(e) {
         const extensionLocation = e.target.value.lastIndexOf('.');
@@ -117,7 +97,7 @@ export default function RenameModal( {file, filePath, onClose, fetchFiles} ) {
             { needApprove && (
                 <ConfirmationModal 
                     message={warn} 
-                    onSubmit={ () => renameFile() }
+                    onSubmit={ () => onSubmit(newName) }
                     onCancel={() => {
                         setWarn('');
                         setNeedApprove(false)

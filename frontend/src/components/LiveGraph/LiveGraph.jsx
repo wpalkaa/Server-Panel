@@ -4,8 +4,6 @@ import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
 import io from 'socket.io-client';
 import './liveGraph.css';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner.jsx';
-import { API } from '@/app/api.js';
-
 
 const graphConfigs = {
     cpu: {
@@ -36,8 +34,6 @@ export default function LiveGraph({ chartId }) {
 
     useEffect( () => {
         console.log("Connecting to WebSocket for chart ", chartId);
-        // const socket = io("http://localhost:8000");
-        // const socket = io(API.URL); 
         const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
 
         socket.on("connect", () => {

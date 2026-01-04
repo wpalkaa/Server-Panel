@@ -4,7 +4,9 @@ const fileController = require('../controllers/fileController');
 
 router.post('/listFiles', fileController.listFiles);
 router.post('/getSize', fileController.getSize);
+router.post('/getFileInfo', fileController.getFileInfo)
 router.post('/download', fileController.downloadFile);
 router.patch('/rename', fileController.renameFile);
+// router.delete('/delete', fileController.deleteFile);
 
 module.exports = router;

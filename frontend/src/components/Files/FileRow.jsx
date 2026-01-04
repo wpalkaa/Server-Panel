@@ -1,12 +1,7 @@
 
-import ContextMenu from '@/components/ContextMenu/ContextMenu';
 import './FileRow.css';
 
-import { useState, useEffect } from 'react';
-
-export default function FileRow( {file, onNavigate, handleRename} ) {
-
-    const [position, setPosition] = useState(undefined);
+export default function FileRow( { file, handleShowMore, onNavigate } ) {
 
     function getFileIcon() {
         const icons = {
@@ -34,23 +29,9 @@ export default function FileRow( {file, onNavigate, handleRename} ) {
         return icons[fileType] || "fa-regular fa-file"
     };
 
-    function handleShowMore(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if( file.name === '..' ) return;
-
-        setPosition( {
-            x: e.clientX + 8,
-            y: e.clientY - 100
-        } );
-    }
-
-
-
     return (
         <div 
-            className="file-row" 
+            className="file-content" 
             onContextMenu={handleShowMore}
             onClick={onNavigate}    
         >
@@ -63,14 +44,7 @@ export default function FileRow( {file, onNavigate, handleRename} ) {
             { file.name !== '..' && (
                 <div className="file-show-more" onClick={handleShowMore}>...</div>
                 )}
-
-            { position && ( 
-                <ContextMenu 
-                    file={file} 
-                    position={position}
-                    setPosition={setPosition}
-                    onRenameClick={handleRename}
-                    />)}
+                
         </div>
     )
 }

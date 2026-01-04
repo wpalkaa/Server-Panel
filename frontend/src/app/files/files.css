@@ -5,7 +5,6 @@ body {
     font-family: 'Segoe UI';
 }
 
-
 .files-container {
     display: flex;
     justify-content: center;
@@ -15,6 +14,8 @@ body {
     height: 100%;
 }
 .files-card {
+    display: flex;
+    flex-direction: column;
     width: 33%;
     height: 55%;
     max-width: 800px;
@@ -22,9 +23,6 @@ body {
     border: 1px solid black;
     border-radius: 16px;
 }
-
-
-
 .list-title {
     display: flex;
     text-decoration: underline;
@@ -35,34 +33,29 @@ body {
     display: flex;
     flex-direction: column;
     margin-top: 1.5rem;
+    height: 100%;
 }
 
 
-.file-line, .file-list {
+
+
+.file-item, .file-list {
     margin: 0;
-    list-style: none;
     padding: 0;
 
 }
 
-.file-row:hover {
-    background-color: gainsboro;
-}
-
-
-
-
-.file-row-loading {
-    height: 1.5rem;
+.error-message {
     display: flex;
-    border: 1px solid black;
-    border-radius: 16px;
-    justify-content: space-between;
-    padding: 0.5rem 1rem 0.5rem 1rem;
-}
-.file-row-loading-text {
-    border-radius: 16px;
-    background-color: rgb(215, 215, 215);
+    font-weight: bold;
+    margin-top: 1rem;
     height: 100%;
-    width: 30%;
+}
+
+
+
+
+
+.file-item:hover {
+    background-color: gainsboro;
 }

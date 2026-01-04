@@ -7,3 +7,5 @@
 - Wrzuć walidację targetPath do jednej funkcji w fileController
 
 - Przy ładowaniu m.in. plików, loading bary się renderują na bardzo krótko co źle wygląda
+
+- Automatyczna aktualizacja listy plików, kiedy zajdzie jakaś zmiana (np. inny użytkownik coś zmieni - MQTT)
