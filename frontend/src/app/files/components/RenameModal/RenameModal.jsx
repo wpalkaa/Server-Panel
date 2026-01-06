@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 
-import ConfirmationModal from '../../../ConfirmationModal/ConfirmationModal';
+import ConfirmationModal from '@/components/ConfirmationModal/ConfirmationModal';
 import './RenameModal.css';
 
 export default function RenameModal( {file, onSubmit, onClose} ) {
@@ -40,20 +40,25 @@ export default function RenameModal( {file, onSubmit, onClose} ) {
 
     async function handleSubmit(e) {
         e.preventDefault();
-
+        
         if(error) {
             console.log(`Error: Can't submit:\n${error}`);
             return;
         };
-
+        
         if( warn && !needApprove ) {
             setNeedApprove(true);
             return;
         };
-
-        onSubmit(newName)
-        setNeedApprove(false);
-        setError('');
+        
+        setIsLoading(true);
+        try {
+            await onSubmit(newName);
+        } catch (error) {
+            setError(error?.response?.data?.message || `Nieznany błąd`);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     function selectOnlyFileName(e) {
@@ -97,7 +102,10 @@ export default function RenameModal( {file, onSubmit, onClose} ) {
             { needApprove && (
                 <ConfirmationModal 
                     message={warn} 
-                    onSubmit={ () => onSubmit(newName) }
+                    onSubmit={ () => {
+                        setWarn('')
+                        setNeedApprove(false)
+                    }}
                     onCancel={() => {
                         setWarn('');
                         setNeedApprove(false)

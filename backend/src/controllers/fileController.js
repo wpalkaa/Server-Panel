@@ -12,33 +12,34 @@ async function getTargetPath(pathToValidate = '', options = { mustExist: true}) 
     }
     // Check if path is provided
     if(!pathToValidate) {
-        console.error(`Error: Request rejected - path was not provided.`);
+        console.error(`[Error]: Request rejected - path was not provided.`);
         throw { status: 400, message: "Path is required"};
     };
     
     // Check if target is in allowed directory
     const targetPath = path.join( fileSystemPath, pathToValidate !== '/' ? pathToValidate : '' );
     if(!targetPath.startsWith(fileSystemPath)) {
-        console.error('Error: Request rejected - received illegal path.');
+        console.error('[Error]: Request rejected - received illegal path.');
         throw { status: 400, message: "Invalid directory path"};
     };
 
     // Check if file exists
+    let exists = false;
     try {
         await fs.promises.access(targetPath, fs.constants.F_OK);
-        
-        // If file can't exist - return Error
-        if( !options.mustExist ) {
-            console.error(`Error: Request rejected - file already exists.`)
-            throw { status: 400, message: "File already exists" }
-        }
+        exists = true;
     } catch(error) {
-
-        // If file can't exist - resolve
-        if( !options.mustExist) return targetPath
-
-        
-        console.error(`Error: Request rejected - file does not exists.`);
+        exists = false;
+    };
+   
+    // File exists but cannot
+    if( !options.mustExist && exists) {
+        console.error(`[Error]: Request rejected - file already exists.`)
+        throw { status: 409, message: "File already exists" }
+    }
+    // File must exist but does not
+    if( options.mustExist && !exists) {
+        console.error(`[Error]: Request rejected - file does not exists.`);
         throw { status: 404, message: "Invalid directory path" }
     }
 
@@ -67,14 +68,14 @@ async function calculateDirectorySize(dirPath) {
 
 exports.listFiles = async (req, res) => {
     const { path: requestPath = '' } = req.body;
-    console.log('Debug: Received path:', requestPath);
-    console.log(`Info: Received request to list files in directory: ${requestPath !== '/' ? '/home' + requestPath : '/home'}`);
+    console.log('[Debug]: Received path:', requestPath);
+    console.log(`[Info]: Received request to list files in directory: ${requestPath !== '/' ? '/home' + requestPath : '/home'}`);
     
     try {
         // Validate request path and get target path
         const targetPath = await getTargetPath(requestPath);
 
-        console.log("Info: Request approved - sending files list...")
+        console.log(`[Info]: Request approved - sending files list.`)
 
 
         // Read files in the target directory
@@ -104,14 +105,13 @@ exports.listFiles = async (req, res) => {
             })
         );
 
-        console.log(`Info: Request approved. Sending files list.`);
         res.status(200).json({
             success: true,
             directory: requestPath,
             files: detailedFiles
         });
     } catch (error) {
-        if(!error.status) console.error(`Error: Couldn't read directory:\n${error}`);
+        if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
             message: error.message || 'Server error while reading directory'
@@ -121,15 +121,15 @@ exports.listFiles = async (req, res) => {
 
 exports.getFileInfo = async (req, res) => {
     const { path: requestPath = '' } = req.body;
-    console.log('Debug: Received path:', requestPath);
-    console.log(`Info: Received request to send info of file: ${requestPath !== '/' ? '/home' + requestPath : '/home'}`);
+    console.log('[Debug]: Received path:', requestPath);
+    console.log(`[Info]: Received request to send info of file: ${requestPath !== '/' ? '/home' + requestPath : '/home'}`);
     
     try {
         // Validate request path and get target path
         const targetPath = await getTargetPath(requestPath);
         const fileName = path.basename(targetPath);
 
-        console.log("Info: Request approved - sending file info...")
+        console.log(`[Info]: Request approved - sending file info.`)
 
         // Get file statistics
         const stats = await fs.promises.stat(targetPath);
@@ -149,14 +149,13 @@ exports.getFileInfo = async (req, res) => {
             birthTime: stats.birthtime,
         };
 
-        console.log(`Info: Request approved. Sending file info.`);
         res.status(200).json({
             success: true,
             directory: requestPath,
             fileInfo: fileInfo
         });
     } catch (error) {
-        if(!error.status) console.error(`Error: Couldn't read directory:\n${error}`);
+        if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
             message: error.message || 'Server error while reading directory'
@@ -168,14 +167,14 @@ exports.getFileInfo = async (req, res) => {
 exports.getSize = async (req, res) => {
 
     const { path: requestPath = '' } = req.body;
-    console.log('Debug: Received path:', requestPath);
-    console.log(`Info: Received request to get size of file: ${requestPath !== '/' ? '/home' + requestPath : '/home'}`);
+    console.log('[Debug]: Received path:', requestPath);
+    console.log(`[Info]: Received request to get size of file: ${requestPath !== '/' ? '/home' + requestPath : '/home'}`);
     
     try {
         // Validate request path and get target path
         const targetPath = await getTargetPath(requestPath);
 
-        console.log("Info: Request approved - sending files list...")
+        console.log("[Info]: Request approved - sending file size.")
 
 
         let totalSize = 0;
@@ -188,13 +187,12 @@ exports.getSize = async (req, res) => {
             totalSize = await calculateDirectorySize(targetPath);
         }
 
-        console.log(`Info: Request approved. Sending file size.`);
         res.status(200).json({
             success: true,
             size: totalSize
         });
     } catch (error) {
-        if(!error.status) console.error(`Error: Couldn't read directory:\n${error}`);
+        if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
             message: error.message || 'Server error while reading directory'
@@ -207,14 +205,13 @@ exports.downloadFile = async( req, res ) => {
 
     const { path: requestPath = '' } = req.body;
     console.log(req.body)
-    console.log(`Info: Received download request for: ${requestPath !== '/' ? '/home' + requestPath : '/home'}`);
+    console.log(`[Info]: Received download request for: ${requestPath !== '/' ? '/home' + requestPath : '/home'}`);
 
     try {
         // Validate request path and get target path
         const targetPath = await getTargetPath(requestPath);
-        console.log(targetPath)
 
-        console.log("Info: Request approved - sending files list...")
+        console.log(`[Info]: Request approved - sending file.`);
 
         // If target is directory, zip it
         const stats = await fs.promises.stat(targetPath);
@@ -237,7 +234,7 @@ exports.downloadFile = async( req, res ) => {
             res.download(targetPath);
         };
     } catch (error) {
-        if(!error.status) console.error(`Error: Couldn't read directory:\n${error}`);
+        if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
             message: error.message || 'Server error while reading directory'
@@ -273,22 +270,93 @@ exports.renameFile = async( req, res ) => {
         const pathToRenamedFile = path.relative( fileSystemPath, newTargetPath );
         await getTargetPath( pathToRenamedFile, { mustExist: false } );
 
-        console.log("Info: Request approved - sending files list...")
-
 
         // Validate file name
         if( !isNameValid(newName) ) {
-            console.error(`Error: Request rejected - new name is not allowed.`);
+            console.error(`[Error]: Request rejected - new name is not allowed.`);
 
             return res.status(400).json({
                 success: false,
                 message: 'File name is not allowed'
             })
         }
-
-        console.log("Info: request approved - renaming file...");
+        
+        console.log("[Info]: Request approved - renaming file...");
 
         // Rename
+        await fs.promises.rename(targetPath, newTargetPath);
+        
+        res.status(200).json({
+            success: true,
+            message: 'File name has been changed'
+        });
+
+    } catch (error) {
+        if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
+        res.status( error.status || 500 ).json({
+            success: false,
+            message: error.message || 'Server error while reading directory'
+        });
+    }
+}
+
+exports.deleteFile = async( req, res ) => {
+
+    console.log(req.body)
+    const { path: requestPath = '' } = req.body;
+
+    console.log(`[Info]: Received delete request for: ${requestPath !== '/' ? '/home' + requestPath : '/home'}`);
+
+    try {
+        // Validate request path and get target path
+        const targetPath = await getTargetPath(requestPath);  // fileSystem + requestPath
+
+        console.log(`[Info]: request approved - deleting file...`);
+        
+        // Delete
+        await fs.promises.rm(targetPath, { recursive: true })
+        
+        res.status(200).json({
+            success: true,
+            message: 'File has been deleted'
+        });
+
+    } catch (error) {
+        if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
+        res.status( error.status || 500 ).json({
+            success: false,
+            message: error.message || 'Server error while reading directory'
+        });
+    }
+}
+
+exports.createFile = async( req, res ) => {
+
+    const { path: requestPath = '' } = req.body;
+    console.log(req.body)
+
+    console.log(`[Info]: Received create file request: ${requestPath !== '/' ? '/home' + requestPath : '/home'}`);
+
+    try {
+        // Validate request path and get target path of a new file
+        const targetPath = await getTargetPath(requestPath);  // fileSystem + requestPath
+        
+        await getTargetPath( pathToRenamedFile, { mustExist: false } );
+
+        // Validate file name
+        const newName = path.basename(targetPath);
+        if( !isNameValid(newName) ) {
+            console.error(`[Error]: Request rejected - new name is not allowed.`);
+
+            return res.status(400).json({
+                success: false,
+                message: 'File name is not allowed'
+            })
+        };
+
+        console.log(`[Info]: request approved - creating a new file.`);
+
+        // Create
         await fs.promises.rename(targetPath, newTargetPath);
 
         res.status(200).json({
@@ -297,7 +365,7 @@ exports.renameFile = async( req, res ) => {
         });
 
     } catch (error) {
-        if(!error.status) console.error(`Error: Couldn't read directory:\n${error}`);
+        if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
             message: error.message || 'Server error while reading directory'

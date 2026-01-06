@@ -1,4 +1,4 @@
-import GraphsContainer from '@/components/GraphsContainer.jsx'
+import GraphsContainer from '@/app/resources/components/GraphsContainer'
 
 export default function Resources() {
 

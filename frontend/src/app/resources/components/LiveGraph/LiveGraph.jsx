@@ -1,9 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import io from 'socket.io-client';
+
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import './liveGraph.css';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner.jsx';
+
+import io from 'socket.io-client';
 
 const graphConfigs = {
     cpu: {
@@ -64,10 +66,7 @@ export default function LiveGraph({ chartId }) {
 
         return () => {
             console.log(`Debug: Cleaning up connection for: ${chartId}`);
-            socket.off("connect");
-            socket.off("disconnect");
-            socket.off("data update");
-            socket.off("connect_error");
+            socket.removeAllListeners();
             socket.disconnect();
             console.log(`Debug: Charts ${chartId} WebSocket disconnected.`);
             

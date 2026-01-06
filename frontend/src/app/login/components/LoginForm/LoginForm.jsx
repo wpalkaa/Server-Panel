@@ -1,7 +1,6 @@
 'use client';
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { API } from '@/app/api.js';
 
 import FormError from './FormError';
 import './LoginStyles.css';
@@ -75,7 +74,8 @@ export default function LoginForm() {
                 login: loginValue,
                 password: passValue
             };
-            const response = await axios.post(`${API.URL}/api/auth/login`, data, {
+            const API_URL = new URL(`/api/auth/login`, process.env.NEXT_PUBLIC_SERVER_URL)
+            const response = await axios.post(API_URL, data, {
                 withCredentials: true
             });
 

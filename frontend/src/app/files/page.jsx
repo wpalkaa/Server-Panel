@@ -2,14 +2,16 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
-import FileRow from "@/components/Files/FileRow";
-import RenameModal from "@/components/Files/ContextMenu/RenameModal/RenameModal";
-
+import FileRow from "./components/FileRow/FileRow";
+import RenameModal from "./components/RenameModal/RenameModal";
+import ContextMenu from "./components/ContextMenu/ContextMenu";
+import CreateModal from "./components/CreateModal/CreateModal";
 import './files.css';
-import axios from 'axios';
+
 import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
-import ContextMenu from "@/components/Files/ContextMenu/ContextMenu";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+
+import axios from 'axios';
 
 
 // ========== API LAYOUT ==========
@@ -55,6 +57,12 @@ const MENU_ITEMS = [
 
 ];
 
+const MODAL = {
+    CREATE: "create",
+    RENAME: "rename",
+    DELETE: "delete",
+};
+
 // ============ HELPERS =============
 
 function humanizeFileSize(size) {
@@ -97,12 +105,13 @@ export default function FilesPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [files, setFiles] = useState([]);
 
-    const [fileToRename, setFileToRename] = useState(null);
-    const [fileToDelete, setFileToDelete] = useState(null);
+    // const [fileToRename, setFileToRename] = useState(null);
+    // const [pathToDelete, setPathToDelete] = useState(null);
     const [error, setError] = useState('');
     
     const [contextMenuposition, setContextMenuPosition] = useState(undefined);
-    const [contextFile, setContextFile] = useState(null);
+    const [contextFile, setContextFile] = useState(null);  // { file, items }
+    const [modal, setModal] = useState(null); // { type: MODAL.type, file: actionFile, path: filePath}
     
     // ============ API =============
 
@@ -174,8 +183,8 @@ export default function FilesPage() {
         } finally {
             setIsLoading(false);
         };
-    }
-    
+    };
+
     async function renameFile(filePath, newName) {
         setIsLoading(true);
 
@@ -188,17 +197,19 @@ export default function FilesPage() {
             // If okay, refresh file list
             if( response.data.success ) {
                 fetchFiles(currentPath, true);
-                setFileToRename(null);
+                setModal(null);
             };
 
         } catch (error) {
             console.error(
                 `Error: couldn't rename file:\n`,
                 error?.response?.data?.message || error.message || "Nieznany błąd");
+            throw error;
         } finally {
             setIsLoading(false);
         }
-    }
+    };
+
 
     async function downloadFile(file, filePath) {
         try {
@@ -226,11 +237,56 @@ export default function FilesPage() {
                 `Error: couldn't download file:\n`,
                 error?.response?.data?.message || error.message || "Nieznany błąd");
             }
-        }
+        };
 
-    async function deleteFile() {
-        return
-    }
+    async function deleteFile(filePath) {
+        setIsLoading(true);
+
+        try {
+            const API_URL = new URL(`/api/files/delete`, process.env.NEXT_PUBLIC_SERVER_URL);
+            
+            console.log(filePath)
+            const response = await axios.delete(API_URL, { data: { path: filePath } } );
+
+            // If okay, refresh file list
+            if( response.data.success ) {
+                fetchFiles(currentPath, true);
+                setModal(null);
+            };
+
+        } catch (error) {
+            console.error(
+                `Error: couldn't delete file:\n`,
+                error?.response?.data?.message || error.message || "Nieznany błąd");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    async function createFile(filePath, fileName) {
+        setIsLoading(true);
+
+        try {
+            const API_URL = new URL(`/api/files/create`, process.env.NEXT_PUBLIC_SERVER_URL);
+            
+            console.log(filePath)
+            const response = await axios.post(API_URL, { path: filePath } );
+
+            // If okay, refresh file list
+            if( response.data.success ) {
+                fetchFiles(currentPath, true);
+                setModal(null);
+            };
+
+        } catch (error) {
+            console.error(
+                `Error: couldn't delete file:\n`,
+                error?.response?.data?.message || error.message || "Nieznany błąd");
+            throw error;
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     // ============ HANDLERS ============
 
@@ -264,19 +320,31 @@ export default function FilesPage() {
     }
 
     function handleContextAction(action) {
+        // Wysyłanie do serwera requesta, rozróżnianie czy ma utworzyć w currentDir czy w folderze jeżeli go kliknięto
+        // createDir != createFile
         const actionFile = contextFile.file;
-        // const filePath = `${currentPath}/${actionFile.name}`
-        console.log(currentPath)
-        const filePath = currentPath !== '/' ? `${currentPath}/${contextFile.file.name}` : `/${contextFile.file.name}`;
+        
+        const isTargettingBackground = contextFile.items === BACKGROUND_ITEMS;
+        console.log("[Debug]: isback",isTargettingBackground)
+
+        const filePath = isTargettingBackground 
+            ? currentPath
+            : (currentPath !== '/' ? `${currentPath}/${contextFile.file.name}` : `/${contextFile.file.name}`);
+        console.log("[Debug]: fpath",filePath)
+
         switch(action) {
+            case MENU_ACTIONS.NEW_FILE:
+            case MENU_ACTIONS.NEW_DIR:
+                setModal( { type: MODAL.CREATE, file: actionFile, path: filePath } );
+                break;
             case MENU_ACTIONS.RENAME:
-                setFileToRename( {file: actionFile, path: filePath} );
+                setModal( { type: MODAL.RENAME, file: actionFile, path: filePath } );
                 break;
             case MENU_ACTIONS.DOWNLOAD:
                 downloadFile(actionFile, filePath);
                 break;
-            case MENU_ACTIONS.DELETE:
-                // deleteFile(contextFile, filePath);
+            case MENU_ACTIONS.DELETE:           
+                setModal( { type: MODAL.DELETE, file: actionFile, path: filePath } );
                 break;
         }
         
@@ -344,25 +412,33 @@ export default function FilesPage() {
                 )}
 
                 {/* File Rename Modal */}
-                {fileToRename && (
-                    <RenameModal 
-                        file={fileToRename.file}
-                        onSubmit={(newName) => renameFile(fileToRename.path, newName)}
-                        onClose={() => setFileToRename(null)}
+                {modal?.type === MODAL.RENAME && (
+                    <RenameModal
+                        file={modal.file}
+                        onSubmit={(newName) => renameFile(modal.path, newName)}
+                        onClose={() => setModal(null)}
                     />
                 )}
 
                 {/* File Delete Modal */}
-                {fileToDelete && (
+                {modal?.type === MODAL.DELETE && (
                     <ConfirmationModal
                         message={
                             <>
-                                <p>Czy napewno chcesz usunąć plik <b>{fileToDelete.name}</b>?
+                                <p>Czy napewno chcesz usunąć plik <b>{modal.file.name}</b>?
                                 <br></br>Tej operacji nie da się cofnąć:</p>
                             </>
                         }
-                        onSubmit={deleteFile}
-                        onCancel={() => setFileToDelete(null)}
+                        onSubmit={() => deleteFile(modal.path)}
+                        onCancel={() => setModal(null)}
+                    />
+                )}
+
+                {/* File Create Modal */}
+                {modal?.type === MODAL.CREATE && (
+                    <CreateModal
+                        onSubmit={(fileName) => createFile(modal.path, fileName)}
+                        onCancel={() => setModal(null)}
                     />
                 )}
 
