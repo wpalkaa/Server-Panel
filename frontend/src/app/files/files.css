@@ -28,12 +28,14 @@ body {
     text-decoration: underline;
     text-underline-offset: 0.6rem;
     text-decoration-thickness: 1.5px;
+    margin: 0;
 }
 .files-list {
     display: flex;
     flex-direction: column;
-    margin-top: 1.5rem;
+    /* margin-top: 1.5rem; */
     height: 100%;
+    overflow-y: auto;
 }
 
 

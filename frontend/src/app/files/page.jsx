@@ -6,6 +6,8 @@ import FileRow from "./components/FileRow/FileRow";
 import RenameModal from "./components/RenameModal/RenameModal";
 import ContextMenu from "./components/ContextMenu/ContextMenu";
 import CreateModal from "./components/CreateModal/CreateModal";
+import ToolBar from "./components/ToolBar/ToolBar";
+import { MENU_ACTIONS, MENU_ITEMS, BACKGROUND_ITEMS, MODAL } from './config.js';
 import './files.css';
 
 import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
@@ -24,44 +26,6 @@ import axios from 'axios';
                 //     birthTime: stats.birthtime,
                 // };
 
-// ============ CONFIG ============
-
-const MENU_ACTIONS = {
-    OPEN: 'open',
-    NEW_FILE: 'newFile',
-    NEW_DIR: 'newDir',
-    DOWNLOAD: 'download',
-    RENAME: 'rename',
-    DELETE: 'delete',    
-};
-
-const BACKGROUND_ITEMS = [
-    { id: MENU_ACTIONS.NEW_FILE,    label: 'Nowy Plik',          handle: 'handleNewFile',    styles: { color: 'green' } },
-    { id: MENU_ACTIONS.NEW_DIR,     label: 'Nowy Folder',        handle: 'handleNewDir',     styles: { color: 'green' } },
-    { id: MENU_ACTIONS.DOWNLOAD,    label: 'Pobierz',            handle: 'handleDownload',   styles: {} },
-    { id: 'size',                   label: 'Rozmiar: ',          handle: 'null',             styles: {} },
-    { id: 'mDate',                  label: 'Data modyfikacji: ', handle: 'null',             styles: {} },
-    { id: 'birthTime',              label: 'Data utworzenia: ',  handle: 'null',             styles: {} },
-
-];
-const MENU_ITEMS = [
-    { id: MENU_ACTIONS.OPEN,      label: 'Otwórz',            handle: 'handleOpen',        styles: {} },
-    { id: MENU_ACTIONS.NEW_FILE,    label: 'Nowy Plik',          handle: 'handleNewFile',    styles: { color: 'green' } },
-    { id: MENU_ACTIONS.NEW_DIR,     label: 'Nowy Folder',        handle: 'handleNewDir',     styles: { color: 'green' } },
-    { id: MENU_ACTIONS.RENAME,    label: 'Zmień nazwę',       handle: 'handleRename',      styles: {} },
-    { id: MENU_ACTIONS.DOWNLOAD,    label: 'Pobierz',            handle: 'handleDownload',   styles: {} },
-    { id: MENU_ACTIONS.DELETE,    label: 'Usuń',              handle: 'handleDelete',      styles: { color: 'red' } },
-    { id: 'size',                   label: 'Rozmiar: ',          handle: 'null',             styles: {} },
-    { id: 'mDate',                  label: 'Data modyfikacji: ', handle: 'null',             styles: {} },
-    { id: 'birthTime',              label: 'Data utworzenia: ',  handle: 'null',             styles: {} },
-
-];
-
-const MODAL = {
-    CREATE: "create",
-    RENAME: "rename",
-    DELETE: "delete",
-};
 
 // ============ HELPERS =============
 
@@ -103,11 +67,8 @@ export default function FilesPage() {
     const [currentDirInfo, setCurrentDirInfo] = useState(null);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [files, setFiles] = useState([]);
-
-    // const [fileToRename, setFileToRename] = useState(null);
-    // const [pathToDelete, setPathToDelete] = useState(null);
     const [error, setError] = useState('');
+    const [files, setFiles] = useState([]);
     
     const [contextMenuposition, setContextMenuPosition] = useState(undefined);
     const [contextFile, setContextFile] = useState(null);  // { file, items }
@@ -231,7 +192,6 @@ export default function FilesPage() {
             link.remove();
             window.URL.revokeObjectURL(url);
 
-            console.log(response)
         } catch (error) {
             console.error(
                 `Error: couldn't download file:\n`,
@@ -263,14 +223,14 @@ export default function FilesPage() {
         }
     };
 
-    async function createFile(filePath, fileName) {
+    async function createFile(filePath, fileName, isDirectory) {
         setIsLoading(true);
 
         try {
             const API_URL = new URL(`/api/files/create`, process.env.NEXT_PUBLIC_SERVER_URL);
             
             console.log(filePath)
-            const response = await axios.post(API_URL, { path: filePath } );
+            const response = await axios.post(API_URL, { path: filePath, name: fileName, isDirectory } );
 
             // If okay, refresh file list
             if( response.data.success ) {
@@ -280,7 +240,7 @@ export default function FilesPage() {
 
         } catch (error) {
             console.error(
-                `Error: couldn't delete file:\n`,
+                `Error: couldn't create file:\n`,
                 error?.response?.data?.message || error.message || "Nieznany błąd");
             throw error;
         } finally {
@@ -319,23 +279,28 @@ export default function FilesPage() {
         } );
     }
 
-    function handleContextAction(action) {
-        // Wysyłanie do serwera requesta, rozróżnianie czy ma utworzyć w currentDir czy w folderze jeżeli go kliknięto
-        // createDir != createFile
-        const actionFile = contextFile.file;
+    function handleContextAction(action, overrideContextFile = null) {
+        const activeContext = overrideContextFile || contextFile
+        const actionFile = activeContext.file;
         
-        const isTargettingBackground = contextFile.items === BACKGROUND_ITEMS;
-        console.log("[Debug]: isback",isTargettingBackground)
+        const isTargettingBackground = activeContext.items === BACKGROUND_ITEMS;
+        console.log("[Debug]: is Targetting Background",isTargettingBackground)
 
         const filePath = isTargettingBackground 
             ? currentPath
-            : (currentPath !== '/' ? `${currentPath}/${contextFile.file.name}` : `/${contextFile.file.name}`);
-        console.log("[Debug]: fpath",filePath)
+            : (currentPath !== '/' 
+                ? `${currentPath}/${actionFile.name}` 
+                : `/${actionFile.name}`);
+        console.log("[Debug]: fpath",filePath);
+
+        const parentDir = actionFile.isDirectory ? filePath : currentPath;
 
         switch(action) {
             case MENU_ACTIONS.NEW_FILE:
+                setModal( { type: MODAL.CREATE, file: actionFile, path: parentDir, isDirectory: false } );
+                break;
             case MENU_ACTIONS.NEW_DIR:
-                setModal( { type: MODAL.CREATE, file: actionFile, path: filePath } );
+                setModal( { type: MODAL.CREATE, file: actionFile, path: parentDir, isDirectory: true } );
                 break;
             case MENU_ACTIONS.RENAME:
                 setModal( { type: MODAL.RENAME, file: actionFile, path: filePath } );
@@ -345,6 +310,11 @@ export default function FilesPage() {
                 break;
             case MENU_ACTIONS.DELETE:           
                 setModal( { type: MODAL.DELETE, file: actionFile, path: filePath } );
+                break;
+            case MENU_ACTIONS.REFRESH:
+                fetchFiles(currentPath, true);
+                break;
+            case MENU_ACTIONS.INFO:
                 break;
         }
         
@@ -369,6 +339,16 @@ export default function FilesPage() {
             <div className="files-card">
                 
                 <h1 className="list-title">Lista plików</h1>
+
+                <ToolBar 
+                    currentDirInfo={currentDirInfo}
+                    currentPath={currentPath}
+                    humanizeFileSize={humanizeFileSize} 
+                    formatDate={formatDate}
+                    handleClick={(action) => {
+                    handleContextAction(action, { file: currentDirInfo, items: BACKGROUND_ITEMS });
+                    }}
+                />
 
                 {error && (
                     <div className="error-message">
@@ -437,8 +417,9 @@ export default function FilesPage() {
                 {/* File Create Modal */}
                 {modal?.type === MODAL.CREATE && (
                     <CreateModal
-                        onSubmit={(fileName) => createFile(modal.path, fileName)}
+                        onSubmit={(fileName) => createFile(modal.path, fileName, modal.isDirectory)}
                         onCancel={() => setModal(null)}
+                        isDirectory={modal.isDirectory}
                     />
                 )}
 

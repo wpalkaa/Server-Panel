@@ -1,0 +1,34 @@
+.toolbar-container {
+    margin-top: 0.5rem;
+    display: flex;;
+    user-select: none;
+}
+.toolbar-items {
+    display: flex;
+    gap: 0.5rem;
+}
+.right {
+    margin-left: auto;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: rgb(48, 48, 70);
+    color: white;
+    padding: 4px;
+    visibility: hidden;
+    white-space: nowrap;
+    top: 1.2rem;
+}
+.toolbar-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.toolbar-item:hover {
+    color: gray;
+}
+.toolbar-item:hover .tooltip {
+    visibility: visible;
+}

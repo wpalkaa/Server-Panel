@@ -4,6 +4,7 @@
     justify-content: space-between;
     padding: 0.5rem 1rem 0.5rem 1rem;
     height: 1.5rem;
+    user-select: none;
 }
 .file-content:hover {
     background-color: gainsboro;

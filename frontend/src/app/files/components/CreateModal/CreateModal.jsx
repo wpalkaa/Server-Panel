@@ -2,12 +2,13 @@
 import { useState } from 'react';
 import './CreateModal.css';
 
-export default function CreateModal( {onSubmit, onCancel} ) {
+export default function CreateModal( {onSubmit, onCancel, isDirectory} ) {
 
 
     const [fileName, setFileName] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const toCreate = isDirectory ? "katalog" : "plik"
 
 
     function handleChange(e) {
@@ -43,13 +44,13 @@ export default function CreateModal( {onSubmit, onCancel} ) {
             setIsLoading(false);
         }
 
-        onSubmit(fileName)
+        // onSubmit(fileName)
     }
 
     return (
         <div className="modal-overlay">
             <div className="modal-container">
-                <h1>Utwórz nowy plik:</h1>
+                <h1>Utwórz nowy {toCreate}:</h1>
                 <form className="modal-form" onSubmit={(e) => handleSubmit(e)}>
                     <input 
                         autoFocus
@@ -63,7 +64,7 @@ export default function CreateModal( {onSubmit, onCancel} ) {
                     </div>
                     
                     <div className="modal-buttons">
-                        <button type="submit" className="submit-button" disabled={isLoading || error} >Utwórz plik</button>
+                        <button type="submit" className="submit-button" disabled={isLoading || error} >Utwórz {toCreate}</button>
                         <button type="button" onClick={onCancel} className="cancel-button">Anuluj</button>
                     </div>
 

@@ -234,10 +234,10 @@ exports.downloadFile = async( req, res ) => {
             res.download(targetPath);
         };
     } catch (error) {
-        if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
+        if(!error.status) console.error(`[Error]: Couldn't download directory:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
-            message: error.message || 'Server error while reading directory'
+            message: error.message || 'Server error while downloading directory'
         });
     }
 }
@@ -259,6 +259,17 @@ exports.renameFile = async( req, res ) => {
     console.log(`Info: Received rename request for: ${requestPath !== '/' ? '/home' + requestPath : '/home'} => ${newName}`);
 
     try {
+        
+        
+        // Validate file name
+        if( !isNameValid(newName) ) {
+            console.error(`[Error]: Request rejected - new name is not allowed.`);
+            
+            return res.status(400).json({
+                success: false,
+                message: 'File name is not allowed'
+            })
+        }
         // Validate request path and get target path
         const targetPath = await getTargetPath(requestPath);  // fileSystem + requestPath
         
@@ -269,17 +280,6 @@ exports.renameFile = async( req, res ) => {
         // Validate new target path
         const pathToRenamedFile = path.relative( fileSystemPath, newTargetPath );
         await getTargetPath( pathToRenamedFile, { mustExist: false } );
-
-
-        // Validate file name
-        if( !isNameValid(newName) ) {
-            console.error(`[Error]: Request rejected - new name is not allowed.`);
-
-            return res.status(400).json({
-                success: false,
-                message: 'File name is not allowed'
-            })
-        }
         
         console.log("[Info]: Request approved - renaming file...");
 
@@ -292,10 +292,10 @@ exports.renameFile = async( req, res ) => {
         });
 
     } catch (error) {
-        if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
+        if(!error.status) console.error(`[Error]: Couldn't rename directory:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
-            message: error.message || 'Server error while reading directory'
+            message: error.message || 'Server error while renaming directory'
         });
     }
 }
@@ -322,53 +322,54 @@ exports.deleteFile = async( req, res ) => {
         });
 
     } catch (error) {
-        if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
+        if(!error.status) console.error(`[Error]: Couldn't delete file:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
-            message: error.message || 'Server error while reading directory'
+            message: error.message || 'Server error while deleting file'
         });
     }
 }
 
 exports.createFile = async( req, res ) => {
 
-    const { path: requestPath = '' } = req.body;
+    const { path: requestPath = '', name: fileName, isDirectory } = req.body;
     console.log(req.body)
 
-    console.log(`[Info]: Received create file request: ${requestPath !== '/' ? '/home' + requestPath : '/home'}`);
+    console.log(`[Info]: Received create file request in ${requestPath !== '/' ? '/home' + requestPath : '/home'}, with name: ${fileName}`);
 
     try {
-        // Validate request path and get target path of a new file
-        const targetPath = await getTargetPath(requestPath);  // fileSystem + requestPath
         
-        await getTargetPath( pathToRenamedFile, { mustExist: false } );
-
         // Validate file name
-        const newName = path.basename(targetPath);
-        if( !isNameValid(newName) ) {
+        if( !isNameValid(fileName) ) {
             console.error(`[Error]: Request rejected - new name is not allowed.`);
-
+            
             return res.status(400).json({
                 success: false,
                 message: 'File name is not allowed'
             })
         };
 
+        // Validate request path 
+        const filePath = `${requestPath}/${fileName}`;
+        console.log(`[Debug]: filePath: ${filePath}`);
+        const targetPath = await getTargetPath(filePath, { mustExist: false }); 
+
         console.log(`[Info]: request approved - creating a new file.`);
 
         // Create
-        await fs.promises.rename(targetPath, newTargetPath);
+        if( isDirectory ) await fs.promises.mkdir(targetPath);
+        else await fs.promises.writeFile(targetPath, '', );
 
         res.status(200).json({
             success: true,
-            message: 'File name has been changed'
+            message: 'File name has been created'
         });
 
     } catch (error) {
-        if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
+        if(!error.status) console.error(`[Error]: Couldn't create file:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
-            message: error.message || 'Server error while reading directory'
+            message: error.message || 'Server error while creating directory'
         });
     }
 }
