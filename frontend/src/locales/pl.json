@@ -1,0 +1,11 @@
+{
+    "navbar": {
+        "home": "Strona główna",
+        "files": "Pliki",
+        "resources": "Zasoby",
+        "settings": "Ustawienia"
+    },
+    "auth": {
+        "invalidToken": "Niepoprawny token"
+    }
+}

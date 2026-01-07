@@ -82,8 +82,6 @@ export default function LoginForm() {
             if( response.data.success ) {
                 // const sessionData = {
                 //     user: loginValue,
-                //     token: response.data.token,
-                //     loginTime: new Date().getTime()
                 // };
                 // localStorage.setItem('user_session', JSON.stringify(sessionData));
                 router.push('/');

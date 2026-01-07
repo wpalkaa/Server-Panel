@@ -6,7 +6,7 @@ const TOOLBAR_ITEMS = [
     {
         id: MENU_ACTIONS.SORT,
         label: 'Sortuj',
-        icon: 'fa-solid fa-filter',
+        icon: 'fa-solid fa-sort',
         location: 'left',
     },
     {

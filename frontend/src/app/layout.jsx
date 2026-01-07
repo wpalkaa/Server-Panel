@@ -1,29 +1,22 @@
 
+import { LanguageProvider } from "@/context/LanguageProvider";
+import NavBar from "@/components/NavBar/NavBar";
+import Username from "@/components/Username/Username";
 import "./globals.css";
-import Link from "next/link";
 
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body>
-        <aside className="navbar">
-          <div className="navbar-logo">WP</div>
-          <ul className='nav-list'>
-            <li><Link href="/">Strona Główna</Link></li>
-            <li><Link href="/files">Pliki</Link></li>
-            <li><Link href="/resources">Zużycie Zasobów</Link></li>
-            <li><Link href="/settings">Ustawienia</Link></li>
-          </ul>
+export default async function RootLayout({ children }) {
 
-          <ul className='nav-user'>
-            <li><Link href="/">User</Link></li>
-            
-          </ul>
-        </aside>  
-        {children}
+     return (
+        <html lang="en">
+            <body>
+                <LanguageProvider>
+                    <NavBar username={<Username/>}/>
 
-        <script src="https://kit.fontawesome.com/c0e27db627.js" crossOrigin="anonymous"></script>
-      </body>
-    </html>
+                    {children}
+                </LanguageProvider>
+
+                <script src="https://kit.fontawesome.com/c0e27db627.js" crossOrigin="anonymous"></script>
+            </body>
+        </html>
   );
 }

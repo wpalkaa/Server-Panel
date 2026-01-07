@@ -12,13 +12,14 @@ body {
     align-items: center;
     width: 100%;
     height: 100%;
+    margin-right: 25%;
 }
 .files-card {
     display: flex;
     flex-direction: column;
-    width: 33%;
+    width: 66%;
     height: 55%;
-    max-width: 800px;
+    max-width: 350px;
     padding: 2rem;
     border: 1px solid black;
     border-radius: 16px;

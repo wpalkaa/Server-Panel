@@ -1,0 +1,11 @@
+{
+    "navbar": {
+        "home": "Home Page",
+        "files": "Files",
+        "resources": "Resources",
+        "settings": "Settings"
+    },
+    "auth": {
+        "invalidToken": "Invalid token"
+    }
+}
