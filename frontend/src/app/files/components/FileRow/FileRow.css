@@ -17,6 +17,13 @@
     align-items: center;
 }
 
+.file-size {
+    visibility: hidden;
+}
+.file-content:hover .file-size {
+    visibility: visible;
+}
+
 .file-show-more {
     display: flex;
     align-items: center;

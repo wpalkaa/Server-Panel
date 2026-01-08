@@ -1,7 +1,7 @@
 .toolbar-container {
     margin: 0.5rem 0;
-    display: flex;;
-    user-select: none;
+    display: flex;
+    /* user-select: none; */
 }
 .toolbar-items {
     display: flex;
@@ -18,7 +18,7 @@
     padding: 4px;
     visibility: hidden;
     white-space: nowrap;
-    top: 1.2rem;
+    top: 1rem;
 }
 .toolbar-item {
     position: relative;

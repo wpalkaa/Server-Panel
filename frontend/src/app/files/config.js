@@ -37,3 +37,12 @@ export const MODAL = {
     RENAME: "rename",
     DELETE: "delete",
 };
+
+export const SORT_METHODS = [
+    { id: 'name_asc' },
+    { id: 'name_desc' },
+    { id: 'lastModified_desc' },
+    { id: 'lastModified_asc' },
+    { id: 'size_desc' },
+    { id: 'size_asc' },
+]

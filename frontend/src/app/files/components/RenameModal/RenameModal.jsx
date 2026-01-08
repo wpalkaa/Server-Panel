@@ -73,7 +73,7 @@ export default function RenameModal( {file, onSubmit, onClose} ) {
     }
 
     return (
-        <div className="modal-overlay">
+        <div className="modal-overlay" onClick={onClose}>
             <div className="modal-container">
                 <h1>Zmień nazwę pliku:</h1>
                 <h2>{file.name}</h2>

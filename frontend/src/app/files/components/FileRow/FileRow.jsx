@@ -1,7 +1,7 @@
 
 import './FileRow.css';
 
-export default function FileRow( { file, handleShowMore, onNavigate } ) {
+export default function FileRow( { file, handleShowMore, onNavigate, humanizeFileSize } ) {
 
     function getFileIcon() {
         const icons = {
@@ -42,7 +42,10 @@ export default function FileRow( { file, handleShowMore, onNavigate } ) {
             </div>
 
             { file.name !== '..' && (
-                <div className="file-show-more" onClick={handleShowMore}>...</div>
+                <div style={{display: 'flex'}}>
+                    <span className="file-size">{humanizeFileSize(file.size)}</span>
+                    <div className="file-show-more" onClick={handleShowMore}>...</div>
+                </div>
                 )}
                 
         </div>

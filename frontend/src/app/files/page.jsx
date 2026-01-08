@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import FileRow from "./components/FileRow/FileRow";
@@ -73,7 +73,26 @@ export default function FilesPage() {
     const [contextMenuposition, setContextMenuPosition] = useState(undefined);
     const [contextFile, setContextFile] = useState(null);  // { file, items }
     const [modal, setModal] = useState(null); // { type: MODAL.type, file: actionFile, path: filePath}
-    
+
+    const [sortMethod, setSortMethod] = useState( { key: 'name', order: 'asc' } ); // { key: 'name'|'lastModified'|'size', order: 'asc'|'desc' } 
+    const sortedFiles = useMemo( () => {
+        return [...files].sort( (a, b) => {
+            if( a.name === ".." || b.name === ".." ) 
+                return a.name === ".." ? -1 : 1;
+
+            if( a.isDirectory !== b.isDirectory )
+                return b.isDirectory - a.isDirectory;
+
+            const aValue = a[sortMethod.key];
+            const bValue = b[sortMethod.key];
+
+            return aValue < bValue 
+                ? sortMethod.order === "asc" ? -1 : 1
+                : sortMethod.order === "asc" ? 1 : -1  
+
+
+        })
+    }, [files, sortMethod])
     // ============ API =============
 
     async function fetchFiles(path, isMounted) {
@@ -90,7 +109,7 @@ export default function FilesPage() {
                 let finalFiles = data.files;
 
                 // FinalFiles sort - directories first, then alphabetical order
-                finalFiles.sort( (a, b) => b.isDirectory - a.isDirectory || a.name.localeCompare(b.name) );
+                // finalFiles.sort( (a, b) => b.isDirectory - a.isDirectory || a.name.localeCompare(b.name) );
 
                 // If not main directory, add previous directory to list
                 if( path !== '/' ) {
@@ -249,7 +268,6 @@ export default function FilesPage() {
     };
 
     // ============ HANDLERS ============
-
     function handleNavigate(file) {
         if (!file.isDirectory) return;
 
@@ -323,7 +341,6 @@ export default function FilesPage() {
     }
 
     // ============ useEffect ============
-
     useEffect( () => {
         let isMounted = true;
 
@@ -348,6 +365,7 @@ export default function FilesPage() {
                     handleClick={(action) => {
                     handleContextAction(action, { file: currentDirInfo, items: BACKGROUND_ITEMS });
                     }}
+                    setSortMethod={setSortMethod}
                 />
 
                 {error && (
@@ -361,12 +379,13 @@ export default function FilesPage() {
                     onContextMenu={(e) => handleContextMenu(e, currentDirInfo, BACKGROUND_ITEMS)}    
                 >
 
-                    {files.map( (file) => 
+                    {sortedFiles.map( (file) => 
                         <div key={file.name} className="file-item">
                             <FileRow  
                                 file={file} 
                                 handleShowMore={(e) => handleContextMenu(e, file, MENU_ITEMS)}
                                 onNavigate={() => handleNavigate(file)}
+                                humanizeFileSize={humanizeFileSize}
                             />
                         </div>
                     )}

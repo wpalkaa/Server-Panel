@@ -7,5 +7,25 @@
     },
     "auth": {
         "invalidToken": "Niepoprawny token"
+    },
+    "files": {
+        "sort": {
+            "title": "Sortuj według:",
+            "name_asc": "Porządek alfabetyczny",
+            "name_desc": "Odwrócony porządek alfabetyczny",
+            "lastModified_asc": "Modyfikowane najpóźniej",
+            "lastModified_desc": "Ostatnio modyfikowane",
+            "size_desc": "Najpierw największe",
+            "size_asc": "Najpierw najmniejsze"
+        },
+        "actionItems": {
+            "sort": "Sortuj",
+            "newFile": "Nowy plik",
+            "newDir": "Nowy folder",
+            "download": "Pobierz plik",
+            "rename": "Zmień nazwę",
+            "delete": "Usuń plik",
+            "refresh": "Odśwież"
+        }
     }
 }

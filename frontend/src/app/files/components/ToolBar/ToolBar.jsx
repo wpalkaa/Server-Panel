@@ -1,4 +1,6 @@
 
+import { useTranslation } from '@/context/LanguageProvider';
+import SortTooltip from '../SortTooltip/SortTooltip';
 import { MENU_ACTIONS } from '../../config';
 import './ToolBar.css';
 
@@ -42,30 +44,37 @@ const TOOLBAR_ITEMS = [
 ];
 
 
-export default function ToolBar( {currentDirInfo, currentPath, humanizeFileSize, formatDate, handleClick} ) {
+export default function ToolBar( {currentDirInfo, currentPath, humanizeFileSize, formatDate, handleClick, setSortMethod} ) {
 
+    const { lang } = useTranslation();
     const infoPath = currentPath === '/' ? '/home' : `${currentPath}`;
 
     const leftItems = TOOLBAR_ITEMS.filter( (item) => item.location === 'left');
     const rightItems = TOOLBAR_ITEMS.filter( (item) => item.location === 'right');
 
-
+    console.log(TOOLBAR_ITEMS)
     const renderItem = (item) =>  
         <div key={item.id} className="toolbar-item" onClick={() => handleClick(item.id)}>
             <i className={item.icon} />
             
             <div className="tooltip">
-                {item.id !== MENU_ACTIONS.INFO 
-                    ? item.label
-                    : <>
+                {item.id === MENU_ACTIONS.INFO 
+                    ? (
+                    <>
                         <div className="info-line">Pozycja: {infoPath}</div>
                         <div className="info-line">Rozmiar: {humanizeFileSize(currentDirInfo.size)}</div>
                         <div className="info-line">Data modyfikacji: {formatDate(currentDirInfo.lastModified)}</div>
                         <div className="info-line">Data utworzenia: {formatDate(currentDirInfo.birthTime)}</div>
-                    </>}
+                    </>)
+                    : (item.id === MENU_ACTIONS.SORT 
+                        ? <SortTooltip setSortMethod={setSortMethod} /> 
+                        : lang.files.actionItems[item.id])
+                }
                 
             </div>
         </div>
+
+
 
     return currentDirInfo && (
         <div className="toolbar-container">
