@@ -6,6 +6,7 @@ const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
 const fileRoutes = require('./routes/fileRoutes');
+const settingsRoutes = require('./routes/settingsRoutes')
 const socket = require('./socket');
 
 
@@ -36,6 +37,7 @@ app.use(cors({
 // Routes
 app.use( '/api/auth', authRoutes );
 app.use( '/api/files', fileRoutes );
+app.use( '/api/settings', settingsRoutes )
 
 app.get('/', (req, res) => {
     res.send("I am connected");

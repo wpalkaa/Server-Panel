@@ -1,0 +1,9 @@
+.settings-navbar {
+    width: 100%;
+}
+.settings-navbar ul {   
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    list-style-type: none;
+}   

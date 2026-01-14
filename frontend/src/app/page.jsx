@@ -1,15 +1,15 @@
-'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { getUser } from "@/lib/getUser";
+// import Username from "@/components/Username/Username";
 
-export default function Home() {
+import HomePage from "@/components/HomePage/HomePage";
 
-  const router = useRouter();
+export default async function Home() {
 
-  return (
-    <div>
-      tutaj coś będzie
-    </div>
-  );
+    const user = await getUser();
+
+
+    return (
+        <HomePage username={user.name} />
+    );
 }

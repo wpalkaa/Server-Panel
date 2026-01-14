@@ -2,7 +2,7 @@
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 
-export default async function Username() {
+export async function getUser() {
     const cookieStore = await cookies();
     const token = cookieStore.get('user_session');
 
@@ -16,10 +16,9 @@ export default async function Username() {
             user.name = payload.login;
         } catch (error){
             console.error(`[Error]: Couldn't get username:\n${error}`)
+            user.name = "Unknown";
         }
     }
 
-    return (
-        <div>{user.name}</div>
-    );
+    return user;
 }

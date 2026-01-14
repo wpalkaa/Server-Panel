@@ -5,6 +5,9 @@
         "resources": "Zasoby",
         "settings": "Ustawienia"
     },
+    "mainPage" : {
+        "welcomeMessage": "Cześć"
+    },
     "auth": {
         "invalidToken": "Niepoprawny token"
     },
@@ -26,6 +29,21 @@
             "rename": "Zmień nazwę",
             "delete": "Usuń plik",
             "refresh": "Odśwież"
+        }
+    },
+    "settings": { 
+        "navbar": {
+            "users": "Użytkownicy",
+            "myAccount": "Moje konto"
+        },
+        "users": {
+            "navbar": "Użytkownicy",
+            "title": "Zarządzaj użytkownikami",
+            "addUser": "Dodaj użytkownika",
+            "deleteUser": "Usuń użytkownika",
+            "changePassword": "Zmień hasło",
+            "setAdmin": "Ustaw jako administratora",
+            "unsetAdmin": "Usuń uprawnienia administratora"
         }
     }
 }

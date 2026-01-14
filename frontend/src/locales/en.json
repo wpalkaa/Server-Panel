@@ -1,11 +1,34 @@
 {
     "navbar": {
-        "home": "Home Page",
+        "home": "Home",
         "files": "Files",
         "resources": "Resources",
         "settings": "Settings"
     },
+    "mainPage" : {
+        "welcomeMessage": "Welcome"
+    },
     "auth": {
         "invalidToken": "Invalid token"
+    },
+    "files": {
+        "sort": {
+            "title": "Sort by:",
+            "name_asc": "Alphabetical order",
+            "name_desc": "Reverse alphabetical order",
+            "lastModified_asc": "Modified earliest",
+            "lastModified_desc": "Modified latest",
+            "size_desc": "Largest first",
+            "size_asc": "Smallest first"
+        },
+        "actionItems": {
+            "sort": "Sort",
+            "newFile": "New file",
+            "newDir": "New folder",
+            "download": "Download file",
+            "rename": "Rename",
+            "delete": "Delete file",
+            "refresh": "Refresh"
+        }
     }
 }

@@ -10,3 +10,5 @@
 - po kliknięciu na nazwę usera, okienko czy chcesz się wylogować
 
 - pozamieniać wszędzie komunikaty na słownik
+
+- zegar się spóźnia 3 sekundy?
