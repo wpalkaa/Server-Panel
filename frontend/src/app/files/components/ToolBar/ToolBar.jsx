@@ -61,7 +61,7 @@ export default function ToolBar( {currentDirInfo, currentPath, humanizeFileSize,
                 {item.id === MENU_ACTIONS.INFO 
                     ? (
                     <>
-                        <div className="info-line">Pozycja: {infoPath}</div>
+                        <div className="info-line">Pozycja: {infoPath + '/'}</div>
                         <div className="info-line">Rozmiar: {humanizeFileSize(currentDirInfo.size)}</div>
                         <div className="info-line">Data modyfikacji: {formatDate(currentDirInfo.lastModified)}</div>
                         <div className="info-line">Data utworzenia: {formatDate(currentDirInfo.birthTime)}</div>

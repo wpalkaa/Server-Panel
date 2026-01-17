@@ -42,7 +42,7 @@ export default function FileRow( { file, handleShowMore, onNavigate, humanizeFil
             </div>
 
             { file.name !== '..' && (
-                <div style={{display: 'flex'}}>
+                <div className="file-info">
                     <span className="file-size">{humanizeFileSize(file.size)}</span>
                     <div className="file-show-more" onClick={handleShowMore}>...</div>
                 </div>

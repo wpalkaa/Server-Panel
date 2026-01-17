@@ -1,8 +1,9 @@
 
+import { useState } from "react";
+
 import { SORT_METHODS } from "@/app/files/config"
 import { useTranslation } from "@/context/LanguageProvider"
 import './SortTooltip.css';
-import { useState } from "react";
 
 export default function SortModal( { setSortMethod } ) {
 

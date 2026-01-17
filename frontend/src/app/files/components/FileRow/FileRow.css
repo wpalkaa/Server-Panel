@@ -1,4 +1,4 @@
-
+/* 
 .file-content {
     display: flex;
     justify-content: space-between;
@@ -37,4 +37,79 @@
 .fa-greater-than {
     font-size: 0.5rem;
     color: rgb(80, 80, 80);
+} */
+
+
+.files-list {
+    overflow: auto;
+}
+.file-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    padding: 12px 16px 12px 0;
+    width: 100%;
+    color: #cbd5e1;
+}
+
+.file-identity {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    max-width: 40%;
+}
+
+.fa-folder { color: #eab308; } 
+.fa-file { color: #94a3b8; }   
+.fa-greater-than { 
+    font-size: 0.7rem; 
+    color: #64748b; 
+}
+
+.file-name {
+    font-weight: 500;
+    color: #f1f5f9;
+    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+}
+.file-size {
+    color: #64748b;
+    font-size: 0.85rem;
+    margin-right: 1.2rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.file-show-more {
+    width: 1.8rem;
+    height: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    border-radius: 4px;
+    color: #94a3b8;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    padding-bottom: 0.5rem;
+}
+
+.file-show-more:hover {
+    background-color: #334155;
+    color: #f1f5f9;
+}
+
+
+
+.file-content:hover .file-name {
+    color: #3b82f6; 
 }

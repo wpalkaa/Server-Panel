@@ -4,11 +4,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import axios from 'axios';
 
 import FileRow from "./components/FileRow/FileRow";
-import RenameModal from "./components/RenameModal/RenameModal";
+import RenameModal from "./components/Modals/RenameModal";
 import ContextMenu from "./components/ContextMenu/ContextMenu";
-import CreateModal from "./components/CreateModal/CreateModal";
+import CreateModal from "./components/Modals/CreateModal";
 import ToolBar from "./components/ToolBar/ToolBar";
-import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
+import ConfirmationModal from "@/app/files/components/Modals/ConfirmationModal";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
 
@@ -237,6 +237,12 @@ export default function FilesPage() {
 
     // ============ HANDLERS ============
     function handleNavigate(file) {
+        // If triggered by selection, cancel
+        const selection = window.getSelection();
+        if (selection.toString().length > 0) {
+            return; 
+        }
+
         if (!file.isDirectory) return;
 
         const pathParts = currentPath.split('/').filter(Boolean); // remove empty strings
@@ -323,7 +329,10 @@ export default function FilesPage() {
         <div className="files-container">
             <div className="files-card">
                 
-                <h1 className="list-title">Lista plików</h1>
+                <div className="list-title-container">
+                    <h1 className="list-title">Lista plików</h1>
+                    <h2 className="list-position">{currentPath === '/' ? '/home/' : currentPath+'/'}</h2>
+                </div>
 
                 <ToolBar 
                     currentDirInfo={currentDirInfo}
@@ -397,7 +406,7 @@ export default function FilesPage() {
                             </>
                         }
                         onSubmit={() => deleteFile(modal.path)}
-                        onCancel={() => setModal(null)}
+                        onClose={() => setModal(null)}
                     />
                 )}
 
@@ -405,7 +414,7 @@ export default function FilesPage() {
                 {modal?.type === MODAL.CREATE && (
                     <CreateModal
                         onSubmit={(fileName) => createFile(modal.path, fileName, modal.isDirectory)}
-                        onCancel={() => setModal(null)}
+                        onClose={() => setModal(null)}
                         isDirectory={modal.isDirectory}
                     />
                 )}
