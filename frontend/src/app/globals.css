@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 html, body {
   margin: 0;
   padding: 0;
@@ -5,20 +7,98 @@ html, body {
 }
 
 body {
-  display: flex
+  display: flex;
+  background-color: #0f172a; 
+  color: #f1f5f9;
+  width: 100%;
+  background: linear-gradient(90deg,rgba(20, 28, 41, 1) 0%, rgba(30, 41, 59, 1) 50%, rgba(30, 41, 59, 1) 79%, rgba(20, 28, 41, 1) 100%);
 }
 
 .navbar {
   height: 100%;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 12rem;
+  padding: 1rem 0.5rem 1rem 1rem;
+  width: 20%;
+  max-width: 13rem;
+  min-width: 10rem;
+  flex-wrap: nowrap;
+  background-color: #1e293b;
+  border-right: 1px solid #334155; 
 }
-
 .navbar-logo {
   text-align: center;
   font-size: 3rem;
-  color: blue;
+  color: rgb(84, 84, 224);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.5rem;
+  user-select: none;
+  margin-bottom: 1rem;
+}
+
+.navbar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  font-size: 1rem;
+}
+.navbar-list-item {
+  border-radius: 8px;
+  margin: 0.25rem 0;
+}
+.navbar-list-item:hover {
+  border-left: 3px solid #364a65;
+  color: #3b82f6;
+}
+.navbar-list-item a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #94a3b8;
+  gap: 0.5rem;
+  font-weight: 500;
+  height: 100%;
+  padding: 0.5rem 0 0.5rem 0.5rem;
+}
+.active {
+  background-color: #364a65;
+  
+  > a {
+    color: #3b82f6;
+    font-weight: 600;
+  }
+}
+
+.navbar-footer {
+  margin-top: auto;
   padding: 1rem;
+  border-top: 1px solid #334155;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.navbar-footer {
+    border-top: 1px solid #334155;
+    padding-top: 20px;
+}
+
+.navbar-footer-user {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.8rem;
+  background-color: #0f172a; 
+  border-radius: 40px;
+  margin-bottom: 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.navbar-footer-user i {
+    color: #3b82f6;
+    margin-right: 12px;
+    font-size: 16px;
 }

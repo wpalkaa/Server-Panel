@@ -1,8 +1,6 @@
 
-import { getUser } from "@/lib/getUser";
-// import Username from "@/components/Username/Username";
-
 import HomePage from "@/components/HomePage/HomePage";
+import { getUser } from "@/lib/getUser";
 
 export default async function Home() {
 

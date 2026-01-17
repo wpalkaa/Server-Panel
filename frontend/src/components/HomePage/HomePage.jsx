@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from "@/context/LanguageProvider";
+import './HomePage.css';
 
 export default function HomePage( { username } ) {
 

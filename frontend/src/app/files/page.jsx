@@ -1,19 +1,21 @@
 'use client';
 import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import axios from 'axios';
 
 import FileRow from "./components/FileRow/FileRow";
 import RenameModal from "./components/RenameModal/RenameModal";
 import ContextMenu from "./components/ContextMenu/ContextMenu";
 import CreateModal from "./components/CreateModal/CreateModal";
 import ToolBar from "./components/ToolBar/ToolBar";
-import { MENU_ACTIONS, MENU_ITEMS, BACKGROUND_ITEMS, MODAL } from './config.js';
-import './files.css';
-
 import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
-import axios from 'axios';
+
+import { MENU_ACTIONS, MENU_ITEMS, BACKGROUND_ITEMS, MODAL } from './config.js';
+import { humanizeFileSize, formatDate } from "@/utils/formatters";
+import './files.css';
+
 
 
 // ========== API LAYOUT ==========
@@ -25,37 +27,6 @@ import axios from 'axios';
                 //     lastModified: stats.mtime,
                 //     birthTime: stats.birthtime,
                 // };
-
-
-// ============ HELPERS =============
-
-function humanizeFileSize(size) {
-    const units = [ 'B', 'KB', 'MB', 'GB', 'TB' ];
-    let newSize = size;
-    let unitIndex = 0;
-
-    while( newSize > 1024 && unitIndex < units.length-1 ) {
-        newSize /= 1024;
-        unitIndex++;
-    }
-    return `${newSize.toFixed(2)} ${units[unitIndex]}`;
-}
-
-function formatDate(date) {
-    if(!date) return '--';
-
-    const newDate = new Date(date)
-
-    const h = newDate.getHours().toString().padStart(2, '0');
-    const m = newDate.getMinutes().toString().padStart(2, '0')
-    const s = newDate.getSeconds().toString().padStart(2, '0');
-
-    const D = newDate.getDate().toString().padStart(2, '0');
-    const M = `${newDate.getMonth() + 1}`.toString().padStart(2, '0');
-    const Y = newDate.getFullYear().toString();
-
-    return `${h}:${m}:${s} | ${D}.${M}.${Y}`;
-}
 
 // ============ PAGE ============
 
@@ -107,9 +78,6 @@ export default function FilesPage() {
 
             if( data.success && isMounted ) {
                 let finalFiles = data.files;
-
-                // FinalFiles sort - directories first, then alphabetical order
-                // finalFiles.sort( (a, b) => b.isDirectory - a.isDirectory || a.name.localeCompare(b.name) );
 
                 // If not main directory, add previous directory to list
                 if( path !== '/' ) {
