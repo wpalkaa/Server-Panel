@@ -1,16 +1,19 @@
 
+'use client'
+import { useTranslation } from '@/context/LanguageProvider.js';
 import LiveGraph from './LiveGraph/LiveGraph.jsx';
+
 
 // export default async function Graph({ chartId, delay }) {
 //     await new Promise((res) => setTimeout(res, delay));
 
-export default async function GraphCard({ chartId }) {
+export default function GraphCard({ chartId }) {
 
-    const graphName = chartId === 'cpu' ? 'CPU' : chartId === 'memory' ? 'pamięci RAM' : chartId === 'disk' ? 'dysku' : 'nieznany zasób';
+    const { lang } = useTranslation();
 
     return (
-        <div className="graph-container">
-            <h2 className="graph-title">Wykorzystanie {graphName}:</h2>
+        <div className="graph-card">
+            <h2 className="graph-title">{lang.resources.graphs.title[chartId]}</h2>
             <LiveGraph chartId={chartId} />
         </div>
     )

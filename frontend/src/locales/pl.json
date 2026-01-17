@@ -45,5 +45,15 @@
             "setAdmin": "Ustaw jako administratora",
             "unsetAdmin": "Usuń uprawnienia administratora"
         }
+    },
+    "resources": {
+        "graphs" : {
+            "title": {
+                "cpu": "Wykorzystanie CPU",
+                "memory": "Wykorzystanie pamięci RAM",
+                "disk": "Wykorzystanie dysku"
+            }
+            
+        }
     }
 }

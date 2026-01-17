@@ -1,4 +1,3 @@
-- LoginForm => zmienic tu na formik (wymagania projektu)
 - LoginForm => pozmieniać by jak najwięcej było server-side
 
 - System plików - edytor plikow? podgłąd obrazów?
@@ -7,8 +6,17 @@
 
 - loadingi - Modale z files, logowanie, pobieranie listy plików, i kto wie co jeszcze
 
-- po kliknięciu na nazwę usera, okienko czy chcesz się wylogować
+- ~~po kliknięciu na nazwę usera, okienko czy chcesz się wylogować~~
 
+
+
+# WAŻNE
+
+- style: logowanie, ustawienia
+- Ogarnąć flagę EN
 - pozamieniać wszędzie komunikaty na słownik
 
-- zegar się spóźnia 3 sekundy?
+
+- LoginForm => zmienic tu na formik (wymagania projektu)
+
+- Główny loading strony - ten poczatkowy, od całej strony który jest przy pobieraniu usera z ciastka

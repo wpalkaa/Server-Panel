@@ -9,7 +9,6 @@
     background: transparent;
 }
 
-/* Główne pudełko menu */
 .context-menu {
     position: absolute; 
     z-index: 1600; 

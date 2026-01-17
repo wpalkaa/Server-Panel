@@ -10,12 +10,12 @@ import io from 'socket.io-client';
 const graphConfigs = {
     cpu: {
         domain: [0, 100],
-        tickCount: 11,
+        yTickCount: 7,
         unit: '%'
     },
     memory: {
         domain: [0, 8000],
-        tickCount: 9,
+        yTickCount: 9,
         unit: 'MB'
     }
 };
@@ -27,7 +27,7 @@ export default function LiveGraph({ chartId }) {
     const [ isConnected, setIsConnected ] = useState(false);
     
     const [data, setData] = useState(new Array(maxPoints).fill().map( (_, index) => ({
-        time: new Date(Date.now() - (10  - index*2) * 1000).toLocaleTimeString("it-IT"),
+        time: new Date(Date.now() - (maxPoints*2  - (index+1)*2) * 1000).toLocaleTimeString("it-IT"),
         value: 0
     })));
 
@@ -86,14 +86,18 @@ export default function LiveGraph({ chartId }) {
     }
 
     return (
-        <LineChart width={500} height={350} data={data}>
+        <LineChart width={550} height={400} data={data} className="graph">
             <XAxis dataKey={"time"} angle={-45} height={60} textAnchor="end" />
-            <YAxis dataKey={"value"} domain={config.domain} tickCount={config.tickCount}/>
+            <YAxis dataKey={"value"} domain={config.domain} tickCount={config.yTickCount}/>
             <Line dataKey={"value"} isAnimationActive={false} dot={false}/>
             <CartesianGrid stroke="#797979ff" strokeDasharray="1 1" />
             <Tooltip 
                 labelFormatter={ (time) => [`Godzina: ${time}`]}
                 formatter={ (value) => [`Wykorzystanie: ${value.toFixed(2)}${config.unit}`]}
+                contentStyle={{
+                    backgroundColor: '#1e293b',
+                    border: "1px solid #334155"
+                }}
                 />
         </LineChart>
     )

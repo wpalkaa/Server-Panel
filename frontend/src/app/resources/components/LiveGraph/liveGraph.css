@@ -1,7 +1,6 @@
 .graph-loading {
-    width: 400px;
-    height: 250px;
-    border: 1px solid #dddddd;
+    width: 550px;
+    height: 400px;
     margin-left: 1rem;
 
     display: flex;
