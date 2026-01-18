@@ -46,7 +46,7 @@ exports.login = (req, res) => {
     
     return res.status(401).json({
         success: false,
-        message: 'Nieprawidłowy login lub hasło'
+        message: 'authRejected'
     });
 
 };

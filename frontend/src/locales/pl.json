@@ -107,7 +107,7 @@
     "errors": {
         "generic": "Wystąpił błąd. Spróbuj ponownie później.",
         "server": "Błąd serwera. Spróbuj ponownie później.",
-        "illegalSymbols": "Nazwa zawiera niedowzwolone znaki: \\,/,:,*,?,<,>,|",
+        "illegalSymbols": "Użyto niedozwolonego znaku: \\,/,:,*,?,<,>,|",
         "emptyString": "Nazwa nie może być pusta",
         "fileExists": "Plik o takiej nazwie już istnieje",
         "directoryExists": "Katalog o takiej nazwie już istnieje",
@@ -115,6 +115,10 @@
         "directoryDoesNotExist": "Katalog nie istnieje",
         "invalidFileName": "Niepoprawna nazwa pliku",
         "invalidDirectoryPath": "Niepoprawna ścieżka katalogu",
-        "noPath": "Nie podano ścieżki"
+        "noPath": "Nie podano ścieżki",
+        "noLogin": "Nie podano nazwy użytkownika",
+        "noPassword": "Nie podano hasła",
+        "invalidLoginLength": "Nazwa użytkownika musi mieć od 3 do 20 znaków",
+        "authRejected": "Niepoprawny login lub hasło"
     }
 }

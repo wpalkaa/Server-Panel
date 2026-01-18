@@ -338,16 +338,18 @@ export default function FilesPage() {
                     <h2 className="list-position">{currentPath === '/' ? '/home/' : currentPath+'/'}</h2>
                 </div>
 
-                <ToolBar 
-                    currentDirInfo={currentDirInfo}
-                    currentPath={currentPath}
-                    humanizeFileSize={humanizeFileSize} 
-                    formatDate={formatDate}
-                    handleClick={(action) => {
-                    handleContextAction(action, { file: currentDirInfo, items: BACKGROUND_ITEMS });
-                    }}
-                    setSortMethod={setSortMethod}
-                />
+                <div className="toolbar-wrapper h-32">
+                    <ToolBar 
+                        currentDirInfo={currentDirInfo}
+                        currentPath={currentPath}
+                        humanizeFileSize={humanizeFileSize} 
+                        formatDate={formatDate}
+                        handleClick={(action) => {
+                        handleContextAction(action, { file: currentDirInfo, items: BACKGROUND_ITEMS });
+                        }}
+                        setSortMethod={setSortMethod}
+                    />
+                </div>
 
                 {error && (
                     <div className="error-message">
@@ -359,7 +361,6 @@ export default function FilesPage() {
                     style={{alignItems: error ? "center" : ""}}
                     onContextMenu={(e) => handleContextMenu(e, currentDirInfo, BACKGROUND_ITEMS)}    
                 >
-
                     {sortedFiles.map( (file) => 
                         <div key={file.name} className="file-item">
                             <FileRow  

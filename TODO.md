@@ -11,4 +11,3 @@
 
 
 # WAŻNE
-- LoginForm => zmienic tu na formik (wymagania projektu)

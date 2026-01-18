@@ -115,6 +115,10 @@
         "directoryDoesNotExist": "Directory does not exist",
         "invalidFileName": "Invalid file name",
         "invalidDirectoryPath": "Invalid directory path",
-        "noPath": "No path provided"
+        "noPath": "No path provided",
+        "noLogin": "No login provided",
+        "noPassword": "No password provided",
+        "invalidLoginLength": "Login must be between 3 and 20 characters",
+        "authRejected": "Invalid login or password"
     }
 }

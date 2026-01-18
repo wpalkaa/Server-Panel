@@ -3,6 +3,7 @@ import './FileRow.css';
 
 export default function FileRow( { file, handleShowMore, onNavigate, humanizeFileSize } ) {
 
+
     function getFileIcon() {
         const icons = {
             'dir': "fa-regular fa-folder",

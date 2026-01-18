@@ -1,13 +1,12 @@
 
 .loading-spinner {
-    width: 5rem;
-    height: 5rem;
-    border: calc(5rem / 4) solid #dddddd;
-    border-top-color: black;
-    border-radius: 50%;
-    box-sizing: border-box;
+    border: calc(1rem / 5) solid transparent;
+    border-top-color: #3b82f6;
+    border-radius: 100%;
+    width: 2rem;
+    height: 2rem;
 
-    animation: loading 1s ease infinite;
+    animation: loading 2s ease infinite;
 }
 
 @keyframes loading {
