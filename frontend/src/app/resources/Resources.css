@@ -5,6 +5,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #475569 transparent;
+    scrollbar-gutter: stable;
+}
+.resources-page::-webkit-scrollbar {
+    width: 8px;
 }
 
 .graphs-container {

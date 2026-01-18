@@ -29,7 +29,8 @@
             "delete": "Usuń plik",
             "refresh": "Odśwież",
             "mDate": "Data modyfikacji: ",
-            "birthTime": "Data utworzenia: "
+            "birthTime": "Data utworzenia: ",
+            "size": "Rozmiar: "
         },
         "modals": {
             "confirmation": {

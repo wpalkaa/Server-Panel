@@ -29,7 +29,8 @@
             "delete": "Delete file",
             "refresh": "Refresh",
             "mDate": "Modification date: ",
-            "birthTime": "Creation date: "
+            "birthTime": "Creation date: ",
+            "size": "Size: "
         },
         "modals": {
             "confirmation": {

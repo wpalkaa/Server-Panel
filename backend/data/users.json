@@ -18,5 +18,21 @@
     {
         "login": "user3",
         "password": "user3"
+    },
+    {
+        "login": "user4",
+        "password": "user4"
+    },
+    {
+        "login": "user5",
+        "password": "user5"
+    },
+    {
+        "login": "user6",
+        "password": "user6"
+    },
+    {
+        "login": "user7",
+        "password": "user7"
     }
 ]

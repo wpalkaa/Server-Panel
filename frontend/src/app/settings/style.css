@@ -7,11 +7,18 @@
 }
 
 .settings-content {
-    flex: 1; 
-    overflow-y: auto;
+    flex: 1;
     padding: 2rem;
     
     width: 100%;
     max-width: 1600px;
     margin: 0 auto;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #475569 transparent;
+    scrollbar-gutter: stable;
 }
+.resources-page::-webkit-scrollbar {
+    width: 8px;
+}
+

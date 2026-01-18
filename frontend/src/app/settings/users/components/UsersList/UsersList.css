@@ -1,53 +1,42 @@
-/* --- GŁÓWNY KONTENER STRONY --- */
 .users-page {
     width: 100%;
     height: 100%;
     padding: 2rem;
     box-sizing: border-box;
-    overflow-y: auto; /* Scrollowanie jeśli użytkowników jest dużo */
+    overflow-y: auto;
 }
 
-/* --- SIATKA UŻYTKOWNIKÓW (GRID) --- */
 .users-list {
     display: grid;
-    /* Automatyczna responsywność:
-       Karty mają minimum 200px szerokości. 
-       Jeśli jest miejsce, mieszczą się obok siebie. 
-       Jeśli nie, spadają niżej. */
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 1.5rem;
     padding-bottom: 2rem;
 }
 
-/* --- KARTA UŻYTKOWNIKA --- */
 .user-card {
-    background-color: #1e293b; /* Slate 800 */
-    border: 1px solid #334155; /* Stalowa ramka */
+    background-color: #1e293b; 
+    border: 1px solid #334155; 
     border-radius: 12px;
     padding: 2rem 1.5rem;
     
     display: flex;
     flex-direction: column;
-    align-items: center; /* Wyśrodkowanie avatara i tekstu */
+    align-items: center; 
     justify-content: center;
-    
     transition: all 0.2s ease;
-    cursor: pointer; /* Sugeruje, że można kliknąć (np. edycja) */
+    cursor: pointer; 
     position: relative;
     overflow: hidden;
     
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
-/* Efekt Hover na karcie */
 .user-card:hover {
-    transform: translateY(-5px); /* Lekkie uniesienie */
-    background-color: #334155; /* Rozjaśnienie tła (Slate 700) */
+    transform: translateY(-5px); 
+    background-color: #334155; 
     border-color: #475569;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 }
-
-/* Dodatkowy akcent - niebieska poświata na górze karty przy hoverze */
 .user-card:hover::after {
     content: "";
     position: absolute;
@@ -55,49 +44,40 @@
     left: 0;
     width: 100%;
     height: 4px;
-    background-color: #3b82f6; /* Twój niebieski akcent */
+    background-color: #3b82f6; 
 }
 
-/* --- ZDJĘCIE (AVATAR) --- */
 .user-photo {
     width: 90px;
     height: 90px;
-    margin-bottom: 1rem;
-    
-    border-radius: 50%; /* Idealne koło */
-    border: 2px solid #475569; /* Obwódka wokół zdjęcia */
-    padding: 2px; /* Odstęp między zdjęciem a obwódką */
+    margin-bottom: 1rem;    
+    border-radius: 50%; 
+    border: 2px solid #475569;
+    padding: 2px; 
     background-color: #0f172a;
-    
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: border-color 0.2s;
 }
-
-/* Zmiana koloru ramki zdjęcia przy najechaniu na kartę */
 .user-card:hover .user-photo {
     border-color: #3b82f6;
 }
 
-/* Sam obrazek w środku */
 .user-photo img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Zapobiega rozciąganiu zdjęcia */
+    object-fit: cover;
     border-radius: 50%;
 }
 
-/* --- NAZWA UŻYTKOWNIKA --- */
 .user-name {
-    color: #f1f5f9; /* Jasny tekst */
+    color: #f1f5f9; 
     font-size: 1.1rem;
     font-weight: 600;
     letter-spacing: 0.02em;
     text-align: center;
-    
-    /* Zabezpieczenie przed bardzo długimi nazwami */
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
