@@ -7,37 +7,31 @@ import './ToolBar.css';
 const TOOLBAR_ITEMS = [
     {
         id: MENU_ACTIONS.SORT,
-        label: 'Sortuj',
         icon: 'fa-solid fa-sort',
         location: 'left',
     },
     {
         id: MENU_ACTIONS.NEW_FILE,
-        label: 'Nowy plik',
         icon: 'fa-solid fa-file-circle-plus',
         location: 'left',
     },
     {
         id: MENU_ACTIONS.NEW_DIR,
-        label: 'Nowy folder',
         icon: 'fa-solid fa-folder-plus',
         location: 'left',
     },
     {
         id: MENU_ACTIONS.DOWNLOAD,
-        label: 'Pobierz',
         icon: 'fa-solid fa-file-arrow-down',
         location: 'left',
     },
     {
         id: MENU_ACTIONS.INFO,
-        label: 'Info',
         icon: 'fa-solid fa-circle-info',
         location: 'right',
     },
     {
         id: MENU_ACTIONS.REFRESH,
-        label: 'Odśwież',
         icon: 'fa-solid fa-arrows-rotate',
         location: 'right',
     },
@@ -61,10 +55,10 @@ export default function ToolBar( {currentDirInfo, currentPath, humanizeFileSize,
                 {item.id === MENU_ACTIONS.INFO 
                     ? (
                     <>
-                        <div className="info-line">Pozycja: {infoPath + '/'}</div>
-                        <div className="info-line">Rozmiar: {humanizeFileSize(currentDirInfo.size)}</div>
-                        <div className="info-line">Data modyfikacji: {formatDate(currentDirInfo.lastModified)}</div>
-                        <div className="info-line">Data utworzenia: {formatDate(currentDirInfo.birthTime)}</div>
+                        <div className="info-line">{lang.files.toolBar.info.position}: {infoPath + '/'}</div>
+                        <div className="info-line">{lang.files.toolBar.info.size}: {humanizeFileSize(currentDirInfo.size)}</div>
+                        <div className="info-line">{lang.files.toolBar.info.lastModified}: {formatDate(currentDirInfo.lastModified)}</div>
+                        <div className="info-line">{lang.files.toolBar.info.birthTime}: {formatDate(currentDirInfo.birthTime)}</div>
                     </>)
                     : (item.id === MENU_ACTIONS.SORT 
                         ? <SortTooltip setSortMethod={setSortMethod} /> 

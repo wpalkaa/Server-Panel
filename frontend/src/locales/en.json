@@ -1,26 +1,25 @@
 {
     "navbar": {
-        "home": "Home",
+        "home": "Main page",
         "files": "Files",
         "resources": "Resources",
         "settings": "Settings"
     },
+    "loginPage": {
+        "title": "Log in",
+        "loginPlaceholder": "Username",
+        "passwordPlaceholder": "Password",
+        "loginButton": "Log in",
+        "loadingButton": "Logging in..."
+    },
     "mainPage" : {
-        "welcomeMessage": "Welcome"
+        "welcomeMessage": "Hello"
     },
     "auth": {
         "invalidToken": "Invalid token"
     },
     "files": {
-        "sort": {
-            "title": "Sort by:",
-            "name_asc": "Alphabetical order",
-            "name_desc": "Reverse alphabetical order",
-            "lastModified_asc": "Modified earliest",
-            "lastModified_desc": "Modified latest",
-            "size_desc": "Largest first",
-            "size_asc": "Smallest first"
-        },
+        "title": "Files list",
         "actionItems": {
             "sort": "Sort",
             "newFile": "New file",
@@ -28,7 +27,94 @@
             "download": "Download file",
             "rename": "Rename",
             "delete": "Delete file",
-            "refresh": "Refresh"
+            "refresh": "Refresh",
+            "mDate": "Modification date: ",
+            "birthTime": "Creation date: "
+        },
+        "modals": {
+            "confirmation": {
+                "accept": "Confirm",
+                "cancel": "Cancel"
+            },
+            "create": {
+                "newFile": "Create new file",
+                "newDir": "Create new folder",
+                "createButton": "Create"
+            },
+            "rename": {
+                "title": "Rename",
+                "renameFile": "Rename file",
+                "renameDir": "Rename folder",
+                "namePlaceholder": "New name",
+                "renameButton": "Rename",
+                "cancelButton": "Cancel",
+                "warning": "Warning: You are changing the file extension",
+                "changeExtension": "Change file extension"
+            },
+            "delete": {
+                "deleteFile": "Delete file",
+                "deleteDir": "Delete folder",
+                "deleteMessageFile": "Are you sure you want to delete the file",
+                "deleteMessageDir": "Are you sure you want to delete the folder",
+                "warning": "This action is irreversible",
+                "deleteButton": "Delete",
+                "cancelButton": "Cancel"
+            }
+        },
+        "toolBar": {
+            "sort": {
+                "title": "Sort by:",
+                "name_asc": "Alphabetical order",
+                "name_desc": "Reverse alphabetical order",
+                "lastModified_asc": "Modified earliest",
+                "lastModified_desc": "Modified latest",
+                "size_desc": "Largest first",
+                "size_asc": "Smallest first"
+            },
+            "info": {
+                "position": "Position",
+                "size": "Size",
+                "lastModified": "Last modified",
+                "birthTime": "Creation date"
+            }
         }
+    },
+    "settings": { 
+        "navbar": {
+            "users": "Users",
+            "myAccount": "My account"
+        },
+        "users": {
+            "navbar": "Users",
+            "title": "Manage users",
+            "addUser": "Add user",
+            "deleteUser": "Delete user",
+            "changePassword": "Change password",
+            "setAdmin": "Set as administrator",
+            "unsetAdmin": "Remove administrator privileges"
+        }
+    },
+    "resources": {
+        "graphs" : {
+            "title": {
+                "cpu": "CPU usage",
+                "memory": "RAM usage",
+                "disk": "Disk usage"
+            }
+            
+        }
+    },
+    "errors": {
+        "generic": "An error occurred. Please try again later.",
+        "server": "Server error. Please try again later.",
+        "illegalSymbols": "The name contains illegal characters: \\,/,:,*,?,<,>,|",
+        "emptyString": "The name cannot be empty",
+        "fileExists": "A file with this name already exists",
+        "directoryExists": "A directory with this name already exists",
+        "fileDoesNotExist": "File does not exist",
+        "directoryDoesNotExist": "Directory does not exist",
+        "invalidFileName": "Invalid file name",
+        "invalidDirectoryPath": "Invalid directory path",
+        "noPath": "No path provided"
     }
 }

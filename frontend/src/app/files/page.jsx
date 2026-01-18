@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from 'axios';
 
+import { useTranslation } from "@/context/LanguageProvider";
 import FileRow from "./components/FileRow/FileRow";
 import RenameModal from "./components/Modals/RenameModal";
 import ContextMenu from "./components/ContextMenu/ContextMenu";
@@ -31,6 +32,8 @@ import './files.css';
 // ============ PAGE ============
 
 export default function FilesPage() {
+    const { lang } = useTranslation();
+    
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -99,9 +102,9 @@ export default function FilesPage() {
         } catch (error) {
             if(isMounted) {
                 setError(error?.response?.data?.message);
-                console.error(
-                    "Error: Couldn't fetch files:\n", 
-                    error?.response?.data?.message || error.message || "Nieznany błąd");
+                // console.error(
+                //     "Error: Couldn't fetch files:\n", 
+                //     error?.response?.data?.message || error.message || "Nieznany błąd");
             }
         } finally {
             setIsLoading(false);
@@ -124,9 +127,9 @@ export default function FilesPage() {
         } catch (error) {
             if(isMounted) {
                 setError(error?.response?.data?.message);
-                console.error(
-                    "Error: Couldn't fetch file info:\n", 
-                    error?.response?.data?.message || error.message || "Nieznany błąd");
+                // console.error(
+                //     "Error: Couldn't fetch file info:\n", 
+                //     error?.response?.data?.message || error.message || "Nieznany błąd");
             }
         } finally {
             setIsLoading(false);
@@ -149,9 +152,9 @@ export default function FilesPage() {
             };
 
         } catch (error) {
-            console.error(
-                `Error: couldn't rename file:\n`,
-                error?.response?.data?.message || error.message || "Nieznany błąd");
+            // console.error(
+            //     `Error: couldn't rename file:\n`,
+            //     error?.response?.data?.message || error.message || "Nieznany błąd");
             throw error;
         } finally {
             setIsLoading(false);
@@ -180,9 +183,9 @@ export default function FilesPage() {
             window.URL.revokeObjectURL(url);
 
         } catch (error) {
-            console.error(
-                `Error: couldn't download file:\n`,
-                error?.response?.data?.message || error.message || "Nieznany błąd");
+            // console.error(
+            //     `Error: couldn't download file:\n`,
+            //     error?.response?.data?.message || error.message || "Nieznany błąd");
             }
         };
 
@@ -202,9 +205,10 @@ export default function FilesPage() {
             };
 
         } catch (error) {
-            console.error(
-                `Error: couldn't delete file:\n`,
-                error?.response?.data?.message || error.message || "Nieznany błąd");
+            // console.error(
+            //     `Error: couldn't delete file:\n`,
+            //     error?.response?.data?.message || error.message || "Nieznany błąd");
+            throw error
         } finally {
             setIsLoading(false);
         }
@@ -226,9 +230,9 @@ export default function FilesPage() {
             };
 
         } catch (error) {
-            console.error(
-                `Error: couldn't create file:\n`,
-                error?.response?.data?.message || error.message || "Nieznany błąd");
+            // console.error(
+            //     `Error: couldn't create file:\n`,
+            //     error?.response?.data?.message || error.message || "Nieznany błąd");
             throw error;
         } finally {
             setIsLoading(false);
@@ -276,14 +280,14 @@ export default function FilesPage() {
         const actionFile = activeContext.file;
         
         const isTargettingBackground = activeContext.items === BACKGROUND_ITEMS;
-        console.log("[Debug]: is Targetting Background",isTargettingBackground)
+        // console.log("[Debug]: is Targetting Background",isTargettingBackground)
 
         const filePath = isTargettingBackground 
             ? currentPath
             : (currentPath !== '/' 
                 ? `${currentPath}/${actionFile.name}` 
                 : `/${actionFile.name}`);
-        console.log("[Debug]: fpath",filePath);
+        // console.log("[Debug]: fpath",filePath);
 
         const parentDir = actionFile.isDirectory ? filePath : currentPath;
 
@@ -330,7 +334,7 @@ export default function FilesPage() {
             <div className="files-card">
                 
                 <div className="list-title-container">
-                    <h1 className="list-title">Lista plików</h1>
+                    <h1 className="list-title">{lang.files.title}</h1>
                     <h2 className="list-position">{currentPath === '/' ? '/home/' : currentPath+'/'}</h2>
                 </div>
 
@@ -401,8 +405,12 @@ export default function FilesPage() {
                     <ConfirmationModal
                         message={
                             <>
-                                <p>Czy napewno chcesz usunąć plik <b>{modal.file.name}</b>?
-                                <br></br>Tej operacji nie da się cofnąć:</p>
+                                <p>
+                                    {modal.file.isDirectory 
+                                        ? lang.files.modals.delete.deleteMessageDir 
+                                        : lang.files.modals.delete.deleteMessageFile
+                                    } <b>{modal.file.name}</b>?
+                                <br></br>{lang.files.modals.delete.warning}</p>
                             </>
                         }
                         onSubmit={() => deleteFile(modal.path)}

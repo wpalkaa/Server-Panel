@@ -12,7 +12,7 @@ export default function Navbar() {
         <div className="settings-navbar">
             <ul>
                 <li><Link href='/settings/users'>{lang.settings.navbar.users}</Link></li>
-                <li><Link href='/settings/myAccount'>{lang.settings.navbar.myAccount}</Link></li>
+                {/* <li><Link href='/settings/myAccount'>{lang.settings.navbar.myAccount}</Link></li> */}
             </ul>
         </div>
     )

@@ -5,7 +5,7 @@ import { SORT_METHODS } from "@/app/files/config"
 import { useTranslation } from "@/context/LanguageProvider"
 import './SortTooltip.css';
 
-export default function SortModal( { setSortMethod } ) {
+export default function SortTooltip( { setSortMethod } ) {
 
     const [selectedMethod, setSelectedMethod] = useState(SORT_METHODS[0].id);
     const { lang } = useTranslation();
@@ -18,7 +18,7 @@ export default function SortModal( { setSortMethod } ) {
 
     return (
         <div className="sort-container">
-            <h1>{lang.files.sort.title}</h1>
+            <h1>{lang.files.toolBar.sort.title}</h1>
             {SORT_METHODS.map( (method) =>
                 <div key={method.id} className="sort-method-item"> 
                     <input 
@@ -29,7 +29,7 @@ export default function SortModal( { setSortMethod } ) {
                         checked={selectedMethod === method.id} 
                         onChange={() => handleMethodChange(method.id)}
                     />
-                    <label htmlFor={method.id}>{lang.files.sort[method.id]}</label>
+                    <label htmlFor={method.id}>{lang.files.toolBar.sort[method.id]}</label>
                 </div>
             )}
         </div>

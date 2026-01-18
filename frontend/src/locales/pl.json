@@ -5,6 +5,13 @@
         "resources": "Zasoby",
         "settings": "Ustawienia"
     },
+    "loginPage": {
+        "title": "Zaloguj się",
+        "loginPlaceholder": "Nazwa użytkownika",
+        "passwordPlaceholder": "Hasło",
+        "loginButton": "Zaloguj się",
+        "loadingButton": "Logowanie..."
+    },
     "mainPage" : {
         "welcomeMessage": "Cześć"
     },
@@ -12,15 +19,7 @@
         "invalidToken": "Niepoprawny token"
     },
     "files": {
-        "sort": {
-            "title": "Sortuj według:",
-            "name_asc": "Porządek alfabetyczny",
-            "name_desc": "Odwrócony porządek alfabetyczny",
-            "lastModified_asc": "Modyfikowane najpóźniej",
-            "lastModified_desc": "Ostatnio modyfikowane",
-            "size_desc": "Najpierw największe",
-            "size_asc": "Najpierw najmniejsze"
-        },
+        "title": "Lista plików",
         "actionItems": {
             "sort": "Sortuj",
             "newFile": "Nowy plik",
@@ -28,7 +27,56 @@
             "download": "Pobierz plik",
             "rename": "Zmień nazwę",
             "delete": "Usuń plik",
-            "refresh": "Odśwież"
+            "refresh": "Odśwież",
+            "mDate": "Data modyfikacji: ",
+            "birthTime": "Data utworzenia: "
+        },
+        "modals": {
+            "confirmation": {
+                "accept": "Potwierdź",
+                "cancel": "Anuluj"
+            },
+            "create": {
+                "newFile": "Utwórz nowy plik",
+                "newDir": "Utwórz nowy folder",
+                "createButton": "Utwórz"
+            },
+            "rename": {
+                "title": "Zmień nazwę",
+                "renameFile": "Zmień nazwę pliku",
+                "renameDir": "Zmień nazwę katalogu",
+                "namePlaceholder": "Nowa nazwa",
+                "renameButton": "Zmień nazwę",
+                "cancelButton": "Anuluj",
+                "warning": "Uwaga: Zmieniasz rozszerzenie pliku",
+                "changeExtension": "Zmień rozszerzenie pliku"
+            },
+            "delete": {
+                "deleteFile": "Usuń plik",
+                "deleteDir": "Usuń katalog",
+                "deleteMessageFile": "Czy na pewno chcesz usunąć plik",
+                "deleteMessageDir": "Czy na pewno chcesz usunąć katalog",
+                "warning": "Ta operacja jest nieodwracalna",
+                "deleteButton": "Usuń",
+                "cancelButton": "Anuluj"
+            }
+        },
+        "toolBar": {
+            "sort": {
+                "title": "Sortuj według:",
+                "name_asc": "Porządek alfabetyczny",
+                "name_desc": "Odwrócony porządek alfabetyczny",
+                "lastModified_asc": "Modyfikowane najpóźniej",
+                "lastModified_desc": "Ostatnio modyfikowane",
+                "size_desc": "Najpierw największe",
+                "size_asc": "Najpierw najmniejsze"
+            },
+            "info": {
+                "position": "Pozycja",
+                "size": "Rozmiar",
+                "lastModified": "Ostatnia modyfikacja",
+                "birthTime": "Data utworzenia"
+            }
         }
     },
     "settings": { 
@@ -55,5 +103,18 @@
             }
             
         }
+    },
+    "errors": {
+        "generic": "Wystąpił błąd. Spróbuj ponownie później.",
+        "server": "Błąd serwera. Spróbuj ponownie później.",
+        "illegalSymbols": "Nazwa zawiera niedowzwolone znaki: \\,/,:,*,?,<,>,|",
+        "emptyString": "Nazwa nie może być pusta",
+        "fileExists": "Plik o takiej nazwie już istnieje",
+        "directoryExists": "Katalog o takiej nazwie już istnieje",
+        "fileDoesNotExist": "Plik nie istnieje",
+        "directoryDoesNotExist": "Katalog nie istnieje",
+        "invalidFileName": "Niepoprawna nazwa pliku",
+        "invalidDirectoryPath": "Niepoprawna ścieżka katalogu",
+        "noPath": "Nie podano ścieżki"
     }
 }

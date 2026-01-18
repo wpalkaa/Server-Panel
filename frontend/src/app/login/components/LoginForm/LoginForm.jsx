@@ -3,7 +3,8 @@ import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 import FormError from './FormError';
-import './LoginStyles.css';
+import { useTranslation } from '@/context/LanguageProvider';
+import '../../LoginStyles.css';
 
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -18,13 +19,14 @@ const LIMITS = {
 
 export default function LoginForm() {
 
+    const { lang } = useTranslation();
 
-    const loginRef = useRef('');
-    const passRef= useRef('');
+    const loginRef = useRef(null);
+    const passwordRef = useRef(null);
     const router = useRouter()
 
     const [loginError, setLoginError] = useState('');
-    const [passError, setPassError] = useState('');
+    // const [passError, setPassError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [serverError, setServerError] = useState('')
 
@@ -62,7 +64,7 @@ export default function LoginForm() {
         e.preventDefault()
 
         const loginValue = loginRef.current.value;
-        const passValue = passRef.current.value;
+        const passValue = passwordRef.current.value;
 
         // const isValid = loginValidate(loginValue) && passwordValidate(passValue);
         const isValid = loginValidate(loginValue)
@@ -100,7 +102,7 @@ export default function LoginForm() {
         clearServerError();
     };
     function clearPassError() {
-        if( passError ) setPassError('');
+        // if( passError ) setPassError('');
         clearServerError();
     };
     function clearServerError() {
@@ -109,14 +111,13 @@ export default function LoginForm() {
 
     return (
         <div className="login-container">
-            <h2 className="login-title">Zaloguj się:</h2>
+            <h2 className="login-title">{lang.loginPage.title}:</h2>
             <form className="login-form" onSubmit={handleSubmit}>
                 <div className='form-row'>
-                    <label htmlFor='login'>Login:</label>
+                    <label htmlFor='login'>{lang.loginPage.loginPlaceholder}:</label>
                     <input 
                         id='login' 
                         type='text' 
-                        // value={login} 
                         onInput={clearLoginError}
                         ref={loginRef}
                         required
@@ -125,20 +126,19 @@ export default function LoginForm() {
                 { loginError ? <FormError error={loginError}/> : <></>}
 
                 <div className='form-row'>
-                    <label htmlFor='password'>password:</label>
+                    <label htmlFor='password'>{lang.loginPage.passwordPlaceholder}:</label>
                     <input 
                         id='password' 
                         type='password' 
-                        // value={password} 
-                        // onInput={clearPassError}
-                        ref={passRef}
+                        onInput={clearLoginError}
+                        ref={passwordRef}
                         required
                     />
                     {/* { passError ? <FormError error={passError}/> : <></>} */}
                 </div>
 
-                <button type='submit' className='login-button' disabled={isLoading}>
-                    { isLoading ? 'Logowanie...' : 'Zaloguj się' }
+                <button type='submit' className='login-button' disabled={isLoading || serverError}>
+                    { isLoading ? lang.loginPage.loadingButton : lang.loginPage.loginButton }
                 </button>
                 {serverError ? <FormError error={serverError}/> : <></>}
             </form>

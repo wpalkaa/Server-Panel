@@ -37,7 +37,6 @@
     color: #cbd5e1;
     font-size: 0.9rem;
     font-weight: 500;
-    cursor: pointer;
     
     display: flex;
     justify-content: space-between;
@@ -47,9 +46,10 @@
     transition: background 0.1s;
 }
 
-.menu-item:hover {
+.menu-item:hover:not(:nth-last-of-type(-n+3)) {
     background-color: #3b82f6;
     color: white;
+    cursor: pointer;
 }
 
 .menu-separator {

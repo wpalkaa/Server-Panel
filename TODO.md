@@ -11,12 +11,4 @@
 
 
 # WAŻNE
-
-- style: logowanie, ustawienia
-- Ogarnąć flagę EN
-- pozamieniać wszędzie komunikaty na słownik
-
-
 - LoginForm => zmienic tu na formik (wymagania projektu)
-
-- Główny loading strony - ten poczatkowy, od całej strony który jest przy pobieraniu usera z ciastka

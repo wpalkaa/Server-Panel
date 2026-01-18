@@ -2,18 +2,15 @@
 'use client';
 
 import { createContext, useState, useContext, useEffect } from "react";
-import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+// import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import LoadingScreen from "@/components/LoadingScreen/LoadingScreen";
 
 import pl from '@/locales/pl.json';
 import en from '@/locales/en.json';
 
 
 const languages = {pl, en}
-const LanguageContext = createContext({
-    lang: 'pl',
-    locale: 'pl',
-    changeLanguage: (locale) => {},
-});
+const LanguageContext = createContext();
 
 export function LanguageProvider( {children} ) {
 
@@ -33,13 +30,17 @@ export function LanguageProvider( {children} ) {
     useEffect( () => {
         const savedLocale = localStorage.getItem('app_lang');
 
+        // If in localStorage, set new locale
         if( savedLocale && languages[savedLocale]) setLocale(savedLocale);
+        // If first visit - not localStorage - set pl
+        else localStorage.setItem('app_lang', 'pl');
+
         setIsLoaded(true);
     }, []);
 
     return (!
         isLoaded 
-            ? <div className='loading-screen'><LoadingSpinner /></div>
+            ? <LoadingScreen />
             : (
                 <LanguageContext value={{ lang, locale, changeLanguage }}>
                     {children}

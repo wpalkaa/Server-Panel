@@ -1,8 +1,10 @@
 
+import '../../LoginStyles.css';
+
 export default function FormError( {error} ) {
 
     return (
-        <div className="form-error" style={{color: 'red', fontSize: '0.7rem'}}>
+        <div className="form-error">
             <i className="fa-solid fa-x"></i> {error}
         </div>
     )

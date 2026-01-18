@@ -13,14 +13,14 @@ async function getTargetPath(pathToValidate = '', options = { mustExist: true}) 
     // Check if path is provided
     if(!pathToValidate) {
         console.error(`[Error]: Request rejected - path was not provided.`);
-        throw { status: 400, message: "Path is required"};
+        throw { status: 400, message: "noPath" };
     };
     
     // Check if target is in allowed directory
     const targetPath = path.join( fileSystemPath, pathToValidate !== '/' ? pathToValidate : '' );
     if(!targetPath.startsWith(fileSystemPath)) {
         console.error('[Error]: Request rejected - received illegal path.');
-        throw { status: 400, message: "Invalid directory path"};
+        throw { status: 400, message: "invalidDirectoryPath" };
     };
 
     // Check if file exists
@@ -35,12 +35,12 @@ async function getTargetPath(pathToValidate = '', options = { mustExist: true}) 
     // File exists but cannot
     if( !options.mustExist && exists) {
         console.error(`[Error]: Request rejected - file already exists.`)
-        throw { status: 409, message: "File already exists" }
+        throw { status: 409, message: "fileExists" }
     }
     // File must exist but does not
     if( options.mustExist && !exists) {
         console.error(`[Error]: Request rejected - file does not exists.`);
-        throw { status: 404, message: "Invalid directory path" }
+        throw { status: 404, message: "fileDoesNotExist" }
     }
 
     return targetPath;
@@ -114,7 +114,8 @@ exports.listFiles = async (req, res) => {
         if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
-            message: error.message || 'Server error while reading directory'
+            // message: error.message || 'Server error while reading directory'
+            message: error.message || 'server'
         });
     };
 };
@@ -158,7 +159,8 @@ exports.getFileInfo = async (req, res) => {
         if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
-            message: error.message || 'Server error while reading directory'
+            // message: error.message || 'Server error while reading directory'
+            message: error.message || 'server'
         });
     };
 };
@@ -195,7 +197,8 @@ exports.getSize = async (req, res) => {
         if(!error.status) console.error(`[Error]: Couldn't read directory:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
-            message: error.message || 'Server error while reading directory'
+            // message: error.message || 'Server error while reading directory'
+            message: error.message || 'server'
         });
     };
 }
@@ -237,7 +240,8 @@ exports.downloadFile = async( req, res ) => {
         if(!error.status) console.error(`[Error]: Couldn't download directory:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
-            message: error.message || 'Server error while downloading directory'
+            // message: error.message || 'Server error while downloading directory'
+            message: error.message || 'server'
         });
     }
 }
@@ -295,7 +299,8 @@ exports.renameFile = async( req, res ) => {
         if(!error.status) console.error(`[Error]: Couldn't rename directory:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
-            message: error.message || 'Server error while renaming directory'
+            // message: error.message || 'Server error while renaming directory'
+            message: error.message || 'server'
         });
     }
 }
@@ -325,7 +330,8 @@ exports.deleteFile = async( req, res ) => {
         if(!error.status) console.error(`[Error]: Couldn't delete file:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
-            message: error.message || 'Server error while deleting file'
+            // message: error.message || 'Server error while deleting file'
+            message: error.message || 'server'
         });
     }
 }
@@ -369,7 +375,8 @@ exports.createFile = async( req, res ) => {
         if(!error.status) console.error(`[Error]: Couldn't create file:\n${error}`);
         res.status( error.status || 500 ).json({
             success: false,
-            message: error.message || 'Server error while creating directory'
+            // message: error.message || 'Server error while creating directory'
+            message: error.message || 'server'
         });
     }
 }

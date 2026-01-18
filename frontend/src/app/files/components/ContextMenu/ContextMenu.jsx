@@ -1,7 +1,10 @@
 
+import { useTranslation } from '@/context/LanguageProvider';
 import './ContextMenu.css';
 
 export default function ContextMenu( {items, position, onAction, onClose, extra} ) {
+
+    const { lang } = useTranslation();
 
     return (
         <>
@@ -40,7 +43,7 @@ export default function ContextMenu( {items, position, onAction, onClose, extra}
                             }}
                             style={item.styles}
                         >
-                            {item.label}
+                            {lang.files.actionItems[item.id]}
                             {item.id === 'size' && extra.size}    
                             {item.id === 'mDate' && extra.mtime}    
                             {item.id === 'birthTime' && extra.birthTime}    

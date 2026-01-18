@@ -1,14 +1,16 @@
 
 import { useState } from 'react';
+
+import { useTranslation } from '@/context/LanguageProvider';
 import './Modals.css';
 
 export default function CreateModal( {onSubmit, onClose, isDirectory} ) {
 
+    const { lang } = useTranslation();
 
     const [fileName, setFileName] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const toCreate = isDirectory ? "katalog" : "plik"
 
 
     function handleChange(e) {
@@ -17,9 +19,9 @@ export default function CreateModal( {onSubmit, onClose, isDirectory} ) {
         const illegalSymbols = /[\\/:*?"<>|]/;
 
         if( name.trim().length === 0 ) {
-            setError("Nazwa nie może być pusta");
+            setError(lang.errors.emptyString);
         } else if( illegalSymbols.test(name) ) {
-            setError("Nazwa zawiera niedowzwolone znaki: \\,/,:,*,?,<,>,|");
+            setError(lang.errors.illegalSymbols);
         } else {
             setError('');
         }
@@ -31,7 +33,7 @@ export default function CreateModal( {onSubmit, onClose, isDirectory} ) {
         e.preventDefault();
 
         if(error) {
-            console.log(`Error: Can't submit:\n${error}`);
+            // console.log(`Error: Can't submit:\n${error}`);
             return;
         };
 
@@ -39,7 +41,7 @@ export default function CreateModal( {onSubmit, onClose, isDirectory} ) {
         try {
             await onSubmit(fileName);
         } catch (error) {
-            setError(error?.response?.data?.message || `Nieznany błąd`);
+            setError(error?.response?.data?.message || lang.errors.generic);
         } finally {
             setIsLoading(false);
         }
@@ -48,7 +50,7 @@ export default function CreateModal( {onSubmit, onClose, isDirectory} ) {
     return (
         <div className="modal-overlay" onMouseDown={onClose}>
             <div className="modal-container" onMouseDown={(e) => e.stopPropagation()}>
-                <h1>Utwórz nowy {toCreate}:</h1>
+                <h1>{isDirectory ? lang.files.modals.create.newDir : lang.files.modals.create.newFile}:</h1>
                 <form className="modal-form" onSubmit={(e) => handleSubmit(e)}>
                     <input 
                         autoFocus
@@ -62,8 +64,8 @@ export default function CreateModal( {onSubmit, onClose, isDirectory} ) {
                     </div>
                     
                     <div className="modal-buttons">
-                        <button type="submit" className="submit-button" disabled={isLoading || error} >Utwórz {toCreate}</button>
-                        <button type="button" onClick={onClose} className="cancel-button">Anuluj</button>
+                        <button type="submit" className="submit-button" disabled={isLoading || error} >{lang.files.modals.create.createButton}</button>
+                        <button type="button" onClick={onClose} className="cancel-button">{lang.files.modals.confirmation.cancel}</button>
                     </div>
 
                 </form>

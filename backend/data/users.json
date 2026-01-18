@@ -2,5 +2,21 @@
     {
         "login": "admin",
         "password": "admin"
+    },
+    {
+        "login": "user",
+        "password": "user"
+    },
+    {
+        "login": "user1",
+        "password": "user1"
+    },
+    {
+        "login": "user2",
+        "password": "user2"
+    },
+    {
+        "login": "user3",
+        "password": "user3"
     }
 ]

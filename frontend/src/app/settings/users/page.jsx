@@ -27,7 +27,7 @@ export default async function UsersPage() {
     const users = await getUsers();
 
     return (
-        <div className="users-page">
+        <div className="users-list">
             <UsersList users={users} />
         </div>
     )

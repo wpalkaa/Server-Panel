@@ -4,10 +4,10 @@ import './style.css'
 
 export default function SettingsLayout({ children }) {
     return (
-        <div className="settings-wrapper" style={{ display: 'flex', flexDirection:'column' }}>
+        <div className="settings-wrapper">
             <Navbar/>
             
-            <main className="settings-content" style={{ padding: '20px', flex: 1 }}>
+            <main className="settings-content">
                 {children}
             </main>
 

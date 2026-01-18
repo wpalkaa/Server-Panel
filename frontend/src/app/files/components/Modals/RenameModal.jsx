@@ -1,11 +1,13 @@
 
 import { useState } from 'react';
+import { useTranslation } from '@/context/LanguageProvider';
 
 import ConfirmationModal from '@/app/files/components/Modals/ConfirmationModal';
 import './Modals.css';
 
 export default function RenameModal( {file, onSubmit, onClose} ) {
 
+    const { lang } = useTranslation();
 
     const fileExtension = file.name.split('.').pop();
 
@@ -25,11 +27,11 @@ export default function RenameModal( {file, onSubmit, onClose} ) {
         const illegalSymbols = /[\\/:*?"<>|]/;
 
         if( name.trim().length === 0 ) {
-            setError("Nazwa nie może być pusta");
+            setError(lang.errors.emptyString);
         } else if( illegalSymbols.test(name) ) {
-            setError("Nazwa zawiera niedowzwolone znaki: \\,/,:,*,?,<,>,|");
+            setError(lang.errors.illegalSymbols);
         } else if( !file.isDirectory && fileExtension !== name.split('.').pop() && file.name.indexOf('.') !== 0 ) {
-            setWarn('Uwaga: Zmieniasz rozszerzenie pliku')
+            setWarn(lang.files.modals.rename.warning);
         }
         else {
             setError('');
@@ -42,7 +44,7 @@ export default function RenameModal( {file, onSubmit, onClose} ) {
         e.preventDefault();
         
         if(error) {
-            console.log(`Error: Can't submit:\n${error}`);
+            // console.log(`Error: Can't submit:\n${error}`);
             return;
         };
         
@@ -55,7 +57,7 @@ export default function RenameModal( {file, onSubmit, onClose} ) {
         try {
             await onSubmit(newName);
         } catch (error) {
-            setError(error?.response?.data?.message || `Nieznany błąd`);
+            setError(error?.response?.data?.message || lang.errors.generic);
         } finally {
             setIsLoading(false);
         }
@@ -75,7 +77,7 @@ export default function RenameModal( {file, onSubmit, onClose} ) {
     return (
         <div className="modal-overlay" onMouseDown={onClose}>
             <div className="modal-container" onMouseDown={(e) => e.stopPropagation()}>
-                <h1>Zmień nazwę pliku:</h1>
+                <h1>{file.isDirectory ? lang.files.modals.rename.renameDir : lang.files.modals.rename.renameFile}</h1>
                 <h2>{file.name}</h2>
                 <form className="modal-form" onSubmit={(e) => handleSubmit(e)}>
                     <input 
@@ -87,12 +89,12 @@ export default function RenameModal( {file, onSubmit, onClose} ) {
                     />
                     
                     <div className="form-error" style={{color: 'red', fontSize: '0.7rem', visibility: error ? "visible" : "hidden"}}> 
-                        <i className="fa-solid fa-x"></i> {error}
+                        <i className="fa-solid fa-x"></i> {lang.errors[error] || error}
                     </div>
                     
                     <div className="modal-buttons">
-                        <button type="submit" className="submit-button" disabled={isLoading || error || needApprove} >Zmień nazwę</button>
-                        <button type="button" onClick={onClose} className="cancel-button">Anuluj</button>
+                        <button type="submit" className="submit-button" disabled={isLoading || error || needApprove} >{lang.files.modals.rename.renameButton}</button>
+                        <button type="button" onClick={onClose} className="cancel-button">{lang.files.modals.rename.cancelButton}</button>
                     </div>
 
                 </form>
@@ -109,7 +111,7 @@ export default function RenameModal( {file, onSubmit, onClose} ) {
                     onClose={() => {
                         setWarn('');
                         setNeedApprove(false)
-                        setError('Zmień rozszerzenie pliku')
+                        setError(lang.files.modals.rename.changeExtension)
                     }} 
                 />)
             }
