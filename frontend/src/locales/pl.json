@@ -92,7 +92,13 @@
             "deleteUser": "Usuń użytkownika",
             "changePassword": "Zmień hasło",
             "setAdmin": "Ustaw jako administratora",
-            "unsetAdmin": "Usuń uprawnienia administratora"
+            "unsetAdmin": "Usuń uprawnienia administratora",
+            
+            "info": {
+                "previousPage": "Powrót",
+                "editUser": "Edytuj użytkownika",
+                "deleteUser": "Usuń użytkownika"
+            }
         }
     },
     "resources": {

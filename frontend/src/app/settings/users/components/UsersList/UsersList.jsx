@@ -24,6 +24,8 @@ export default function UsersList( {users} ) {
                         <i className="fa-solid fa-arrow-left"></i>
                     </button>
 
+                    <span className="pagination-info text-[#94a3b8]">{currentPage}/{totalPages}</span>
+
                     <button className="pagination-btn" disabled={currentPage === totalPages} onClick={() => setCurrentPage((prev) => prev+1)} >
                         <i className="fa-solid fa-arrow-right"></i>
                     </button>

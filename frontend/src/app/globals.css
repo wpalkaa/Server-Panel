@@ -99,6 +99,20 @@ body {
 
 .navbar-footer-user i {
     color: #3b82f6;
-    margin-right: 12px;
+    /* margin-right: 12px; */
     font-size: 16px;
+}
+
+.logout-btn {
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logout-btn:hover > i{ 
+  color: white;
+  transform: translateX(2px);
+  transition: all 0.2s ease;
 }

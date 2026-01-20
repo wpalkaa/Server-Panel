@@ -11,3 +11,5 @@
 
 
 # WAŻNE
+
+- Dodaj funkcję do wylogowania się (przycisk już jest)

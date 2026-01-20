@@ -92,7 +92,13 @@
             "deleteUser": "Delete user",
             "changePassword": "Change password",
             "setAdmin": "Set as administrator",
-            "unsetAdmin": "Remove administrator privileges"
+            "unsetAdmin": "Remove administrator privileges",
+            
+            "info": {
+                "previousPage": "Back",
+                "editUser": "Edit user",
+                "deleteUser": "Delete user"
+            }
         }
     },
     "resources": {
