@@ -13,7 +13,7 @@ function getUsers () {
 
 
 exports.login = (req, res) => {
-    console.log(`Login request received for:\n${JSON.stringify(req.body)}`);
+    console.log(`[Info]: Login request received for:\n${JSON.stringify(req.body)}`);
     
     const USERS = getUsers();
     const { login, password } = req.body;
@@ -42,7 +42,7 @@ exports.login = (req, res) => {
         });
     };
 
-    console.log('Login request rejected - wrong login or password.');
+    console.log('[Info]: Login request rejected - wrong login or password.');
     
     return res.status(401).json({
         success: false,
@@ -50,4 +50,3 @@ exports.login = (req, res) => {
     });
 
 };
-

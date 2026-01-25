@@ -1,0 +1,141 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* Główne okno modala */
+.modal-container {
+    background-color: #1e293b; 
+    border: 1px solid #334155; 
+    border-radius: 12px;
+    padding: 24px;
+    
+    width: 30%;
+    max-width: 450px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-container h1 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8; 
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.modal-container h2 {
+    font-size: 1.1rem;
+    color: #f1f5f9;
+    margin: 0 0 20px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+    border-left: 3px solid #3b82f6;
+    padding-left: 10px;
+}
+
+.modal-message {
+    color: #cbd5e1;
+    font-size: 1rem;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.modal-container input[type="text"] {
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    color: #f1f5f9;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.modal-container input[type="text"]:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.form-error {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #ef4444;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.submit-button {
+    background-color: #3b82f6;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.submit-button:hover:not(:disabled) {
+    background-color: #2563eb;
+}
+
+.submit-button:disabled {
+    background-color: #334155;
+    color: #64748b;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.cancel-button {
+    background-color: transparent;
+    color: #94a3b8;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancel-button:hover {
+    color: #f1f5f9;
+    background-color: #334155;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}

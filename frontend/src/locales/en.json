@@ -3,7 +3,8 @@
         "home": "Main page",
         "files": "Files",
         "resources": "Resources",
-        "settings": "Settings"
+        "settings": "Settings",
+        "logoutMessage": "Are you sure you want to log out?"
     },
     "loginPage": {
         "title": "Log in",
@@ -97,7 +98,7 @@
             "info": {
                 "previousPage": "Back",
                 "editUser": "Edit user",
-                "deleteUser": "Delete user"
+                "deleteUser": "Delete user  "
             }
         }
     },

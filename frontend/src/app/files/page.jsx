@@ -9,7 +9,7 @@ import RenameModal from "./components/Modals/RenameModal";
 import ContextMenu from "./components/ContextMenu/ContextMenu";
 import CreateModal from "./components/Modals/CreateModal";
 import ToolBar from "./components/ToolBar/ToolBar";
-import ConfirmationModal from "@/app/files/components/Modals/ConfirmationModal";
+import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
 

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useTranslation } from '@/context/LanguageProvider';
 
-import ConfirmationModal from '@/app/files/components/Modals/ConfirmationModal';
+import ConfirmationModal from '@/components/ConfirmationModal/ConfirmationModal';
 import './Modals.css';
 
 export default function RenameModal( {file, onSubmit, onClose} ) {

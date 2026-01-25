@@ -3,7 +3,8 @@
         "home": "Strona główna",
         "files": "Pliki",
         "resources": "Zasoby",
-        "settings": "Ustawienia"
+        "settings": "Ustawienia",
+        "logoutMessage": "Czy chcesz się wylogować?"
     },
     "loginPage": {
         "title": "Zaloguj się",

@@ -1,7 +1,7 @@
 
 
 import { useTranslation } from '@/context/LanguageProvider';
-import './Modals.css';
+import './ConfirmationModal.css';
 
 export default function ConfirmationModal( {message, onSubmit, onClose} ) {
 

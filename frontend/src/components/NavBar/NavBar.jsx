@@ -1,46 +1,20 @@
 
 'use client';
-import Link from "next/link";
-const { usePathname } = require("next/navigation");
 
-import { useTranslation } from "@/context/LanguageProvider";
 import LanguageSwitch from "../LanguageSwitch/LanguageSwitch";
+import NavList from "./NavList";
+import UserSection from "./UserSection";
 
 export default function NavBar( {username} ) {
 
-    const { lang } = useTranslation();
-    const pathname = usePathname();
-
-    const isActive = (path) => {
-        if( path === "/" ) return pathname === "/";
-        return pathname.startsWith(path);
-    }
 
     return (
         <aside className="navbar">
             <div className="navbar-logo">WP</div>
-            <ul className='navbar-list'>
-                <li className={`navbar-list-item ${isActive("/") ? "active" : ""}`}><Link href="/"><i className="fa-regular fa-house"></i>{lang.navbar.home}</Link></li>
-                <li className={`navbar-list-item ${isActive("/files") ? "active" : ""}`}><Link href="/files"><i className="fa-regular fa-file"></i>{lang.navbar.files}</Link></li>
-                <li className={`navbar-list-item ${isActive("/resources") ? "active" : ""}`}><Link href="/resources"><i className="fa-solid fa-microchip"></i>{lang.navbar.resources}</Link></li>
-                <li className={`navbar-list-item ${isActive("/settings") ? "active" : ""}`}><Link href="/settings"><i className="fa-solid fa-sliders"></i>{lang.navbar.settings}</Link></li>
-            </ul>
+            <NavList/>
 
             <footer className="navbar-footer">
-                { username &&  
-                (
-                <div className="navbar-footer-user-wrapper flex items-center">
-                    <div className="navbar-footer-user">
-                        <i className="fa-regular fa-user mr-3"></i>{username}
-                        
-                        <button className="logout-btn ml-3" title={lang.navbar.logout} onClick={() => {}}>
-                            <i className="fa-solid fa-right-from-bracket"></i>
-                        </button>
-                    </div>
-                    
-                </div>
-                )}
-
+                { username && <UserSection username={username} /> }
 
                 <LanguageSwitch/> 
             </footer>
