@@ -1,3 +1,10 @@
+# MongoDB
+backend/data/db
+mongod.lock
+*.wt
+*.bson
+storage.bson
+
 # Logs
 logs
 *.log
