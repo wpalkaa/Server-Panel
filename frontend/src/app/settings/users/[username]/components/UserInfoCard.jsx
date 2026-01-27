@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { useTranslation } from '@/context/LanguageProvider';
 import '../UserInfo.css';
 
-export default function UserInfoCard({ user }) {
+export default function UserInfoCard({ userData, isAdmin }) {
 
     const { lang } = useTranslation();
+    const avatar = userData.avatar || '/default-avatar-icon.jpg'
 
     return (
         <div className="user-info-card">
@@ -16,16 +17,25 @@ export default function UserInfoCard({ user }) {
                 </Link>
             </div>
 
-            <h1 className="username">{user.username}</h1>
+            <h1 className="username">{userData.login}</h1>
 
             <div className="user-avatar">
-                <img src={user.avatar} alt="User Avatar" />
+                <img src={avatar} alt="User Avatar" />
             </div>
 
-            <div className="user-actions">
-                <button className="edit-user-button">{lang.settings.users.info.editUser}</button>
-                <button className="delete-user-button">{lang.settings.users.info.deleteUser}</button>
+            <div className="user-groups">
+                <span className="group-label">{lang.global.groups.title}:</span>
+                <span className={`group-badge group-${userData.group}`}>
+                    {lang.global.groups[userData.group]}
+                </span>
             </div>
+
+            {isAdmin && (
+                <div className="user-actions">
+                    <button className="edit-user-button">{lang.settings.users.info.editUser}</button>
+                    <button className="delete-user-button">{lang.settings.users.info.deleteUser}</button>
+                </div>
+            )}
         </div>
     );
 }

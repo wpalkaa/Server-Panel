@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
 
-
 const fileSystemPath = path.join(__dirname, "../../fileSystem/home");
+const isNameValid = require('../utils/isNameValid');
 
 async function getTargetPath(pathToValidate = '', options = { mustExist: true}) {
     // Check if path leads to main file
@@ -244,17 +244,8 @@ exports.downloadFile = async( req, res ) => {
             message: error.message || 'server'
         });
     }
-}
-
-
-function isNameValid(fileName) {
-    if( !fileName || fileName.trim().length === 0 ) return false
-
-    const illegalSymbols = /[\\/:*?"<>|]/;
-    if( illegalSymbols.test(fileName) ) return false;
-
-    return true;
 };
+
 
 exports.renameFile = async( req, res ) => {
 

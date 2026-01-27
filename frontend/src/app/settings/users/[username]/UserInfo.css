@@ -57,12 +57,12 @@
 }
 
 .edit-user-button {
-    background: #3b82f6;
+    background: #2563eb;
     color: white;
 }
 
 .edit-user-button:hover {
-    background: #2563eb;
+    background: #3b82f6;
     box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
     transform: translateY(-2px);
 }
@@ -78,4 +78,54 @@
     color: white;
     box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
     transform: translateY(-2px);
+}
+
+
+
+
+
+.user-groups {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px; 
+    margin: 1.5rem 0;
+}
+.group-label {
+    color: #64748b; 
+    font-size: 0.85rem;
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    font-weight: 600;
+}
+
+.group-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 16px; 
+    
+    border-radius: 50px; 
+    
+    background: rgba(255, 255, 255, 0.03); 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px); 
+    
+    color: #e2e8f0; 
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+
+.group-badge.group-admin {
+    border-color: rgba(239, 68, 68, 0.5); 
+    color: #fca5a5; 
+    background: rgba(239, 68, 68, 0.1); 
+}
+
+.group-badge.group-user {
+    border-color: rgba(16, 185, 129, 0.5); 
+    color: #6ee7b7; 
+    background: rgba(16, 185, 129, 0.1);
 }

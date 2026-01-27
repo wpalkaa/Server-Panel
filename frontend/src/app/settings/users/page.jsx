@@ -5,7 +5,7 @@ export default async function UsersPage() {
     async function getUsers() {
         try {
             const baseURL = process.env.NEXT_PUBLIC_SERVER_URL;
-            const API_URL = new URL('/api/settings/users', baseURL);
+            const API_URL = new URL('/api/users', baseURL);
 
             const response = await fetch(API_URL);
 

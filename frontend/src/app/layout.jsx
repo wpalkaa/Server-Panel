@@ -3,11 +3,11 @@ import { LanguageProvider } from "@/context/LanguageProvider";
 import NavBar from "@/components/NavBar/NavBar";
 import "./globals.css";
 
-import { getUser } from "@/lib/getUser";
+import { getUsername } from "@/lib/getClientInfo";
 
 export default async function RootLayout({ children }) {
 
-    const user = await getUser();
+    const user = await getUsername();
 
      return (
         <html lang="en">

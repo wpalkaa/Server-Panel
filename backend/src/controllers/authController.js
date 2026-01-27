@@ -1,33 +1,37 @@
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const path = require('path');
 
+const isNameValid = require('../utils/isNameValid');
 const SECRET_KEY = process.env.SECRET_KEY;
 
-function getUsers () {
-    const userFilePath = path.join( __dirname, '../../data/users.json' );
-    const data = fs.readFileSync( userFilePath, 'utf-8' );
-
-    return JSON.parse(data);
-}
+const User = require('../models/User');
+const bcrypt = require('bcryptjs');
 
 
-exports.login = (req, res) => {
-    console.log(`[Info]: Login request received for:\n${JSON.stringify(req.body)}`);
-    
-    const USERS = getUsers();
+exports.login = async (req, res) => {
+    console.log(`[Info]: Login request received for:\n`, req.body);
     const { login, password } = req.body;
-    
-    const user = USERS.find( u => u.login === login && u.password === password);
 
-    if( user ) {
-        console.log(`Login request approved.`);
-        
+    try{
+        const user = await User.findOne({ login });
+        console.log(user)
+
+        if(!user) throw { status: 401, message: 'authRejected' };
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if(!isMatch) throw { status: 401, message: 'authRejected' };
+
+        console.log(`[Info]: Login request approved for ${user.login}`);
+
+
         // Generate JWT token
         const token = jwt.sign(  // jwt.sign(payload, secretOrPrivateKey, [options, callback])
-            { login: user.login },
+            {
+                userId: user._id,
+                login: user.login,
+                group: user.group    
+            },
             SECRET_KEY,
-            { expiresIn: '7d'}
+            { expiresIn: '7d' }
         );
 
         res.cookie('user_session', token, {
@@ -38,15 +42,51 @@ exports.login = (req, res) => {
 
         return res.status(200).json({
             success: true,
-            user: { login: user.login }
+            user: { 
+                    login: user.login,
+                    role: user.role 
+                }
+        });
+    } catch(error) {
+        if(error.status)console.log('[Info]: Login request rejected - wrong login or password.');
+        else console.log(`[Error]: Server error on login request: \n`, error)
+        return res.status(error.status || 500).json({
+            success: false,
+            message: error.message || 'server'
         });
     };
-
-    console.log('[Info]: Login request rejected - wrong login or password.');
-    
-    return res.status(401).json({
-        success: false,
-        message: 'authRejected'
-    });
-
 };
+
+exports.register = async (req, res) => {
+    const { login, password, role } = req.body;
+    console.log(`[Info]: Register request received for:`, login);
+
+    try {
+        const loginLength = login.length;
+        if( loginLength < 3 || loginLength > 20 || !isNameValid(login) ) throw { status: 400, message: "invalidLogin" };
+
+        const existingUser = await User.findOne({ login });
+        if(existingUser) throw { status: 409, message: "userExists" };
+
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        await User.create({
+            login,
+            password: hashedPassword,
+            role
+        });
+        console.log(`[Info]: Request accepted. New user has been created.`);
+        
+        return res.status(201).json({
+            success: true
+        });
+    } catch(error) {
+        if(error.status) console.log(`[Info]: Couldn't create user: ${error.message}`);
+        else console.log(`[Error]: Server error on register request:\n`, error)
+        res.status( error.status || 500 ).json({
+            success: false,
+            message: error.message || 'server'
+        });
+    }
+}

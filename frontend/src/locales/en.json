@@ -112,6 +112,13 @@
             
         }
     },
+    "global": {
+        "groups": {
+            "title": "Group",
+            "admin": "Admin",
+            "user": "User"
+        }
+    },
     "errors": {
         "generic": "An error occurred. Please try again later.",
         "server": "Server error. Please try again later.",

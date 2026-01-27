@@ -16,7 +16,7 @@ export default function UsersList( {users} ) {
     return (
         <>
             <div className="users-list-wrapper">
-                {currentUsers.map( (u) => <UserCard key={u.login} user={u}/> )}
+                {currentUsers.map( (u) => <UserCard key={u.login} userData={u}/> )}
             </div>
             {totalPages > 1 && (
                 <div className="pagination-bar">

@@ -1,10 +1,10 @@
 
 import HomePage from "@/components/HomePage/HomePage";
-import { getUser } from "@/lib/getUser";
+import { getUsername } from "@/lib/getClientInfo";
 
 export default async function Home() {
 
-    const user = await getUser();
+    const user = await getUsername();
 
 
     return (

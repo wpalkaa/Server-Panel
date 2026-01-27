@@ -4,10 +4,12 @@ const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 
+const mongoose = require('mongoose');
+const socket = require('./socket');
+
 const authRoutes = require('./routes/authRoutes');
 const fileRoutes = require('./routes/fileRoutes');
-const settingsRoutes = require('./routes/settingsRoutes')
-const socket = require('./socket');
+const usersRoutes = require('./routes/usersRoutes');
 
 
 // Initialize Express and HTTP server
@@ -32,17 +34,17 @@ app.use(cors({
     credentials: true
 }))
 
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI)
+    .then( () => console.log('[Info]: Connected to database.') )
+    .catch( (err) => console.log(`[Error]: Couldn't connect to database: \n${err}`) );
+
 
 
 // Routes
 app.use( '/api/auth', authRoutes );
 app.use( '/api/files', fileRoutes );
-app.use( '/api/settings', settingsRoutes )
-
-app.get('/', (req, res) => {
-    res.send("I am connected");
-});
-
+app.use( '/api/users', usersRoutes)
 
 // WebSocket
 socket( io );
@@ -52,5 +54,5 @@ socket( io );
 const PORT = process.env.PORT;
 
 server.listen(PORT, () => {
-    console.log(`HTTP server and WebSocket are listening on port ${PORT}`);
+    console.log(`[Info]: HTTP server and WebSocket are listening on port ${PORT}`);
 });

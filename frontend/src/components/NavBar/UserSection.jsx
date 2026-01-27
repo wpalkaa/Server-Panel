@@ -17,7 +17,7 @@ export default function UserSection({ username }) {
 
     async function handleLogout() {
         try {
-            await axios.patch('api/auth/logout');
+            await axios.patch('/api/auth/logout');
 
             router.refresh();
         } catch (error) {
