@@ -1,5 +1,5 @@
 # MongoDB
-backend/data/db
+backend/data/db/
 mongod.lock
 *.wt
 *.bson

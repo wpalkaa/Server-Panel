@@ -56,3 +56,7 @@ const PORT = process.env.PORT;
 server.listen(PORT, () => {
     console.log(`[Info]: HTTP server and WebSocket are listening on port ${PORT}`);
 });
+
+
+// For tests
+module.exports = server;
