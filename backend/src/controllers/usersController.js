@@ -8,6 +8,7 @@ exports.getUsers = async (req, res) => {
     try {
         const users = await User.find().select("-password");
 
+        console.log(`[Info]: Request approved. Sending users list.`)
         return res.status(200).json({
             success: true,
             data: users
@@ -22,14 +23,15 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUserData = async (req, res) => {
-    const { username } = req.params;
-    console.log(`[Info]: Get uset data request received for: ${username}`);
+    const { login } = req.params;
+    console.log(`[Info]: Get user data request received for: ${login}`);
 
     try {
-        const user = await User.findOne({ login: username }).select('-password');
+        const user = await User.findOne({ login: login }).select('-password');
 
         if(!user) throw { status: 404, message: "userNotFound" };
 
+        console.log(`[Info]: Request approved. Sending user data.`)
         return res.status(200).json({
             success: true,
             data: user
@@ -39,7 +41,7 @@ exports.getUserData = async (req, res) => {
         else console.log(`[Error]: Error on get user data request: ${error}`);
         return res.status(error.status || 500).json({
             success: false,
-            message: "server"
+            message: error.message || "server"
         });        
     }
 }
@@ -53,6 +55,7 @@ exports.deleteUser = async (req, res) => {
 
         if(!deletedUser) throw { status: 404, message: "userNotFound" };
 
+        console.log(`[Info]: Request approved. User has been deleted.`)
         return res.status(200).json({
             success: true
         });

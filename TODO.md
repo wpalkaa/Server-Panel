@@ -6,10 +6,4 @@
 
 - loadingi - Modale z files, logowanie, pobieranie listy plików, i kto wie co jeszcze
 
-- ~~po kliknięciu na nazwę usera, okienko czy chcesz się wylogować~~
-
-
-
-# WAŻNE
-
-- Dodaj funkcję do wylogowania się (przycisk już jest)
+- Dodawanie u usuwanie użytkowników oraz ich edytowanie

@@ -13,7 +13,6 @@ exports.login = async (req, res) => {
 
     try{
         const user = await User.findOne({ login });
-        console.log(user)
 
         if(!user) throw { status: 401, message: 'authRejected' };
 
@@ -37,6 +36,8 @@ exports.login = async (req, res) => {
         res.cookie('user_session', token, {
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7d 24h 60min 60s 1000s = 7d
             httpOnly: true,
+            secure: true,
+            sameSime: 'none',
             path: '/'
         });
 
@@ -44,7 +45,7 @@ exports.login = async (req, res) => {
             success: true,
             user: { 
                     login: user.login,
-                    role: user.role 
+                    group: user.group 
                 }
         });
     } catch(error) {
@@ -58,7 +59,7 @@ exports.login = async (req, res) => {
 };
 
 exports.register = async (req, res) => {
-    const { login, password, role } = req.body;
+    const { login, password, group } = req.body;
     console.log(`[Info]: Register request received for:`, login);
 
     try {
@@ -74,7 +75,7 @@ exports.register = async (req, res) => {
         await User.create({
             login,
             password: hashedPassword,
-            role
+            group
         });
         console.log(`[Info]: Request accepted. New user has been created.`);
         
