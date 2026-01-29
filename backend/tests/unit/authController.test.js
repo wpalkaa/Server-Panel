@@ -1,13 +1,13 @@
 const authController = require('../../src/controllers/authController');
 const User = require('../../src/models/User');
-const isNameValid = require('../../src/utils/isNameValid');
+const { isNameValid } = require('../../src/utils/files');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 jest.mock('../../src/models/User'); // zamienia User na mocka
 jest.mock('bcryptjs');
 jest.mock('jsonwebtoken');
-jest.mock('../../src/utils/isNameValid');
+jest.mock('../../src/utils/files');
 
 describe('Auth Controller - Login', () => {
     let req, res;

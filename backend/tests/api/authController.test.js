@@ -5,13 +5,13 @@ const bcrypt = require('bcryptjs');
 const authController = require('../../src/controllers/authController');
 const authRoutes = require('../../src/routes/authRoutes')
 const User = require('../../src/models/User');
-const isNameValid = require('../../src/utils/isNameValid');
+const { isNameValid } = require('../../src/utils/files');
 
 
 jest.mock('../../src/models/User');
 jest.mock('bcryptjs');
 jest.mock('jsonwebtoken');
-jest.mock('../../src/utils/isNameValid');
+jest.mock('../../src/utils/files');
 
 const app = express();
 app.use(express.json());

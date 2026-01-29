@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const isNameValid = require('../utils/isNameValid');
+const { isNameValid } = require('../utils/files');
 const SECRET_KEY = process.env.SECRET_KEY;
 
 const User = require('../models/User');

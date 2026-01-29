@@ -3,66 +3,66 @@ const path = require('path');
 const archiver = require('archiver');
 
 const fileSystemPath = path.join(__dirname, "../../fileSystem/home");
-const isNameValid = require('../utils/isNameValid');
+const { isNameValid, getTargetPath, calculateDirectorySize } = require('../utils/files');
 
-async function getTargetPath(pathToValidate = '', options = { mustExist: true}) {
-    // Check if path leads to main file
-    if( pathToValidate === '/home' ) {
-        return fileSystemPath;
-    }
-    // Check if path is provided
-    if(!pathToValidate) {
-        console.error(`[Error]: Request rejected - path was not provided.`);
-        throw { status: 400, message: "noPath" };
-    };
+// async function getTargetPath(pathToValidate = '', options = { mustExist: true}, fileSystemPath) {
+//     // Check if path leads to main file
+//     if( pathToValidate === '/home' ) {
+//         return fileSystemPath;
+//     }
+//     // Check if path is provided
+//     if(!pathToValidate) {
+//         console.error(`[Error]: Request rejected - path was not provided.`);
+//         throw { status: 400, message: "noPath" };
+//     };
     
-    // Check if target is in allowed directory
-    const targetPath = path.join( fileSystemPath, pathToValidate !== '/' ? pathToValidate : '' );
-    if(!targetPath.startsWith(fileSystemPath)) {
-        console.error('[Error]: Request rejected - received illegal path.');
-        throw { status: 400, message: "invalidDirectoryPath" };
-    };
+//     // Check if target is in allowed directory
+//     const targetPath = path.join( fileSystemPath, pathToValidate !== '/' ? pathToValidate : '' );
+//     if(!targetPath.startsWith(fileSystemPath)) {
+//         console.error('[Error]: Request rejected - received illegal path.');
+//         throw { status: 400, message: "invalidDirectoryPath" };
+//     };
 
-    // Check if file exists
-    let exists = false;
-    try {
-        await fs.promises.access(targetPath, fs.constants.F_OK);
-        exists = true;
-    } catch(error) {
-        exists = false;
-    };
+//     // Check if file exists
+//     let exists = false;
+//     try {
+//         await fs.promises.access(targetPath, fs.constants.F_OK);
+//         exists = true;
+//     } catch(error) {
+//         exists = false;
+//     };
    
-    // File exists but cannot
-    if( !options.mustExist && exists) {
-        console.error(`[Error]: Request rejected - file already exists.`)
-        throw { status: 409, message: "fileExists" }
-    }
-    // File must exist but does not
-    if( options.mustExist && !exists) {
-        console.error(`[Error]: Request rejected - file does not exists.`);
-        throw { status: 404, message: "fileDoesNotExist" }
-    }
+//     // File exists but cannot
+//     if( !options.mustExist && exists) {
+//         console.error(`[Error]: Request rejected - file already exists.`)
+//         throw { status: 409, message: "fileExists" }
+//     }
+//     // File must exist but does not
+//     if( options.mustExist && !exists) {
+//         console.error(`[Error]: Request rejected - file does not exists.`);
+//         throw { status: 404, message: "fileDoesNotExist" }
+//     }
 
-    return targetPath;
-};
+//     return targetPath;
+// };
 
-async function calculateDirectorySize(dirPath) {
-    const files = await fs.promises.readdir(dirPath, {withFileTypes: true});
-    let totalSize = 0;
+// async function calculateDirectorySize(dirPath) {
+//     const files = await fs.promises.readdir(dirPath, {withFileTypes: true});
+//     let totalSize = 0;
 
-    for( const file of files ) {
-        const filePath = path.join(dirPath, file.name);
+//     for( const file of files ) {
+//         const filePath = path.join(dirPath, file.name);
 
-        if( file.isDirectory() ) {
-            totalSize += await calculateDirectorySize(filePath);
-        } else {
-            const fileStats = await fs.promises.stat(filePath);
-            totalSize += fileStats.size;
-        }
-    }
+//         if( file.isDirectory() ) {
+//             totalSize += await calculateDirectorySize(filePath);
+//         } else {
+//             const fileStats = await fs.promises.stat(filePath);
+//             totalSize += fileStats.size;
+//         }
+//     }
 
-    return totalSize;
-};
+//     return totalSize;
+// };
 
 
 
@@ -73,7 +73,7 @@ exports.listFiles = async (req, res) => {
     
     try {
         // Validate request path and get target path
-        const targetPath = await getTargetPath(requestPath);
+        const targetPath = await getTargetPath(requestPath, fileSystemPath);
 
         console.log(`[Info]: Request approved - sending files list.`)
 
@@ -91,6 +91,7 @@ exports.listFiles = async (req, res) => {
                 if( !stats.isDirectory() ) {
                     totalSize = stats.size;
                 } else {
+                    /* istanbul ignore next */
                     totalSize = await calculateDirectorySize(filePath);
                 };
 
@@ -127,7 +128,7 @@ exports.getFileInfo = async (req, res) => {
     
     try {
         // Validate request path and get target path
-        const targetPath = await getTargetPath(requestPath);
+        const targetPath = await getTargetPath(requestPath, fileSystemPath);
         const fileName = path.basename(targetPath);
 
         console.log(`[Info]: Request approved - sending file info.`)
@@ -135,11 +136,11 @@ exports.getFileInfo = async (req, res) => {
         // Get file statistics
         const stats = await fs.promises.stat(targetPath);
         let totalSize = 0;
-                if( !stats.isDirectory() ) {
-                    totalSize = stats.size;
-                } else {
-                    totalSize = await calculateDirectorySize(targetPath);
-                };
+        if( !stats.isDirectory() ) {
+            totalSize = stats.size;
+        } else {
+            totalSize = await calculateDirectorySize(targetPath);
+        };
 
         const fileInfo = {
             name: fileName,
@@ -174,7 +175,7 @@ exports.getSize = async (req, res) => {
     
     try {
         // Validate request path and get target path
-        const targetPath = await getTargetPath(requestPath);
+        const targetPath = await getTargetPath(requestPath, fileSystemPath);
 
         console.log("[Info]: Request approved - sending file size.")
 
@@ -212,7 +213,7 @@ exports.downloadFile = async( req, res ) => {
 
     try {
         // Validate request path and get target path
-        const targetPath = await getTargetPath(requestPath);
+        const targetPath = await getTargetPath(requestPath, fileSystemPath);
 
         console.log(`[Info]: Request approved - sending file.`);
 
@@ -266,7 +267,7 @@ exports.renameFile = async( req, res ) => {
             })
         }
         // Validate request path and get target path
-        const targetPath = await getTargetPath(requestPath);  // fileSystem + requestPath
+        const targetPath = await getTargetPath(requestPath, fileSystemPath);  // fileSystem + requestPath
         
         // New target path
         const targetDirname = path.dirname(targetPath)  // fileSystem + requestDirectory
@@ -274,7 +275,7 @@ exports.renameFile = async( req, res ) => {
 
         // Validate new target path
         const pathToRenamedFile = path.relative( fileSystemPath, newTargetPath );
-        await getTargetPath( pathToRenamedFile, { mustExist: false } );
+        await getTargetPath( pathToRenamedFile, fileSystemPath, { mustExist: false } );
         
         console.log("[Info]: Request approved - renaming file...");
 
@@ -305,7 +306,7 @@ exports.deleteFile = async( req, res ) => {
 
     try {
         // Validate request path and get target path
-        const targetPath = await getTargetPath(requestPath);  // fileSystem + requestPath
+        const targetPath = await getTargetPath(requestPath, fileSystemPath);  // fileSystem + requestPath
 
         console.log(`[Info]: request approved - deleting file...`);
         
@@ -349,7 +350,7 @@ exports.createFile = async( req, res ) => {
         // Validate request path 
         const filePath = `${requestPath}/${fileName}`;
         console.log(`[Debug]: filePath: ${filePath}`);
-        const targetPath = await getTargetPath(filePath, { mustExist: false }); 
+        const targetPath = await getTargetPath(filePath, fileSystemPath, { mustExist: false }); 
 
         console.log(`[Info]: request approved - creating a new file.`);
 
@@ -359,7 +360,7 @@ exports.createFile = async( req, res ) => {
 
         res.status(200).json({
             success: true,
-            message: 'File name has been created'
+            message: 'File has been created'
         });
 
     } catch (error) {
