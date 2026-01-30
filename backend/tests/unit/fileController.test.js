@@ -4,7 +4,6 @@ const archiver = require('archiver');
 
 const fileController = require('../../src/controllers/fileController');
 const { isNameValid, getTargetPath, calculateDirectorySize } = require('../../src/utils/files');
-const { get } = require('http');
 
 jest.mock('fs', () => ({ // tworzy obiekt fs
     promises: {
@@ -75,7 +74,6 @@ describe('Files controller', () => {
         it('Target directory does not exist', async () => {
             req.body.path = '/jsyraethrhw';
             
-            //fs.promises.access.mockRejectedValue(new Error('Not exists'));
             getTargetPath.mockRejectedValue({ status: 404, message: 'fileDoesNotExist'})
             await fileController.listFiles(req, res);
 
@@ -426,7 +424,7 @@ describe('Files controller', () => {
         it('Everything ok', async () => {
             isNameValid.mockReturnValue(true);
             getTargetPath.mockResolvedValueOnce('/home/old.txt')
-            getTargetPath.mockResolvedValueOnce('/home/new.txt');
+            getTargetPath.mockResolvedValueOnce('/home/new.txt')
 
             fs.promises.rename.mockResolvedValue();
 

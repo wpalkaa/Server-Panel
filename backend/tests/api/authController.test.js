@@ -24,6 +24,8 @@ describe('/api/auth', () => {
     });
 
     describe('POST /api/auth/login', () => {
+        
+        afterEach(() => jest.clearAllMocks());
         const reqBody = { 
             login: 'user', 
             password: '12345' 
@@ -89,6 +91,8 @@ describe('/api/auth', () => {
 
 
     describe('POST /api/auth/register', () => {
+        afterEach(() => jest.clearAllMocks());
+        
         const reqBody = { 
             login: 'user', 
             password: '12345', 

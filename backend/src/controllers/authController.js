@@ -72,7 +72,7 @@ exports.register = async (req, res) => {
         
         const hashedPassword = await bcrypt.hash(password, 10);
         
-        await User.create({
+        const newUser = await User.create({
             login,
             password: hashedPassword,
             group
@@ -80,7 +80,8 @@ exports.register = async (req, res) => {
         console.log(`[Info]: Request accepted. New user has been created.`);
         
         return res.status(201).json({
-            success: true
+            success: true,
+            userId: newUser._id
         });
     } catch(error) {
         if(error.status) console.log(`[Info]: Couldn't create user: ${error.message}`);

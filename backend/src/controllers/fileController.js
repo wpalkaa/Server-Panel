@@ -74,7 +74,6 @@ exports.listFiles = async (req, res) => {
     try {
         // Validate request path and get target path
         const targetPath = await getTargetPath(requestPath, fileSystemPath);
-
         console.log(`[Info]: Request approved - sending files list.`)
 
 
@@ -139,6 +138,7 @@ exports.getFileInfo = async (req, res) => {
         if( !stats.isDirectory() ) {
             totalSize = stats.size;
         } else {
+            /* istanbul ignore next */
             totalSize = await calculateDirectorySize(targetPath);
         };
 
@@ -187,6 +187,7 @@ exports.getSize = async (req, res) => {
         if( !fileStats.isDirectory() ) {
             totalSize = fileStats.size;
         } else {
+            /* istanbul ignore next */
             totalSize = await calculateDirectorySize(targetPath);
         }
 

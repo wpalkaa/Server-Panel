@@ -8,10 +8,12 @@ const mongoose = require('mongoose');
 const socket = require('./socket');
 const cookieParser = require('cookie-parser');
 const fs = require('fs')
+const bcrypt = require('bcryptjs');
 
 const authRoutes = require('./routes/authRoutes');
 const fileRoutes = require('./routes/fileRoutes');
 const usersRoutes = require('./routes/usersRoutes');
+const User = require('./models/User');
 
 
 // Initialize Express and HTTP server
@@ -45,9 +47,33 @@ app.use(cookieParser());
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
-    .then( () => console.log('[Info]: Connected to database.') )
-    .catch( (err) => console.log(`[Error]: Couldn't connect to database: \n${err}`) );
+    .then( async () => {
+        console.log('[Info]: Connected to database.') 
+        
+        const adminExists = await User.findOne({ login: 'admin' });
+        const userExists = await User.findOne({ login: 'user' });
 
+        if(!adminExists) {
+            console.log(`[Info]: Admin not found in database. Creating admin account.`)
+            const hashedPassword = await bcrypt.hash('admin', 10);
+
+            await User.create({
+                login: 'admin',
+                password: hashedPassword,
+                group: 'admin'
+            });
+        }
+        if(!userExists) {
+            console.log(`[Info]: User not found in database. Creating user account.`)
+            const hashedPassword = await bcrypt.hash('user', 10);
+
+            await User.create({
+                login: 'user',
+                password: hashedPassword,
+                group: 'user'
+            });
+        }})
+    .catch( (err) => console.log(`[Error]: Couldn't connect to database: \n${err}`) );
 
 
 // Routes

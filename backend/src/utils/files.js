@@ -1,3 +1,6 @@
+const path = require('path');
+const fs = require('fs');
+
 function isNameValid(fileName) {
     if( !fileName || fileName.trim().length === 0 ) return false
 
@@ -36,6 +39,7 @@ async function getTargetPath(pathToValidate = '', fileSystemPath, options = { mu
         exists = false;
     };
    
+    console.log(`\n\n\n\n\nexist: ${exists}\nmust: ${options.mustExist}\n${targetPath}\n\n\n\n`)
     // File exists but cannot
     if( !options.mustExist && exists) {
         console.error(`[Error]: Request rejected - file already exists.`)
@@ -46,7 +50,6 @@ async function getTargetPath(pathToValidate = '', fileSystemPath, options = { mu
         console.error(`[Error]: Request rejected - file does not exists.`);
         throw { status: 404, message: "fileDoesNotExist" }
     }
-
     return targetPath;
 };
 

@@ -7,3 +7,5 @@
 - loadingi - Modale z files, logowanie, pobieranie listy plików, i kto wie co jeszcze
 
 - Dodawanie u usuwanie użytkowników oraz ich edytowanie
+
+- KOD 500 w listfiles kiedy jest to plik.txt a nie katalog

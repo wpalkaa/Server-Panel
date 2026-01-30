@@ -23,6 +23,7 @@ describe('/api/users', () => {
     });
 
     describe('GET /api/users', () => {
+        afterEach(() => jest.clearAllMocks());
 
         it('Everythin ok', async () => {
             usersController.getUsers.mockImplementation((req, res) => {
@@ -56,6 +57,7 @@ describe('/api/users', () => {
 
 
     describe('GEET /api/users/:login', () => {
+        afterEach(() => jest.clearAllMocks());
 
         it('Everything ok', async () => {
             usersController.getUserData.mockImplementation((req, res) => {
@@ -90,6 +92,7 @@ describe('/api/users', () => {
 
 
     describe('DELETE /api/users/:id', () => {
+        afterEach(() => jest.clearAllMocks());
 
         beforeEach(() => {
             verifyAdmin.mockImplementation((req, res, next) => {

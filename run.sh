@@ -1,5 +1,28 @@
 #!/bin/bash
 
+cleanup() {
+    echo "============ Stopping services ============"
+
+    if [ -n "$FRONTEND_PID" ]; then
+        echo "Stopping frontend $$FRONTEND_PID..."
+        kill $FRONTEND_PID
+    fi
+
+    if [ -n "$BACKEND_PID" ]; then
+        echo "Stopping backend $$BACKEND_PID..."
+        kill $BACKEND_PID
+    fi
+
+    echo "Stopping database..."
+    cd backend/data || exit
+    docker-compose down
+    cd ../..
+
+    echo "============ All services stopped ============"
+
+    exit 0
+}
+
 mkdir logs
 
 echo "Starting frontend..."
@@ -27,4 +50,10 @@ echo " - frontend.log"
 echo " - backend.log"
 echo " - database.log"
 
-wait
+echo "Type 'stop' to stop all services."
+while true; do
+    read input
+    if [ $input == "stop" ]; then
+        cleanup
+    fi
+done
