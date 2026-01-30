@@ -23,7 +23,7 @@ defineFeature(feature, test => {
 
     afterEach(() => jest.clearAllMocks());
 
-    it('Directory is empty', ({ given, when, then }) => {
+    test('Directory is empty', ({ given, when, then }) => {
         let size;
 
         given('an empty directory', async () => {
@@ -41,7 +41,7 @@ defineFeature(feature, test => {
 
 
 
-    it('Directory with only files', ({ given, when, then }) => {
+    test('Directory with only files', ({ given, when, then }) => {
         let size;
 
         given('a directory with files of sizes 100 and 200', async () => {
@@ -65,7 +65,7 @@ defineFeature(feature, test => {
 
 
     
-    it('Directory contains files and directories', ({ given, when, then }) => {
+    test('Directory contains files and directories', ({ given, when, then }) => {
         let size;
 
         given('a directory with a file of size 67 and a subdirectory containing a file of size 1333', async () => {
