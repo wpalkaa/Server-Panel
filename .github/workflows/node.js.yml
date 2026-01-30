@@ -4,8 +4,12 @@ name: Node.js CI
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - "backend/**"
   pull_request:
     branches: [ "main" ]
+    paths:
+      - "backend/**"
 
 jobs:
   build:
@@ -29,11 +33,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+
     - name: Install dependencies
-      run: npm install
+      run: npm install backend
+      working-directory: backend
+
     - name: Run server
-      run: node backend/src/server.js
+      run: node src/server.js &
+      working-directory: backend
+
     - name: Wait for server to start
       run: sleep 5
+
     - name: Run tests
-      run: npm test backend
+      run: npm test 
+      working-directory: backend
