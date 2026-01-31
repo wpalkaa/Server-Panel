@@ -27,6 +27,7 @@ git clone https://github.com/wpalkaa/Server-Panel
 ```
 
 ### 2. Uruchom
+Docker wymagany dla MongoDB.
 ```bash
 sh run.sh
 ```
