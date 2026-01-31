@@ -9,6 +9,10 @@ jest.mock('bcryptjs');
 jest.mock('jsonwebtoken');
 jest.mock('../../src/utils/files');
 
+
+
+
+
 describe('Auth Controller - Login', () => {
     let req, res;
 

@@ -1,6 +1,10 @@
+
+Wojciech Pałka 300869 gr. 4
+
 # Server Panel
 
-Panel do zarządzania plikami serwera, monitorowania listy użytkowników oraz zużycia zasobów.
+Panel do zarządzania plikami serwera, zarządzania użytkownikami oraz monitorowania zużycia zasobów.
+
 
 ---
 
@@ -11,37 +15,17 @@ Panel do zarządzania plikami serwera, monitorowania listy użytkowników oraz z
 git clone https://github.com/wpalkaa/Server-Panel
 ```
 
-### 2. Konfiguracja Frontend'u
-Pobierz wszystkie zależności
+### 2. Uruchom
 ```bash
-cd Server-Panel/frontend
-npm install
+sh run.sh
 ```
 
-Uruchom, wpisując:
-- dla trybu deweloperskiego
-```bash
-npm run dev
-```
+### Przydatne
+- Adres www: https://localhost:3000/
 
-- dla trybu produkcyjnego
+- Adres serwera: https://localhost:13001/
 
-```bash
-npm run build
-npm run start
-```
+- Adres bazy danych: mongodb://localhost:27017/
 
-### 3. Konfiguracja Backend'u
-
-Pobierz wszystkie zależności
-
-```bash
-cd Server-Panel/backend
-npm install
-```
-
-Włącz serwer, wpisująć:
-
-```bash
-node src/server.js
-```
+- By odpalić testy, należy uruchomić serwer - w katalogu **backend** `node src/server.js`
+a następnie `npm run cov` 

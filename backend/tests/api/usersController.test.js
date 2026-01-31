@@ -4,7 +4,6 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 
 const usersRoutes = require('../../src/routes/usersRoutes');
-// const usersController = require('../../src/controllers/usersController');
 const verifyAdmin = require('../../src/middleware/verifyAdmin');
 const User = require('../../src/models/User');
 const { isNameValid } = require('../../src/utils/files');
@@ -18,10 +17,14 @@ app.use(cookieParser());
 app.use('/api/users', usersRoutes);
 
 jest.mock('../../src/models/User');
-// jest.mock('../../src/controllers/usersController');
 jest.mock('../../src/middleware/verifyAdmin');
 jest.mock('../../src/utils/files');
 jest.mock('bcryptjs');
+
+
+
+
+
 
 describe('/api/users', () => {
     

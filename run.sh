@@ -22,8 +22,34 @@ cleanup() {
 
     exit 0
 }
+trap cleanup SIGINT SIGTERM
 
-mkdir logs
+mkdir -p logs
+
+
+echo "============ Installing Dependencies ============"
+
+echo "1/2 Installing Backend dependencies..."
+cd backend || exit
+npm install
+if [ $? -ne 0 ]; then
+    echo "Error installing backend dependencies!"
+    exit 1
+fi
+cd ..
+
+echo "2/2 Installing Frontend dependencies..."
+cd frontend || exit
+npm install
+if [ $? -ne 0 ]; then
+    echo "Error installing frontend dependencies!"
+    exit 1
+fi
+cd ..
+
+echo "============ Starting Services ============"
+
+
 
 echo "Starting frontend..."
 cd frontend || exit
@@ -42,18 +68,23 @@ cd data || exit
 docker-compose up -d > ../../logs/database.log 2>&1 &
 cd ../..
 
-echo "Running:"
-echo "Frontend PID: $FRONT_PID"
-echo "Backend PID: $BACK_PID"
-echo "Logs in ./logs"
-echo " - frontend.log"
-echo " - backend.log"
-echo " - database.log"
+
+
+echo ""
+echo "============ Status ============"
+echo "Frontend PID: $FRONTEND_PID"
+echo "Backend PID:  $BACKEND_PID"
+echo "Logs available in ./logs directory"
+echo "================================"
+
 
 echo "Type 'stop' to stop all services."
+
 while true; do
     read input
     if [ $input == "stop" ]; then
         cleanup
+    else
+        echo "Unknown command: $input. Type 'stop' to stop all services."
     fi
 done
