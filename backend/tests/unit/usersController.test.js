@@ -1,7 +1,15 @@
 const usersController = require('../../src/controllers/usersController');
 const User = require('../../src/models/User');
+const { isNameValid } = require('../../src/utils/files');
+
+const bcrypt = require('bcryptjs');
 
 jest.mock('../../src/models/User');
+jest.mock('bcryptjs');
+jest.mock('jsonwebtoken');
+jest.mock('../../src/utils/files');
+
+
 
 describe('Users Controller', () => {
     let req, res;
@@ -119,7 +127,7 @@ describe('Users Controller', () => {
             expect(res.status).toHaveBeenCalledWith(404);
             expect(res.json).toHaveBeenCalledWith({
                 success: false,
-                message: 'server'
+                message: 'userNotFound'
             });
         });
 
@@ -135,4 +143,98 @@ describe('Users Controller', () => {
             })
         });
     });
+
+
+
+    describe('Users controller - Create user', () => {
+        let res, req;
+
+        beforeEach(() => {
+            req = {
+                body: {
+                    login: 'user',
+                    password: '12345',
+                    group: 'user'
+                }
+            };
+            res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            }
+        });
+
+        it('Everything ok', async () => {
+            isNameValid.mockResolvedValue(true);
+            User.findOne.mockResolvedValue(null);
+            bcrypt.hash.mockResolvedValue('hashed');
+            User.create.mockResolvedValue(true);
+
+            await usersController.createUser(req, res);
+
+            expect(User.findOne).toHaveBeenCalledWith({ login: 'user'});
+            expect(User.create).toHaveBeenCalledWith({
+                    login: 'user',
+                    password: 'hashed',
+                    group: 'user'
+                })
+
+            expect(res.status).toHaveBeenCalledWith(201);
+            expect(res.json).toHaveBeenCalledWith({
+                success: true
+            });
+        });
+
+        it('User exists', async () => {
+            isNameValid.mockResolvedValue(true);
+            User.findOne.mockResolvedValue({ login: 'user' });
+
+            await usersController.createUser(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(409);
+            expect(res.json).toHaveBeenCalledWith({
+                success: false,
+                message: "userExists"
+            })
+        });
+
+        it('Invalid login length', async () => {
+            req.body.login = 'u';
+
+            isNameValid.mockReturnValue(true);
+
+            await usersController.createUser(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({
+                success: false,
+                message: 'invalidLogin'
+            });
+        });
+
+        it('Invalid login format', async () => {
+            isNameValid.mockReturnValue(false);
+
+            await usersController.createUser(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({
+                success: false,
+                message: 'invalidLogin'
+            });
+        });
+
+        it('Server error', async () => {
+            
+            isNameValid.mockReturnValue(true);
+            User.findOne.mockRejectedValue(new Error());
+
+            await usersController.createUser(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({
+                success: false,
+                message: 'server'
+            });
+        });
+    })
 });

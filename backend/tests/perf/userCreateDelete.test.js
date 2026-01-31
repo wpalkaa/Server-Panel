@@ -9,7 +9,7 @@ const agent = new https.Agent({ rejectUnauthorized: false })
 
 async function accountCreateDelete1000times(accData, i) {
     try {
-        const r = await axios.post(`${API_URL}/auth/register`, accData, { timeout: TIMEOUT, httpsAgent: agent });
+        const r = await axios.post(`${API_URL}/users/create`, accData, { timeout: TIMEOUT, httpsAgent: agent });
         if( r.status !== 201 ) throw new Error(`${i}-request: Got wrong status`);
 
         const data = r.data;

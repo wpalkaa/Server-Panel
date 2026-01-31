@@ -1,10 +1,14 @@
 const request = require('supertest');
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcryptjs');
 
 const usersRoutes = require('../../src/routes/usersRoutes');
-const usersController = require('../../src/controllers/usersController');
+// const usersController = require('../../src/controllers/usersController');
 const verifyAdmin = require('../../src/middleware/verifyAdmin');
+const User = require('../../src/models/User');
+const { isNameValid } = require('../../src/utils/files');
+
 
 
 // Express app for tests
@@ -13,8 +17,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api/users', usersRoutes);
 
-jest.mock('../../src/controllers/usersController');
+jest.mock('../../src/models/User');
+// jest.mock('../../src/controllers/usersController');
 jest.mock('../../src/middleware/verifyAdmin');
+jest.mock('../../src/utils/files');
+jest.mock('bcryptjs');
 
 describe('/api/users', () => {
     
@@ -26,11 +33,8 @@ describe('/api/users', () => {
         afterEach(() => jest.clearAllMocks());
 
         it('Everythin ok', async () => {
-            usersController.getUsers.mockImplementation((req, res) => {
-                res.status(200).json({
-                    success: true,
-                    data: [{ login: 'user1' }, { login: 'user2' }]
-                });
+            User.find.mockReturnValue({
+                select: jest.fn().mockResolvedValue([{ login: 'user1' }, { login: 'user2' }])
             });
 
             const r = await request(app).get('/api/users');
@@ -40,12 +44,9 @@ describe('/api/users', () => {
             expect(r.body.data).toMatchObject([{ login: 'user1' }, { login: 'user2' }]);
         });
 
-        it('Server error', async () => {
-            usersController.getUsers.mockImplementation((req, res) => {
-                res.status(500).json({ 
-                    success: false, 
-                    message: 'server' 
-                });
+        it('Some server error', async () => {
+            User.find.mockReturnValue({
+                select: jest.fn().mockRejectedValue(new Error())
             });
 
             const r = await request(app).get('/api/users');
@@ -60,26 +61,20 @@ describe('/api/users', () => {
         afterEach(() => jest.clearAllMocks());
 
         it('Everything ok', async () => {
-            usersController.getUserData.mockImplementation((req, res) => {
-                res.status(200).json({
-                    success: true,
-                    data: { login: 'admin', role: 'admin' }
-                });
+            User.findOne.mockReturnValue({
+                select: jest.fn().mockResolvedValue({ login: 'admin', group: 'admin' })
             });
 
             const r = await request(app).get('/api/users/admin');
 
             expect(r.statusCode).toBe(200);
             expect(r.body.success).toBe(true);
-            expect(r.body.data).toMatchObject({ login: 'admin', role: 'admin'} );
+            expect(r.body.data).toMatchObject({ login: 'admin', group: 'admin'} );
         });
 
         it('User not found', async () => {
-            usersController.getUserData.mockImplementation((req, res) => {
-                res.status(404).json({
-                    success: false,
-                    message: 'userNotFound'
-                });
+            User.findOne.mockReturnValue({
+                select: jest.fn().mockResolvedValue(null)
             });
 
             const r = await request(app).get('/api/users/djaiwodjaiowd');
@@ -101,9 +96,7 @@ describe('/api/users', () => {
         });
 
         it('Everything ok', async () => {
-            usersController.deleteUser.mockImplementation((req, res) => {
-                res.status(200).json( { success: true } );
-            });
+            User.findByIdAndDelete.mockResolvedValue({ _id: '1', login: 'deletedUser' });
 
             const r = await request(app).delete('/api/users/delete/1');
 
@@ -121,26 +114,89 @@ describe('/api/users', () => {
 
             const r = await request(app).delete('/api/users/delete/1');expect(r.statusCode).toBe(403);
 
+            expect(User.findByIdAndDelete).not.toHaveBeenCalled();            
             expect(r.statusCode).toBe(403);
             expect(r.body.success).toBe(false);
             expect(r.body.message).toBe('Unauthorized');
             
-            expect(usersController.deleteUser).not.toHaveBeenCalled();            
         })
 
         it('User not found', async () => {
-            usersController.deleteUser.mockImplementation((req, res) => {
-                res.status(404).json({
-                    success: false,
-                    message: 'userNotFound'
-                });
-            });
-
+            User.findByIdAndDelete.mockResolvedValue(null);
+            
             const r = await request(app).delete('/api/users/delete/inoberte');
 
             expect(r.statusCode).toBe(404);
             expect(r.body.success).toBe(false);
             expect(r.body.message).toBe('userNotFound')
+        });
+    });
+
+
+
+    describe('POST /api/users/create', () => {
+        afterEach(() => jest.clearAllMocks());
+        
+        const reqBody = { 
+            login: 'user', 
+            password: '12345', 
+            group: 'user' 
+        };
+
+        it('Everything ok', async () => {
+            User.findOne.mockResolvedValue(null);
+            bcrypt.hash.mockResolvedValue('hashed');
+            User.create.mockResolvedValue({ 
+                login: 'user', 
+                password: 'hashed',
+                group: 'user'
+            });
+            isNameValid.mockReturnValue(true);
+
+            const res = await request(app).post('/api/users/create').send(reqBody);
+
+            expect(res.statusCode).toBe(201);
+            expect(res.body.success).toBe(true);
+
+            expect(bcrypt.hash).toHaveBeenCalledWith('12345', 10);
+            expect(User.create).toHaveBeenCalledWith({
+                login: 'user',
+                password: 'hashed',
+                group: 'user'
+            });
+        });
+
+        it('Invalid login provided', async () => {
+
+            isNameValid.mockReturnValue(false);
+
+            const res = await request(app).post('/api/users/create').send(reqBody);
+
+            expect(res.statusCode).toBe(400);
+            expect(res.body.success).toBe(false);
+            expect(res.body.message).toBe('invalidLogin');
+        });
+
+        it('User already exists', async () => {
+            User.findOne.mockResolvedValue({ login: 'user' });
+            isNameValid.mockReturnValue(true);
+
+            const res = await request(app).post('/api/users/create').send(reqBody);
+
+            expect(res.statusCode).toBe(409);
+            expect(res.body.success).toBe(false);
+            expect(res.body.message).toBe('userExists');
+        });
+
+        it('Server error', async () => {
+            User.findOne.mockRejectedValue(new Error());
+            isNameValid.mockReturnValue(true);
+
+            const res = await request(app).post('/api/users/create').send(reqBody);
+
+            expect(res.statusCode).toBe(500);
+            expect(res.body.success).toBe(false);
+            expect(res.body.message).toBe('server');
         });
     });
 })

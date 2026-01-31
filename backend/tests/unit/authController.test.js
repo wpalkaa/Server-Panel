@@ -1,8 +1,8 @@
 const authController = require('../../src/controllers/authController');
 const User = require('../../src/models/User');
-const { isNameValid } = require('../../src/utils/files');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { isNameValid } = require('../../src/utils/files');
 
 jest.mock('../../src/models/User'); // zamienia User na mocka
 jest.mock('bcryptjs');
@@ -36,6 +36,7 @@ describe('Auth Controller - Login', () => {
         };
         
         // Mock login actions
+        isNameValid.mockReturnValue(true);
         User.findOne.mockResolvedValue(mockUser); 
         bcrypt.compare.mockResolvedValue(true);   
         jwt.sign.mockReturnValue('token');
@@ -60,6 +61,7 @@ describe('Auth Controller - Login', () => {
             password: 'hashed' 
         };
         // Mock login actions
+        isNameValid.mockReturnValue(true);
         User.findOne.mockResolvedValue(mockUser);
         bcrypt.compare.mockResolvedValue(false);
 
@@ -74,7 +76,8 @@ describe('Auth Controller - Login', () => {
     });
 
     it('User does not exist', async () => {
-
+        
+        isNameValid.mockReturnValue(true);
         User.findOne.mockResolvedValue(null);
 
         await authController.login(req, res);
@@ -85,96 +88,18 @@ describe('Auth Controller - Login', () => {
             message: 'authRejected'
         }));
     });
-});
 
-describe('Auth Controller - Register', () => {
-    let res, req;
-
-    beforeEach(() => {
-        req = {
-            body: {
-                login: 'user',
-                password: '12345',
-                group: 'user'
-            }
-        };
-        res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn()
-        }
-    });
-
-    it('Everything ok', async () => {
-        isNameValid.mockResolvedValue(true);
-        User.findOne.mockResolvedValue(null);
-        bcrypt.hash.mockResolvedValue('hashed');
-        User.create.mockResolvedValue(true);
-
-        await authController.register(req, res);
-
-        expect(User.findOne).toHaveBeenCalledWith({ login: 'user'});
-        expect(User.create).toHaveBeenCalledWith({
-                login: 'user',
-                password: 'hashed',
-                group: 'user'
-            })
-
-        expect(res.status).toHaveBeenCalledWith(201);
-        expect(res.json).toHaveBeenCalledWith({
-            success: true
-        });
-    });
-
-    it('User exists', async () => {
-        isNameValid.mockResolvedValue(true);
-        User.findOne.mockResolvedValue({ login: 'user' });
-
-        await authController.register(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(409);
-        expect(res.json).toHaveBeenCalledWith({
-            success: false,
-            message: "userExists"
-        })
-    });
-
-    it('Invalid login length', async () => {
-        req.body.login = 'u';
-
-        isNameValid.mockReturnValue(true);
-
-        await authController.register(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({
-            success: false,
-            message: 'invalidLogin'
-        });
-    });
-
-    it('Invalid login format', async () => {
+    it('Illegal symbol in login', async () => {
+        
         isNameValid.mockReturnValue(false);
 
-        await authController.register(req, res);
+        await authController.login(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({
+        expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
             success: false,
-            message: 'invalidLogin'
-        });
+            message: 'illegalLogin'
+        }));
     });
+});
 
-    it('Server error', async () => {
-        
-        isNameValid.mockReturnValue(true);
-        User.findOne.mockRejectedValue(new Error());
-
-        await authController.register(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(500);
-        expect(res.json).toHaveBeenCalledWith({
-            success: false,
-            message: 'server'
-        });
-    });
-})

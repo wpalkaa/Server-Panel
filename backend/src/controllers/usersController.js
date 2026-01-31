@@ -1,6 +1,9 @@
 
 const SECRET_KEY = process.env.SECRET_KEY;
+const { isNameValid } = require('../utils/files');
+
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
 
 exports.getUsers = async (req, res) => {
     console.log(`[Info]: Get users list request received.`);
@@ -64,7 +67,42 @@ exports.deleteUser = async (req, res) => {
         else console.log(`[Error]: Error on delete user request: ${error}`);
         return res.status(error.status || 500).json({
             success: false,
-            message: "server"
+            message: error.message || "server"
         });
     };
 };
+
+exports.createUser = async (req, res) => {
+    const { login, password, group } = req.body;
+    console.log(`[Info]: Register request received for:`, login);
+
+    try {
+        const loginLength = login.length;
+        if( loginLength < 3 || loginLength > 20 || !isNameValid(login) ) throw { status: 400, message: "invalidLogin" };
+
+        const existingUser = await User.findOne({ login });
+        if(existingUser) throw { status: 409, message: "userExists" };
+
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        const newUser = await User.create({
+            login,
+            password: hashedPassword,
+            group
+        });
+        console.log(`[Info]: Request accepted. New user has been created.`);
+        
+        return res.status(201).json({
+            success: true,
+            userId: newUser._id
+        });
+    } catch(error) {
+        if(error.status) console.log(`[Info]: Couldn't create user: ${error.message}`);
+        else console.log(`[Error]: Server error on register request:\n`, error)
+        res.status( error.status || 500 ).json({
+            success: false,
+            message: error.message || 'server'
+        });
+    }
+}
