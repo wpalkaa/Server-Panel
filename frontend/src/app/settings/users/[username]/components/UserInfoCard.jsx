@@ -1,13 +1,31 @@
 'use client';
 
 import Link from 'next/link';
+import axios from 'axios';
+
+import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/context/LanguageProvider';
 import '../UserInfo.css';
 
 export default function UserInfoCard({ userData, isAdmin }) {
 
     const { lang } = useTranslation();
+    const router = useRouter();
     const avatar = userData.avatar || '/default-avatar-icon.jpg'
+
+    async function handleDelete(e) {
+        e.preventDefault();
+        
+        try {
+            const baseURL = process.env.NEXT_PUBLIC_SERVER_URL;
+            const API_URL = new URL(`/api/users/delete/${userData._id}`, baseURL);
+
+            const response = await axios.delete(API_URL, { withCredentials: true});
+            router.push('/settings/users');
+        } catch (error) {
+            alert(error.response.data.message);
+        }
+    };
 
     return (
         <div className="user-info-card">
@@ -33,7 +51,7 @@ export default function UserInfoCard({ userData, isAdmin }) {
             {isAdmin && (
                 <div className="user-actions">
                     <button className="edit-user-button">{lang.settings.users.info.editUser}</button>
-                    <button className="delete-user-button">{lang.settings.users.info.deleteUser}</button>
+                    <button className="delete-user-button" onClick={(e) => handleDelete(e)}>{lang.settings.users.info.deleteUser}</button>
                 </div>
             )}
         </div>

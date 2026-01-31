@@ -1,9 +1,11 @@
 'use client';
 import { useState } from "react";
+
 import UserCard from "./UserCard";
+import CreateUserCard from "./CreateUserCard";
 import './UsersList.css';
 
-export default function UsersList( {users} ) {
+export default function UsersList( {users, isAdmin} ) {
 
     const [currentPage, setCurrentPage] = useState(1);
     const maxUsersPerPage = 10;
@@ -17,6 +19,8 @@ export default function UsersList( {users} ) {
         <>
             <div className="users-list-wrapper">
                 {currentUsers.map( (u) => <UserCard key={u.login} userData={u}/> )}
+
+                {isAdmin && <CreateUserCard/>}
             </div>
             {totalPages > 1 && (
                 <div className="pagination-bar">

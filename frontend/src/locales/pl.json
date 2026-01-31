@@ -99,6 +99,22 @@
                 "previousPage": "Powrót",
                 "editUser": "Edytuj użytkownika",
                 "deleteUser": "Usuń użytkownika"
+            },
+
+            "createUser": {
+                "title": "Utwórz nowego użytkownika",
+                "loginLabel": "Nazwa użytkownika",
+                "loginPlaceholder": "Nazwa użytkownika",
+                "passwordLabel": "Hasło",
+                "passwordPlaceholder": "Hasło",
+                "groupLabel": "Grupa",
+                "createButton": "Utwórz",
+                "cancelButton": "Anuluj",
+
+                "groups": {
+                    "admin": "Administrator",
+                    "user": "Użytkownik"
+                }
             }
         }
     },
@@ -122,7 +138,7 @@
     "errors": {
         "generic": "Wystąpił błąd. Spróbuj ponownie później.",
         "server": "Błąd serwera. Spróbuj ponownie później.",
-        "illegalSymbols": "Użyto niedozwolonego znaku: \\,/,:,*,?,<,>,|",
+        "illegalSymbols": "Użyto niedozwolonego znaku jak: \\,/,:,*,?,<,>,|",
         "emptyString": "Nazwa nie może być pusta",
         "fileExists": "Plik o takiej nazwie już istnieje",
         "directoryExists": "Katalog o takiej nazwie już istnieje",

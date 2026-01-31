@@ -78,6 +78,22 @@
                 "size": "Size",
                 "lastModified": "Last modified",
                 "birthTime": "Creation date"
+            },
+
+            "createUser": {
+                "title": "Create new user",
+                "loginLabel": "Login",
+                "loginPlaceholder": "Login",
+                "passwordLabel": "Password",
+                "passwordPlaceholder": "Password",
+                "groupLabel": "Group",
+                "createButton": "Create",
+                "cancelButton": "Cancel",
+
+                "groups": {
+                    "admin": "Admin",
+                    "user": "User"
+                }
             }
         }
     },
@@ -122,7 +138,7 @@
     "errors": {
         "generic": "An error occurred. Please try again later.",
         "server": "Server error. Please try again later.",
-        "illegalSymbols": "The name contains illegal characters: \\,/,:,*,?,<,>,|",
+        "illegalSymbols": "The name contains illegal characters like: \\,/,:,*,?,<,>,|",
         "emptyString": "The name cannot be empty",
         "fileExists": "A file with this name already exists",
         "directoryExists": "A directory with this name already exists",

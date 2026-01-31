@@ -16,6 +16,8 @@ export default async function RootLayout({ children }) {
                     <NavBar username={user.name}/>
 
                     {children}
+
+                    <div id="dialogs"></div>
                 </LanguageProvider>
 
                 <script src="https://kit.fontawesome.com/c0e27db627.js" crossOrigin="anonymous"></script>

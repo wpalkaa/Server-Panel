@@ -2,7 +2,6 @@
 import { notFound } from 'next/navigation';
 import { getGroup } from '@/lib/getClientInfo';
 
-
 import UserInfoCard from './components/UserInfoCard';
 import './UserInfo.css';
 
@@ -25,7 +24,7 @@ async function getUserData(username) {
 
 export default async function UserInfo( {params} ) {
     const clientGroup = await getGroup();
-    console.log(clientGroup)
+    
     const { username } = await params;
 
     const userData = await getUserData(username);
