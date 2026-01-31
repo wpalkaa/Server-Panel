@@ -5,6 +5,10 @@ mongod.lock
 *.bson
 storage.bson
 
+# TLS certificates
+localhost.pem
+localhost-key.pem
+
 # Logs
 logs
 *.log
