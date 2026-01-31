@@ -5,6 +5,17 @@ Wojciech Pałka 300869 gr. 4
 
 Panel do zarządzania plikami serwera, zarządzania użytkownikami oraz monitorowania zużycia zasobów.
 
+Automatycznie są tworzone dwa konta na które można się zalogować na stronie:
+```
+login: admin
+passwrod: admin
+``` 
+oraz
+```
+login: user
+password: user
+```
+
 
 ---
 
