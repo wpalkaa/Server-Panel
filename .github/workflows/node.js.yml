@@ -38,6 +38,11 @@ jobs:
       run: npm install
       working-directory: backend
 
+    - name: Generate SSL Certificates
+      run: |
+        openssl req -x509 -newkey rsa:2048 -keyout localhost-key.pem -out localhost.pem -days 365 -nodes -subj '/CN=localhost'
+      working-directory: backend
+
     - name: Run server
       run: node src/server.js &
       working-directory: backend

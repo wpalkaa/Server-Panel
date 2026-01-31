@@ -20,8 +20,8 @@ const User = require('./models/User');
 const app = express();
 
 const options = {
- key: fs.readFileSync('./localhost-key.pem'),
- cert: fs.readFileSync('./localhost.pem'),
+    key: fs.readFileSync('./localhost-key.pem'),
+    cert: fs.readFileSync('./localhost.pem'),
 };
 
 const server = https.createServer(options, app);
