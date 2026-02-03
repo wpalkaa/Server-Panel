@@ -4,7 +4,7 @@ import { useState } from 'react';
 import CreateUserDialog from './CreateUserDialog/CreateUserDialog'
 import './UsersList.css';
 
-export default function CreateUserCard() {
+export default function CreateUserCard({ onCreate }) {
 
     const [isOpened, setIsOpened] = useState(false);
     console.log(isOpened)
@@ -22,7 +22,7 @@ export default function CreateUserCard() {
                 </div>
             </div>
 
-            {isOpened && <CreateUserDialog onClose={() => setIsOpened(false)} />}
+            {isOpened && <CreateUserDialog onClose={() => setIsOpened(false)} onCreate={onCreate} />}
         </>
     )
 }

@@ -3,14 +3,12 @@ import axios from 'axios';
 
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useRouter } from 'next/navigation';
 
 import { useTranslation } from '@/context/LanguageProvider';
 import './CreateUserDialog.css'
 
-export default function CreateUserDialog({ onClose }) {
+export default function CreateUserDialog({ onClose, onCreate }) {
 
-    const router = useRouter();
     const { lang } = useTranslation();
 
     const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +45,7 @@ export default function CreateUserDialog({ onClose }) {
             const response = await axios.post(API_URL, userData);
 
             onClose();
-            router.refresh();
+            onCreate(userData);
         } catch (error) {
             setError(error.response.data.message);
         } finally {
@@ -100,7 +98,7 @@ export default function CreateUserDialog({ onClose }) {
 
                     <div className="form-row">
                         <label className="form-label">{lang.settings.users.createUser.groupLabel}</label>
-                        <select name="group" className="form-select">
+                        <select name="group" className="form-select" onChange={(e) => setUserData((p) => ({...p, group: e.target.value}) )}>
                             <option value="user">{lang.settings.users.createUser.groups.user}</option>
                             <option value="admin">{lang.settings.users.createUser.groups.admin}</option>
                         </select>

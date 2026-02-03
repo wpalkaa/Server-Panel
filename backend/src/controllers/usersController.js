@@ -6,10 +6,18 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
 exports.getUsers = async (req, res) => {
-    console.log(`[Info]: Get users list request received.`);
+    const { search } = req.query;
+    console.log(`[Info]: Get users list request received${search ? ` with params: ${search}` : ''}.`);
     
     try {
-        const users = await User.find().select("-password");
+
+        const filter = {};
+
+        if(search) {
+            filter.login = { $regex: search, $options: 'i' }
+        }
+
+        const users = await User.find(filter).select("-password");
 
         console.log(`[Info]: Request approved. Sending users list.`)
         return res.status(200).json({

@@ -1,12 +1,18 @@
 'use client';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import UserCard from "./UserCard";
 import CreateUserCard from "./CreateUserCard";
+import { useTranslation } from "@/context/LanguageProvider";
 import './UsersList.css';
 
-export default function UsersList( {users, isAdmin} ) {
+export default function UsersList( {users: allUsers, isAdmin} ) {
 
+    const { lang } = useTranslation();
+
+    const [users, setUsers] = useState(allUsers);
+
+    const [searchValue, setSearchValue] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const maxUsersPerPage = 10;
 
@@ -15,12 +21,59 @@ export default function UsersList( {users, isAdmin} ) {
 
     const currentUsers = users.slice(firstUserIndex, firstUserIndex + maxUsersPerPage);
 
+
+    
+    function addUser(userData) {
+        setUsers((prev) => [...prev, userData]);
+    };
+
+    useEffect(() => {
+        async function fetchFilteredUsers() {
+            try {
+                const baseURL = process.env.NEXT_PUBLIC_SERVER_URL;
+                const API_URL = new URL('/api/users', baseURL);
+
+                const response = await fetch(`${API_URL}/?search=${searchValue}`);
+
+                if(!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message);
+                };
+
+                const data = await response.json();
+                
+                setUsers(data.data)
+
+            } catch (error) {
+                console.error("Error: Couldn't fetch users data:\n", error.message);
+                setUsers([]);
+            };
+        }
+
+        const delay = setTimeout(() => fetchFilteredUsers(), 500);
+
+        return () => clearTimeout(delay);
+    }, [searchValue]);
+
     return (
         <>
+            <div className="search-bar-container">
+                <div className="search-input-wrapper">
+                    <i className="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input 
+                        type="text" 
+                        placeholder={lang.settings.users.searchBarPlaceholder}
+                        className="search-input"
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                    />
+                </div>
+            </div>
+
             <div className="users-list-wrapper">
                 {currentUsers.map( (u) => <UserCard key={u.login} userData={u}/> )}
 
-                {isAdmin && <CreateUserCard/>}
+                {isAdmin && <CreateUserCard onCreate={addUser}/>}
             </div>
             {totalPages > 1 && (
                 <div className="pagination-bar">

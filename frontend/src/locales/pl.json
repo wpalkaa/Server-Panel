@@ -94,6 +94,7 @@
             "changePassword": "Zmień hasło",
             "setAdmin": "Ustaw jako administratora",
             "unsetAdmin": "Usuń uprawnienia administratora",
+            "searchBarPlaceholder": "Szukaj użytkownika...",
             
             "info": {
                 "previousPage": "Powrót",

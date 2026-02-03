@@ -32,8 +32,8 @@ export default async function UsersPage() {
     const users = await getUsers();
 
     return (
-        <div className="users-list">
-            <UsersList users={users} isAdmin={clientGroup === 'admin'} />
-        </div>
+            <div className="users-list">
+                <UsersList users={users} isAdmin={clientGroup === 'admin'} />
+            </div>
     )
 }

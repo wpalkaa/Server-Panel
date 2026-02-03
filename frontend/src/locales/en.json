@@ -110,6 +110,7 @@
             "changePassword": "Change password",
             "setAdmin": "Set as administrator",
             "unsetAdmin": "Remove administrator privileges",
+            "searchBarPlaceholder": "Find user...",
             
             "info": {
                 "previousPage": "Back",

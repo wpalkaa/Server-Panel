@@ -72,7 +72,7 @@ cd ../..
 
 echo ""
 echo "============ Status ============"
-echo "Frontend PID: $FRONTEND_PID"
+echo "Frontend PID: $FRONTEND_PID; Access at https://localhost:3000"
 echo "Backend PID:  $BACKEND_PID"
 echo "Logs available in ./logs directory"
 echo "================================"
