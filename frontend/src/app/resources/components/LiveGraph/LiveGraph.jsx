@@ -1,11 +1,12 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import './liveGraph.css';
 
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
+import mqtt from 'mqtt';
 
 const graphConfigs = {
     cpu: {
@@ -17,11 +18,18 @@ const graphConfigs = {
         domain: [0, 8000],
         yTickCount: 9,
         unit: 'MB'
+    },
+    disk: {
+        domain: [0, 500],
+        yTickCount: 6,
+        unit: 'GB'
     }
 };
 
 export default function LiveGraph({ chartId }) {
     
+    const clientRef = useRef();
+
     const config = graphConfigs[chartId] || graphConfigs['cpu'];
     const maxPoints = 10;
     const [ isConnected, setIsConnected ] = useState(false);
@@ -34,47 +42,89 @@ export default function LiveGraph({ chartId }) {
 
     // ============ WebSocket connection and data handling ============
 
+    // useEffect( () => {
+    //     console.log("Connecting to WebSocket for chart ", chartId);
+    //     const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
+
+    //     socket.on("connect", () => {
+    //         setIsConnected(true);
+    //         console.log("Debug: Graph WebSocket connected.");
+    //         console.log("Debug: requested data for: ", chartId);
+    //         socket.emit('data request', { chartId: chartId} )
+    //     });
+
+    //     socket.on("error", (error) => {
+    //         console.error("Error: Graph WebSocket error: \n", error);
+    //     });
+
+
+    //     socket.on("data update", (event) => {
+    //         // console.log(`Debug: Received data for chart ${chartId}: \n`, event.data);
+
+    //         setData( (prevData) => {
+    //             const newData = [...prevData, event.data];
+    //             console.log("Debug: Updated data array: \n", newData);
+
+    //             if( newData.length > maxPoints ) {
+    //                 return newData.slice(1) // keep only the last maxPoints entries
+    //             }
+    //             return newData;
+    //         } );
+    //     });
+
+    //     return () => {
+    //         console.log(`Debug: Cleaning up connection for: ${chartId}`);
+    //         socket.removeAllListeners();
+    //         socket.disconnect();
+    //         console.log(`Debug: Charts ${chartId} WebSocket disconnected.`);
+            
+    //         setIsConnected(false);
+    //     }
+
+    // }, [chartId]);
+
+
+
+    // ============ MQTT handler=============
     useEffect( () => {
-        console.log("Connecting to WebSocket for chart ", chartId);
-        const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
+        const BROKER_URL = process.env.NEXT_PUBLIC_MQTT_BROKER_URL;
+        const client = mqtt.connect(BROKER_URL);
+        
+        clientRef.current = client;
 
-        socket.on("connect", () => {
+        client.on('connect', () => {
             setIsConnected(true);
-            console.log("Debug: Graph WebSocket connected.");
-            console.log("Debug: requested data for: ", chartId);
-            socket.emit('data request', { chartId: chartId} )
+
+            const topic = `stats/${chartId}`;
+            client.subscribe(topic, (error) => {
+                if(error) console.error(`[Error]: Couldn't subscribe to ${topic}:\n${error}`);
+            });
         });
 
-        socket.on("error", (error) => {
-            console.error("Error: Graph WebSocket error: \n", error);
-        });
+        client.on('message', (topic, message) => {
+            if(topic === `stats/${chartId}`) {
+                const data = JSON.parse(message);
 
+                setData( (prevData) => {
+                    const newData = [...prevData, data];
 
-        socket.on("data update", (event) => {
-            // console.log(`Debug: Received data for chart ${chartId}: \n`, event.data);
-
-            setData( (prevData) => {
-                const newData = [...prevData, event.data];
-                console.log("Debug: Updated data array: \n", newData);
-
-                if( newData.length > maxPoints ) {
-                    return newData.slice(1) // keep only the last maxPoints entries
-                }
-                return newData;
-            } );
-        });
+                    if( newData.length > maxPoints ) {
+                        return newData.slice(1) // keep only the last maxPoints entries
+                    }
+                    return newData;
+                });
+            };
+        })
 
         return () => {
-            console.log(`Debug: Cleaning up connection for: ${chartId}`);
-            socket.removeAllListeners();
-            socket.disconnect();
-            console.log(`Debug: Charts ${chartId} WebSocket disconnected.`);
-            
+            if(client) {
+                client.removeAllListeners();
+                client.end();
+            }
             setIsConnected(false);
         }
 
     }, [chartId]);
-
 
 
     if(!isConnected) {

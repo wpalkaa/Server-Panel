@@ -14,7 +14,7 @@ export default function UsersList( {users: allUsers, isAdmin} ) {
 
     const [searchValue, setSearchValue] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const maxUsersPerPage = 10;
+    const maxUsersPerPage = 11;
 
     const firstUserIndex = (currentPage - 1) * maxUsersPerPage
     const totalPages = Math.ceil(users.length / maxUsersPerPage);
@@ -22,7 +22,7 @@ export default function UsersList( {users: allUsers, isAdmin} ) {
     const currentUsers = users.slice(firstUserIndex, firstUserIndex + maxUsersPerPage);
 
 
-    
+
     function addUser(userData) {
         setUsers((prev) => [...prev, userData]);
     };

@@ -13,7 +13,7 @@ cleanup() {
         kill $BACKEND_PID
     fi
 
-    echo "Stopping database..."
+    echo "Stopping database and broker..."
     cd backend/data || exit
     docker-compose down
     cd ../..
@@ -50,6 +50,10 @@ cd ..
 echo "============ Starting Services ============"
 
 
+echo "Starting database and broker..."
+cd backend/data || exit
+docker-compose up -d > ../../logs/containers.log 2>&1 &
+cd ../..
 
 echo "Starting frontend..."
 cd frontend || exit
@@ -62,11 +66,8 @@ cd ../backend || exit
 node src/server.js > ../logs/backend.log 2>&1 &
 BACKEND_PID=$!
 echo "Backend started with PID $BACKEND_PID"
+cd ..
 
-echo "Starting database..."
-cd data || exit
-docker-compose up -d > ../../logs/database.log 2>&1 &
-cd ../..
 
 
 

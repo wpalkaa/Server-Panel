@@ -14,7 +14,7 @@ module.exports = ( io ) => {
             // Simulate sending data updates every 2 seconds
             const intervalId = setInterval( () => {
                 const data = {
-                    time: new Date().toLocaleTimeString("it-IT")
+                    time: new Date().toLocaleTimeString("pl-PL")
                 };
 
                 switch( msg.chartId ) {

@@ -5,7 +5,8 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 
 const mongoose = require('mongoose');
-const socket = require('./socket');
+// const socket = require('./socket');
+const MQTTConnect = require('./mqtt');
 const cookieParser = require('cookie-parser');
 const fs = require('fs')
 const bcrypt = require('bcryptjs');
@@ -25,14 +26,14 @@ const options = {
 };
 
 const server = https.createServer(options, app);
-const io = new Server( server, {
-    cors: {
-        origin: 'https://localhost:3000', // Allowing requests from Nextjs server
-        methods: ["GET", "POST"],
-        credentials: true
-    },
-    allowEIO3: true
-} );
+// const io = new Server( server, {
+//     cors: {
+//         origin: 'https://localhost:3000', // Allowing requests from Nextjs server
+//         methods: ["GET", "POST"],
+//         credentials: true
+//     },
+//     allowEIO3: true
+// } );
 
 
 
@@ -44,6 +45,19 @@ app.use(cors({
     credentials: true
 }))
 app.use(cookieParser());
+
+
+// Routes
+app.use( '/api/auth', authRoutes );
+app.use( '/api/files', fileRoutes );
+app.use( '/api/users', usersRoutes)
+
+// // WebSocket
+// socket( io );
+
+// MQTT
+MQTTConnect();
+
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -74,17 +88,6 @@ mongoose.connect(process.env.MONGODB_URI)
             });
         }})
     .catch( (err) => console.log(`[Error]: Couldn't connect to database: \n${err}`) );
-
-
-// Routes
-app.use( '/api/auth', authRoutes );
-app.use( '/api/files', fileRoutes );
-app.use( '/api/users', usersRoutes)
-
-// WebSocket
-socket( io );
-
-
 
 const PORT = process.env.PORT;
 
