@@ -79,6 +79,16 @@
     box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
     transform: translateY(-2px);
 }
+.delete-user-button:disabled {
+    border-color: #7f1d1d;
+    color: #fca5a5;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+.delete-user-button:disabled:hover {
+    background-color: transparent;
+}
 
 
 

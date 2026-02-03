@@ -111,6 +111,7 @@
                 "groupLabel": "Grupa",
                 "createButton": "Utwórz",
                 "cancelButton": "Anuluj",
+                "loadingPlaceholder": "Tworzenie...",
 
                 "groups": {
                     "admin": "Administrator",

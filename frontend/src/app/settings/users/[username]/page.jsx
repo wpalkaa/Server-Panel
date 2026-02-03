@@ -1,6 +1,6 @@
 
 import { notFound } from 'next/navigation';
-import { getGroup } from '@/lib/getClientInfo';
+import { getUsername, getGroup } from '@/lib/getClientInfo';
 
 import UserInfoCard from './components/UserInfoCard';
 import './UserInfo.css';
@@ -24,6 +24,7 @@ async function getUserData(username) {
 
 export default async function UserInfo( {params} ) {
     const clientGroup = await getGroup();
+    const clientLogin = await getUsername();
     
     const { username } = await params;
 
@@ -32,7 +33,7 @@ export default async function UserInfo( {params} ) {
 
     return (
         <div className="user-info-page">
-            <UserInfoCard userData={userData} isAdmin={clientGroup === 'admin'} />        
+            <UserInfoCard userData={userData} isAdmin={clientGroup === 'admin'} clientLogin={clientLogin} />        
         </div>
     )
 }

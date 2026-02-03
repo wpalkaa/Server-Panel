@@ -38,8 +38,6 @@ async function getTargetPath(pathToValidate = '', fileSystemPath, options = { mu
     } catch(error) {
         exists = false;
     };
-   
-    console.log(`\n\n\n\n\nexist: ${exists}\nmust: ${options.mustExist}\n${targetPath}\n\n\n\n`)
     // File exists but cannot
     if( !options.mustExist && exists) {
         console.error(`[Error]: Request rejected - file already exists.`)

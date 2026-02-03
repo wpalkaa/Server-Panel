@@ -109,9 +109,9 @@ export default function CreateUserDialog({ onClose, onCreate }) {
                     </div>}
 
                     <div className="form-footer">
-                        <button className="form-btn cancel-btn" type="button" onClick={onClose} >Anuluj</button>
+                        <button className="form-btn cancel-btn" type="button" onClick={onClose} >{lang.settings.users.createUser.cancelButton}</button>
                         <button className="form-btn submit-btn" type="submit" disabled={ error || isLoading || userData.login.length === 0 || userData.password.length === 0} >
-                            {isLoading ? 'Creating...' : 'Create'}
+                            {isLoading ? lang.settings.users.createUser.loadinPlaceholder : lang.settings.users.createUser.createButton}
                         </button>
                     </div>
                 </form>

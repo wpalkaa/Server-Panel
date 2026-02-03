@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/context/LanguageProvider';
 import '../UserInfo.css';
 
-export default function UserInfoCard({ userData, isAdmin }) {
+export default function UserInfoCard({ userData, isAdmin, clientLogin }) {
 
     const { lang } = useTranslation();
     const router = useRouter();
@@ -51,7 +51,11 @@ export default function UserInfoCard({ userData, isAdmin }) {
             {isAdmin && (
                 <div className="user-actions">
                     <button className="edit-user-button">{lang.settings.users.info.editUser}</button>
-                    <button className="delete-user-button" onClick={(e) => handleDelete(e)}>{lang.settings.users.info.deleteUser}</button>
+                    <button 
+                        className="delete-user-button" 
+                        onClick={(e) => handleDelete(e)}
+                        disabled={clientLogin.name === userData.login}    
+                    >{lang.settings.users.info.deleteUser}</button>
                 </div>
             )}
         </div>

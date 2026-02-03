@@ -78,22 +78,6 @@
                 "size": "Size",
                 "lastModified": "Last modified",
                 "birthTime": "Creation date"
-            },
-
-            "createUser": {
-                "title": "Create new user",
-                "loginLabel": "Login",
-                "loginPlaceholder": "Login",
-                "passwordLabel": "Password",
-                "passwordPlaceholder": "Password",
-                "groupLabel": "Group",
-                "createButton": "Create",
-                "cancelButton": "Cancel",
-
-                "groups": {
-                    "admin": "Admin",
-                    "user": "User"
-                }
             }
         }
     },
@@ -116,6 +100,23 @@
                 "previousPage": "Back",
                 "editUser": "Edit user",
                 "deleteUser": "Delete user  "
+            },
+
+            "createUser": {
+                "title": "Create new user",
+                "loginLabel": "Login",
+                "loginPlaceholder": "Login",
+                "passwordLabel": "Password",
+                "passwordPlaceholder": "Password",
+                "groupLabel": "Group",
+                "createButton": "Create",
+                "cancelButton": "Cancel",
+                "loadingPlaceholder": "Creating...",
+
+                "groups": {
+                    "admin": "Admin",
+                    "user": "User"
+                }
             }
         }
     },

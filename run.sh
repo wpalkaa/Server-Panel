@@ -14,9 +14,9 @@ cleanup() {
     fi
 
     echo "Stopping database and broker..."
-    cd backend/data || exit
+    cd backend || exit
     docker-compose down
-    cd ../..
+    cd ..
 
     echo "============ All services stopped ============"
 
@@ -51,9 +51,9 @@ echo "============ Starting Services ============"
 
 
 echo "Starting database and broker..."
-cd backend/data || exit
-docker-compose up -d > ../../logs/containers.log 2>&1 &
-cd ../..
+cd backend || exit
+docker-compose up -d > ../logs/containers.log 2>&1 &
+cd ..
 
 echo "Starting frontend..."
 cd frontend || exit
