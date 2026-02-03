@@ -14,4 +14,4 @@ services:
       - "1883:1883"
       - "8003:8003"
     volumes:
-      - ../broker/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./broker/mosquitto.conf:/mosquitto/config/mosquitto.conf
