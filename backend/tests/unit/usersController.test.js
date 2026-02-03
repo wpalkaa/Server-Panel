@@ -18,7 +18,8 @@ describe('Users Controller', () => {
     beforeEach(() => {
         req = {
             params: {},
-            body: {}
+            body: {},
+            query: {}
         };
         res = {
             status: jest.fn().mockReturnThis(),
