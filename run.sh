@@ -60,9 +60,14 @@ cd frontend || exit
 npm run dev > ../logs/frontend.log 2>&1 &
 FRONTEND_PID=$!
 echo "Frontend started with PID $FRONTEND_PID"
+sleep 5
 
 echo "Starting backend..."
-cd ../backend || exit
+cd .. || exit
+echo "Copying frontend TLS certificate to backend..."
+cp frontend/certificates/localhost.pem backend/localhost.pem
+cp frontend/certificates/localhost-key.pem backend/localhost-key.pem
+cd backend || exit
 node src/server.js > ../logs/backend.log 2>&1 &
 BACKEND_PID=$!
 echo "Backend started with PID $BACKEND_PID"

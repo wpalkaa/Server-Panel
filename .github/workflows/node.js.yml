@@ -24,7 +24,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [20.x]
 
     steps:
     - uses: actions/checkout@v4
@@ -35,7 +35,12 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: npm install backend
+      run: npm install
+      working-directory: backend
+
+    - name: Generate SSL Certificates
+      run: |
+        openssl req -x509 -newkey rsa:2048 -keyout localhost-key.pem -out localhost.pem -days 365 -nodes -subj '/CN=localhost'
       working-directory: backend
 
     - name: Run server
