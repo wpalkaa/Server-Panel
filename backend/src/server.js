@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const https = require('https');
+const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 
@@ -25,21 +25,12 @@ const options = {
     cert: fs.readFileSync('./localhost.pem'),
 };
 
-const server = https.createServer(options, app);
-// const io = new Server( server, {
-//     cors: {
-//         origin: 'https://localhost:3000', // Allowing requests from Nextjs server
-//         methods: ["GET", "POST"],
-//         credentials: true
-//     },
-//     allowEIO3: true
-// } );
-
+const server = http.createServer(options, app);
 
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: 'https://localhost:3000', // Allowing requests from Nextjs server
+    origin: ['http://localhost', 'http://localhost:3000'], // Allowing requests from Nextjs server
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials: true
 }))
@@ -51,6 +42,9 @@ app.use( '/api/auth', authRoutes );
 app.use( '/api/files', fileRoutes );
 app.use( '/api/users', usersRoutes)
 
+app.get('/api/health', (req, res) => {
+    res.status(200).send("OK");
+});
 // // WebSocket
 // socket( io );
 

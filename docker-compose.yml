@@ -1,0 +1,157 @@
+services:
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    networks:
+      - proxy-net
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf    
+    depends_on:
+      - frontend
+      - backend
+      - redis
+      - postgresql
+      - mqtt
+      - adminer
+      - mongodb
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    networks:
+      - proxy-net
+    environment:
+      - SECRET_KEY_FILE=/run/secrets/jwt_auth
+    secrets:
+      - jwt_auth
+    depends_on:
+      backend:
+        condition: service_healthy
+  
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    environment:
+      # - BACKEND_PORT=${BACKEND_PORT}
+      # - POSTGRES_DB=${POSTGRES_DB}
+      # - REDIS_URL=${REDIS_URL}
+      - WEB_HOST='http://nginx'
+      - PORT=3000
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/database
+      - BROKER_URL=mqtt://mqtt:1883
+    networks:
+      - proxy-net
+      - app-net
+      - db-net
+    secrets:
+      - db_user
+      - db_password
+      - jwt_auth
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+  
+  redis:
+    image: redis:alpine
+    container_name: redis
+    networks:
+      - app-net
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  postgresql:
+    image: postgres:16-alpine
+    container_name: postgresql
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER_FILE=/run/secrets/db_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+    networks:
+      - db-net
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    secrets:
+      - db_user
+      - db_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$(cat /run/secrets/db_user) -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    volumes:
+      - ./backend/data:/data/db
+    networks:
+      - db-net
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    networks:
+      - db-net
+      - proxy-net
+
+  mqtt:
+    image: eclipse-mosquitto
+    container_name: mqtt
+    networks:
+      - proxy-net
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./backend/broker/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+
+volumes:
+  postgres-data:
+  redis-data:
+
+networks:
+  proxy-net:
+    ipam:
+      config:
+        - subnet: 172.0.0.0/24
+          gateway: 172.0.0.1
+  
+  db-net:
+    ipam:
+      config:
+        - subnet: 172.0.1.0/24
+          gateway: 172.0.1.1
+  
+  app-net:
+    ipam:
+      config:
+        - subnet: 172.0.2.0/24
+          gateway: 172.0.2.1
+
+secrets:
+  db_user:
+    file: ./secrets/db_user.txt
+  db_password:
+    file: ./secrets/db_password.txt
+  jwt_auth:
+    file: ./secrets/jwt_auth.txt

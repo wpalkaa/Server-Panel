@@ -39,8 +39,8 @@ exports.login = async (req, res) => {
         res.cookie('user_session', token, {
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7d 24h 60min 60s 1000s = 7d
             httpOnly: true,
-            secure: true,
-            sameSime: 'none',
+            secure: false,
+            sameSite: 'lax',
             path: '/'
         });
 
