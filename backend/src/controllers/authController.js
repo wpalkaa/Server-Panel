@@ -1,10 +1,12 @@
 const jwt = require('jsonwebtoken');
-
-const { isNameValid } = require('../utils/files');
-const SECRET_KEY = process.env.SECRET_KEY;
+const bcrypt = require('bcryptjs');
 
 const User = require('../models/User');
-const bcrypt = require('bcryptjs');
+const { isNameValid } = require('../utils/files');
+const secrets = require('../../config/secrets');
+
+const SECRET_KEY = secrets.jwtSecret;
+
 
 
 exports.login = async (req, res) => {

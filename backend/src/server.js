@@ -24,12 +24,7 @@ const FORCE_EXIT_TIME = 20000 // 20 seconds
 // Initialize Express and HTTP server
 const app = express();
 
-const options = {
-    key: fs.readFileSync('./localhost-key.pem'),
-    cert: fs.readFileSync('./localhost.pem'),
-};
-
-const server = http.createServer(options, app);
+const server = http.createServer(app);
 
 // Middleware
 app.use(express.json());
@@ -89,6 +84,13 @@ mongoose.connect(process.env.MONGODB_URI)
 // Redis
 const redisClient = redis.createClient({ url: process.env.REDIS_URL });
 
+redisClient.on('error', (err) => console.log(`[ERROR]: Redis Client Error: ${err}`));
+redisClient.connect()
+    .then(() => console.log(`[INFO]: Connected to redis.`))
+    .catch((err) => console.error(`[ERROR]: Failed to connect to Redis: ${err}`));
+
+
+// Graceful Shutdown
 function gracefulShutdown(signal) {
     console.log(`[INFO]: Received ${signal} signal. Shuttind down the system...`);
 

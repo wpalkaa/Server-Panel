@@ -68,12 +68,13 @@ services:
     environment:
       # - BACKEND_PORT=${BACKEND_PORT}
       # - POSTGRES_DB=${POSTGRES_DB}
-      # - REDIS_URL=${REDIS_URL}
+      - REDIS_URL=${REDIS_URL}
       - WEB_HOST='http://nginx'
       - PORT=3000
       - NODE_ENV=production
       - MONGODB_URI=mongodb://mongodb:27017/database
       - BROKER_URL=mqtt://mqtt:1883
+      - JWT_SECRET_FILE=/run/secrets/jwt_auth
     networks:
       - proxy-net
       - app-net

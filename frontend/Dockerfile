@@ -26,7 +26,7 @@ COPY --from=build --chown=app:app /app/.next/ /app/.next
 COPY --from=build --chown=app:app /app/node_modules /app/node_modules
 COPY --from=build --chown=app:app /app/public /app/public
 COPY --from=build --chown=app:app /app/package*.json /app
-COPY --from=build --chown=app:app /app/certificates /app/certificates
+# COPY --from=build --chown=app:app /app/certificates /app/certificates
 
 RUN apk add --no-cache wget
 RUN apk add --no-cache su-exec

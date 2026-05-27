@@ -16,4 +16,4 @@
 
 
 
-- .env OD BACKENDU DOCKERRRRR
+- Ogarnąć Redisa
