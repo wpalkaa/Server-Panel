@@ -26,6 +26,15 @@ const app = express();
 
 const server = http.createServer(app);
 
+// Redis
+const redisClient = redis.createClient({ url: process.env.REDIS_URL });
+
+redisClient.on('error', (err) => console.log(`[ERROR]: Redis Client Error: ${err}`));
+redisClient.connect()
+    .then(() => console.log(`[INFO]: Connected to redis.`))
+    .catch((err) => console.error(`[ERROR]: Failed to connect to Redis: ${err}`));
+
+
 // Middleware
 app.use(express.json());
 app.use(cors({
@@ -81,15 +90,7 @@ mongoose.connect(process.env.MONGODB_URI)
         }})
     .catch( (err) => console.log(`[Error]: Couldn't connect to database: \n${err}`) );
 
-// Redis
-const redisClient = redis.createClient({ url: process.env.REDIS_URL });
-
-redisClient.on('error', (err) => console.log(`[ERROR]: Redis Client Error: ${err}`));
-redisClient.connect()
-    .then(() => console.log(`[INFO]: Connected to redis.`))
-    .catch((err) => console.error(`[ERROR]: Failed to connect to Redis: ${err}`));
-
-
+    
 // Graceful Shutdown
 function gracefulShutdown(signal) {
     console.log(`[INFO]: Received ${signal} signal. Shuttind down the system...`);
