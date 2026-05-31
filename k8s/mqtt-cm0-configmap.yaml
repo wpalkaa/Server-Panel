@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  mosquitto.conf: |2-
+    listener 1883
+    allow_anonymous true
+
+    listener 8003
+    allow_anonymous true
+    protocol websockets
+kind: ConfigMap
+metadata:
+  annotations:
+    use-subpath: "true"
+  labels:
+    io.kompose.service: mqtt
+  name: mqtt-cm0

@@ -28,7 +28,8 @@ git clone https://github.com/wpalkaa/Server-Panel
 
 ### 2. Uruchom
 ```bash
-docker compose up -d
+kubectl apply -f k8s/mongodb-cm0-configmap.yaml --server-side
+kubectl apply -f .\k8s\.
 ```
 
 ### 3. Obrazy aplikacyjne
