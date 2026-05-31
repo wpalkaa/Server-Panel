@@ -34,6 +34,6 @@ RUN apk add --no-cache su-exec
 # USER app
 
 HEALTHCHECK --interval=10s --timeout=10s --start-period=10s --retries=5 \
-    CMD wget -qO- https://localhost:3000/ || exit 1
+    CMD wget -qO- http://localhost/ || exit 1
 
 CMD sh -c 'export SECRET_KEY=$(cat "${SECRET_KEY_FILE}") && exec su-exec app npm run start'
