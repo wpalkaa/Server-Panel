@@ -27,17 +27,10 @@ git clone https://github.com/wpalkaa/Server-Panel
 ```
 
 ### 2. Uruchom
-Docker wymagany dla MongoDB.
 ```bash
-sh run.sh
+docker compose up -d
 ```
 
-### Przydatne
-- Adres www: https://localhost:3000/
-
-- Adres serwera: https://localhost:13001/
-
-- Adres bazy danych: mongodb://localhost:27017/
-
-- By odpalić testy, należy uruchomić serwer - w katalogu **backend** `node src/server.js`
-a następnie `npm run cov` 
+### 3. Obrazy aplikacyjne
+backend : docker.io/wojdeg13/server-panel-backend:v1.0.0
+frontend: docker.io/wojdeg13/server-panel-front:v1.0.0
