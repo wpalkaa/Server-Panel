@@ -28,6 +28,7 @@ git clone https://github.com/wpalkaa/Server-Panel
 
 ### 2. Uruchom
 ```bash
+kubectl create ns server-panel
 kubectl apply -f k8s/mongodb-cm0-configmap.yaml --server-side
 kubectl apply -f .\k8s\.
 ```

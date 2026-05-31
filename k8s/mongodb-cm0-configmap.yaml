@@ -32,6 +32,7 @@ data:
     1
 kind: ConfigMap
 metadata:
+  namespace: server-panel
   labels:
     io.kompose.service: mongodb
   name: mongodb-cm0

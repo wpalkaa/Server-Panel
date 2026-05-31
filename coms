@@ -1,2 +1,17 @@
+kubectl apply -f k8s/
+
 kubectl get nodes
 kubectl get pods
+
+kubectl get deployment hello-app
+
+kubectl describe deployment hello-app
+
+kubectl describe pod mongodb-744fc67c58-4bmgl -n server-panel 
+
+kubectl port-forward deployment/hello-app 8080:8080
+
+ kubectl rollout restart deployment
+ kubectl rollout restart deployment -n server-panel  
+
+ 

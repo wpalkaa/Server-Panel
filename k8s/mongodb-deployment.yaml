@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: server-panel
   annotations:
     kompose.cmd: C:\Users\Wojtek\AppData\Local\Microsoft\WinGet\Links\kompose.exe convert
     kompose.version: 1.38.0 (a8f5d1cbd)
@@ -34,9 +35,9 @@ spec:
               memory: "268435456"
           volumeMounts:
             - mountPath: /data/db
-              name: mongodb-cm0
+              name: mongodb-data
       restartPolicy: Always
       volumes:
-        - configMap:
-            name: mongodb-cm0
-          name: mongodb-cm0
+        - name: mongodb-data
+          persistentVolumeClaim:
+            claimName: mongodb-data

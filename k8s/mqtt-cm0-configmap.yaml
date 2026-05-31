@@ -9,6 +9,7 @@ data:
     protocol websockets
 kind: ConfigMap
 metadata:
+  namespace: server-panel
   annotations:
     use-subpath: "true"
   labels:

@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: server-panel
   annotations:
     kompose.cmd: C:\Users\Wojtek\AppData\Local\Microsoft\WinGet\Links\kompose.exe convert
     kompose.version: 1.38.0 (a8f5d1cbd)
@@ -34,6 +35,8 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
           name: redis
+          ports:
+            - containerPort: 6379
           resources:
             limits:
               cpu: 500m
