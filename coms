@@ -11,7 +11,26 @@ kubectl describe pod mongodb-744fc67c58-4bmgl -n server-panel
 
 kubectl port-forward deployment/hello-app 8080:8080
 
- kubectl rollout restart deployment
- kubectl rollout restart deployment -n server-panel  
+kubectl rollout restart deployment
+kubectl rollout restart deployment -n server-panel  
 
  
+kubectl delete namespace server-panel
+
+kubectl create ns server-panel
+kubectl apply -f k8s/mongodb-cm0-configmap.yaml --server-side
+kubectl apply -f .\k8s\.
+ 
+
+kubectl logs backend-854dfb4bd4-c9mfh -n server-panel   
+
+
+
+
+kubectl rollout restart deployment backend -n server-panel
+kubectl rollout status deployment/backend -n server-panel
+
+
+
+kubectl exec -it deployment/redis -n server-panel -- redis-cli ping 
+PONG
