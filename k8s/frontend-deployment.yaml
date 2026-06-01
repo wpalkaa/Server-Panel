@@ -21,10 +21,6 @@ spec:
       labels:
         io.kompose.service: frontend
     spec:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        fsGroup: 1000
       initContainers:
         - name: wait-for-backend
           image: busybox:1.36
