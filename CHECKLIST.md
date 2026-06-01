@@ -109,6 +109,9 @@ Repozytorium zawiera workflow, który
 - wykonuje deploy przez kubectl, Helm albo Kustomize. ✅
 - Workflow sprawdza rollout po wdrożeniu.✅
 
+Sprawdzenie:\
+https://github.com/wpalkaa/Server-Panel/actions/runs/26786615050/job/78963885473
+
 # Rzeczy dodatkowe
 
 ### NetworkPolicy
