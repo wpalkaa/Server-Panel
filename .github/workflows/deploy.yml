@@ -110,15 +110,7 @@ jobs:
       - name: Deploy frontend to Kubernetes
         run: |
           kubectl set image deployment/frontend frontend=wojdeg13/server-panel-front:${{ github.sha }} -n server-panel
-          kubectl rollout status deployment/frontend -n server-panel --timeout=120s || ( \
-            echo "--- POD STATUS ---" && \
-            kubectl get pods -n server-panel && \
-            echo "--- FRONTEND POD DESCRIPTION ---" && \
-            kubectl describe pods -l io.kompose.service=frontend -n server-panel && \
-            echo "--- FRONTEND LOGS ---" && \
-            kubectl logs -l io.kompose.service=frontend -n server-panel --all-containers=true && \
-            exit 1 \
-          )
+          kubectl rollout status deployment/frontend -n server-panel --timeout=120s
  
       - name: Verify deployment health
         run: |
