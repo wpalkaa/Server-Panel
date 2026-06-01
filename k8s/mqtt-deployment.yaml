@@ -9,10 +9,6 @@ metadata:
     io.kompose.service: mqtt
   name: mqtt
 spec:
-  securityContext:
-      runAsNonRoot: true
-      runAsUser: 1000
-      fsGroup: 1000
   replicas: 1
   selector:
     matchLabels:
@@ -27,6 +23,10 @@ spec:
       labels:
         io.kompose.service: mqtt
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
       containers:
         - image: eclipse-mosquitto
           name: mqtt

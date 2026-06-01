@@ -27,9 +27,9 @@ spec:
         io.kompose.service: backend
     spec:
       securityContext:
-          runAsNonRoot: true
-          runAsUser: 1000
-          fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
       initContainers:
         - name: wait-for-services
           securityContext:
