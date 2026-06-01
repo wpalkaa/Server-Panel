@@ -17,6 +17,9 @@ spec:
       containers:
         - name: mongodb
           image: mongo:latest
+      volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
   volumeClaimTemplates:
     - metadata:
         name: mongodb-data

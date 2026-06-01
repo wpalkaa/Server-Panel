@@ -97,7 +97,6 @@ jobs:
 
       - name: Apply Kubernetes manifests
         run: |
-          kubectl apply -f ./k8s/mongodb-cm0-configmap.yaml --server-side  
           kubectl apply -f ./k8s/ -n server-panel
  
       - name: Deploy backend to Kubernetes
