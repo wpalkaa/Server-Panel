@@ -44,6 +44,10 @@ app.use(cors({
 }))
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+    req.redisClient = redisClient;
+    next();
+});
 
 // Routes
 app.use( '/api/auth', authRoutes );

@@ -5,25 +5,50 @@ const { isNameValid } = require('../utils/files');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
+const clearUserCache = async (redisClient) => {
+    try {
+        const keys = await redisClient.keys('users:*');
+        if (keys.length > 0) {
+            await redisClient.del(keys);
+            console.log(`[Info]: Redis cache for users has been cleared.`);
+        }
+    } catch (err) {
+        console.error(`[Error]: Failed to clear Redis cache: ${err}`);
+    }
+};
+
 exports.getUsers = async (req, res) => {
     const { search } = req.query;
+    const redisClient = req.redisClient
     console.log(`[Info]: Get users list request received${search ? ` with params: ${search}` : ''}.`);
     
     try {
+        const cacheKey = `users:list:${search || 'all'}`;
+        if (redisClient && redisClient.isOpen) {
+            const cachedUsers = await redisClient.get(cacheKey);
+            if (cachedUsers) {
+                console.log(`[Info]: Request approved. Sending users list (Served from Redis).`);
+                return res.status(200).json(JSON.parse(cachedUsers));
+            }
+        }
 
         const filter = {};
-
         if(search) {
             filter.login = { $regex: search, $options: 'i' }
         }
 
         const users = await User.find(filter).select("-password");
-
-        console.log(`[Info]: Request approved. Sending users list.`)
-        return res.status(200).json({
+        const responseData = {
             success: true,
             data: users
-        });
+        }
+        
+        if (redisClient && redisClient.isOpen) {
+            await redisClient.setEx(cacheKey, 3600, JSON.stringify(responseData));
+        }
+
+        console.log(`[Info]: Request approved. Sending users list.`)
+        return res.status(200).json(responseData);
     } catch(error) {
         console.log(`[Error]: Error on get users request: ${error}`);
         return res.status(500).json({
@@ -35,18 +60,32 @@ exports.getUsers = async (req, res) => {
 
 exports.getUserData = async (req, res) => {
     const { login } = req.params;
+    const redisClient = req.redisClient;
     console.log(`[Info]: Get user data request received for: ${login}`);
 
     try {
-        const user = await User.findOne({ login: login }).select('-password');
+        const cacheKey = `users:data:${login}`;
+        if (redisClient && redisClient.isOpen) {
+            const cachedUser = await redisClient.get(cacheKey);
+            if (cachedUser) {
+                console.log(`[Info]: Request approved. Sending user data (Served from Redis).`);
+                return res.status(200).json(JSON.parse(cachedUser));
+            }
+        }
 
+        const user = await User.findOne({ login: login }).select('-password');
         if(!user) throw { status: 404, message: "userNotFound" };
 
-        console.log(`[Info]: Request approved. Sending user data.`)
-        return res.status(200).json({
+        const responseData = {
             success: true,
             data: user
-        });
+        };
+        if (redisClient && redisClient.isOpen) {
+            await redisClient.setEx(cacheKey, 3600, JSON.stringify(responseData));
+        }
+
+        console.log(`[Info]: Request approved. Sending user data.`)
+        return res.status(200).json(responseData);
     } catch(error) {
         if(error.message) console.log(`[Info]: Request rejected - ${error.message}`)
         else console.log(`[Error]: Error on get user data request: ${error}`);
@@ -59,12 +98,17 @@ exports.getUserData = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
     const { id } = req.params;
+    const redisClient = req.redisClient;
     console.log(`[Info]: Delete user request received for user id: ${id}.`);
     
     try {
         const deletedUser = await User.findByIdAndDelete(id);
 
         if(!deletedUser) throw { status: 404, message: "userNotFound" };
+
+        if (redisClient && redisClient.isOpen) {
+            await clearUserCache(redisClient);
+        }
 
         console.log(`[Info]: Request approved. User has been deleted.`)
         return res.status(200).json({
@@ -100,6 +144,10 @@ exports.createUser = async (req, res) => {
             group
         });
         console.log(`[Info]: Request accepted. New user has been created.`);
+
+        if (redisClient && redisClient.isOpen) {
+            await clearUserCache(redisClient);
+        }
         
         return res.status(201).json({
             success: true,

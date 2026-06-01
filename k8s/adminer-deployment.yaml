@@ -22,9 +22,9 @@ spec:
         io.kompose.service: adminer
     spec:
       securityContext:
-          runAsNonRoot: true
-          runAsUser: 1000
-          fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
       containers:
         - image: adminer:latest
           name: adminer
