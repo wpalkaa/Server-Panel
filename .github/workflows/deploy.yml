@@ -90,8 +90,15 @@ jobs:
       - name: Create namespace
         run: kubectl create namespace server-panel
  
+      - name: Install Nginx Ingress
+        run:
+          kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+          sleep 10
+
       - name: Apply Kubernetes manifests
-        run: kubectl apply -f ./k8s/ -n server-panel
+        run: |
+          kubectl apply -f ./k8s/mongodb-cm0-configmap.yaml --server-side  
+          kubectl apply -f ./k8s/ -n server-panel
  
       - name: Deploy backend to Kubernetes
         run: |
