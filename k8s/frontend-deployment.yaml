@@ -32,9 +32,10 @@ spec:
             - sh
             - -c
             - |
-              until nc -z backend 3000; do
+              until wget -qO- http://backend:3000/api/health; do
                 echo "waiting for backend"; sleep 3;
               done
+              echo "Done"
       containers:
         - env:
             - name: SECRET_KEY_FILE

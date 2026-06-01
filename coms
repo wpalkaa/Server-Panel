@@ -19,7 +19,7 @@ kubectl delete namespace server-panel
 
 kubectl create ns server-panel
 kubectl apply -f k8s/mongodb-cm0-configmap.yaml --server-side
-kubectl apply -f .\k8s\.
+kubectl apply -f k8s/
  
 
 kubectl logs backend-854dfb4bd4-c9mfh -n server-panel   
@@ -34,3 +34,6 @@ kubectl rollout status deployment/backend -n server-panel
 
 kubectl exec -it deployment/redis -n server-panel -- redis-cli ping 
 PONG
+
+
+kubectl get ingress -A
