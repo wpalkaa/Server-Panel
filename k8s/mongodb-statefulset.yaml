@@ -14,6 +14,10 @@ spec:
       labels:
         io.kompose.service: mongodb
     spec:
+      securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          fsGroup: 1000
       containers:
         - name: mongodb
           image: mongo:latest

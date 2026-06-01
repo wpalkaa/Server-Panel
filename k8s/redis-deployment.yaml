@@ -23,6 +23,10 @@ spec:
       labels:
         io.kompose.service: redis
     spec:
+      securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          fsGroup: 1000
       containers:
         - image: redis:alpine
           livenessProbe:
