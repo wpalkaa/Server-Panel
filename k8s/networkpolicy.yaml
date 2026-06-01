@@ -1,23 +1,139 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
+  name: mongodb-policy
+  namespace: server-panel
+spec:
+  podSelector:
+    matchLabels:
+      io.kompose.service: mongodb
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.service: backend
+      ports:
+        - protocol: TCP
+          port: 27017
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: redis-policy
+  namespace: server-panel
+spec:
+  podSelector:
+    matchLabels:
+      io.kompose.service: redis
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.service: backend
+      ports:
+        - protocol: TCP
+          port: 6379
+---
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: mqtt-policy
+#   namespace: server-panel
+# spec:
+#   podSelector:
+#     matchLabels:
+#       io.kompose.service: mqtt
+#   policyTypes:
+#     - Ingress
+#   ingress:
+#     - from:
+#         - podSelector:
+#             matchLabels:
+#               io.kompose.service: backend
+#       ports:
+#         - protocol: TCP
+#           port: 1883
+#         - protocol: TCP
+#           port: 8003
+# ---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
   name: backend-policy
   namespace: server-panel
 spec:
   podSelector:
     matchLabels:
-      app: backend
+      io.kompose.service: backend
   policyTypes:
-    - Egress
     - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.service: nginx
+      ports:
+        - protocol: TCP
+          port: 3000
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.service: frontend
+      ports:
+        - protocol: TCP
+          port: 3000
   egress:
     - to:
         - podSelector:
             matchLabels:
-              app: redis
+              io.kompose.service: redis
+    - to:
         - podSelector:
             matchLabels:
-              app: mongodb
+              io.kompose.service: mongodb
+    - to:
         - podSelector:
             matchLabels:
-              app: mqtt
+              io.kompose.service: mqtt
+    - to: []  # Allow DNS
+      ports:
+        - protocol: UDP
+          port: 53
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: frontend-policy
+  namespace: server-panel
+spec:
+  podSelector:
+    matchLabels:
+      io.kompose.service: frontend
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.service: nginx
+      ports:
+        - protocol: TCP
+          port: 3000
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              io.kompose.service: backend
+      ports:
+        - protocol: TCP
+          port: 3000
+    - to: []
+      ports:
+        - protocol: UDP
+          port: 53
