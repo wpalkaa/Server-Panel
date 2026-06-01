@@ -126,6 +126,7 @@ exports.deleteUser = async (req, res) => {
 
 exports.createUser = async (req, res) => {
     const { login, password, group } = req.body;
+    const redisClient = req.redisClient;
     console.log(`[Info]: Register request received for:`, login);
 
     try {
