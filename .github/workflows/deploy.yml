@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - kubernetes
+  workflow_dispatch:
 
 jobs:
   tests:
@@ -83,11 +84,14 @@ jobs:
             wojdeg13/server-panel-front:${{ github.sha }}
             wojdeg13/server-panel-front:latest
  
-      - name: Configure kubectl
-        uses: azure/k8s-set-context@v3
-        with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1.10.0
+
+      - name: Create namespace
+        run: kubectl create namespace server-panel
+ 
+      - name: Apply Kubernetes manifests
+        run: kubectl apply -f ./k8s/ -n server-panel
  
       - name: Deploy backend to Kubernetes
         run: |
