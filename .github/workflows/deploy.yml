@@ -31,9 +31,16 @@ jobs:
       run: npm install
       working-directory: backend
 
+    - name: Create secrets directory and files
+      run: |
+        mkdir -p ./secrets
+        echo "${{ secrets.JWT_AUTH_SECRET }}" > ./secrets/jwt_auth.txt
+
     - name: Run server
       run: node src/server.js &
       working-directory: backend
+      env:
+        JWT_SECRET_FILE: ./secrets/jwt_auth.txt
 
     - name: Wait for server to start
       run: sleep 5
@@ -41,6 +48,8 @@ jobs:
     - name: Run tests
       run: npm test 
       working-directory: backend
+      env:
+        JWT_SECRET_FILE: ./secrets/jwt_auth.txt
 
   build-and-deploy:
     runs-on: ubuntu-latest
