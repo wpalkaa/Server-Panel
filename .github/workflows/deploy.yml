@@ -32,6 +32,7 @@ jobs:
       working-directory: backend
 
     - name: Create secrets directory and files
+      working-directory: backend
       run: |
         mkdir -p ./secrets
         echo "${{ secrets.JWT_AUTH_SECRET }}" > ./secrets/jwt_auth.txt
