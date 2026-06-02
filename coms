@@ -37,3 +37,6 @@ PONG
 
 
 kubectl get ingress -A
+
+
+kubectl logs -l io.kompose.service=backend  -n server-panel

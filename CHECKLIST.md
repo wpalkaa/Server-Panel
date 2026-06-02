@@ -171,3 +171,5 @@ Sprawdzenie:
 ```bash
 kubectl exec -it deployment/redis -n server-panel -- redis-cli ping 
 ```
+Zdjęcie z logów backendu, po tym jak zostało wysłane dwukrotnie to samo zapytanie:
+![Zdjęcie z logów backendu](redis_proof.png)

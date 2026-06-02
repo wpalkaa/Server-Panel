@@ -24,6 +24,7 @@ exports.getUsers = async (req, res) => {
     
     try {
         const cacheKey = `users:list:${search || 'all'}`;
+
         if (redisClient && redisClient.isOpen) {
             const cachedUsers = await redisClient.get(cacheKey);
             if (cachedUsers) {
@@ -65,6 +66,7 @@ exports.getUserData = async (req, res) => {
 
     try {
         const cacheKey = `users:data:${login}`;
+        
         if (redisClient && redisClient.isOpen) {
             const cachedUser = await redisClient.get(cacheKey);
             if (cachedUser) {
