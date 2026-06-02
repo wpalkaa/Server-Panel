@@ -40,3 +40,6 @@ kubectl get ingress -A
 
 
 kubectl logs -l io.kompose.service=backend  -n server-panel
+
+kubectl scale deployment <nazwa-deploymentu> --replicas=5
+kubectl scale stateful <nazwa-deploymentu> --replicas=5
