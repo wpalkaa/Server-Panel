@@ -29,10 +29,10 @@ const server = http.createServer(app);
 // Redis
 const redisClient = redis.createClient({ url: process.env.REDIS_URL });
 
-redisClient.on('error', (err) => console.log(`[ERROR]: Redis Client Error: ${err}`));
+redisClient.on('error', (err) => console.log(`[Error]: Redis Client Error: ${err}`));
 redisClient.connect()
-    .then(() => console.log(`[INFO]: Connected to redis.`))
-    .catch((err) => console.error(`[ERROR]: Failed to connect to Redis: ${err}`));
+    .then(() => console.log(`[Info]: Connected to redis.`))
+    .catch((err) => console.error(`[Error]: Failed to connect to Redis: ${err}`));
 
 
 // Middleware
@@ -97,10 +97,10 @@ mongoose.connect(process.env.MONGODB_URI)
     
 // Graceful Shutdown
 function gracefulShutdown(signal) {
-    console.log(`[INFO]: Received ${signal} signal. Shuttind down the system...`);
+    console.log(`[Info]: Received ${signal} signal. Shuttind down the system...`);
 
     const forceExitTimeout = setTimeout(() => {
-        console.error(`[ERROR]: Force shutdown. Couldn't close all services in time (${FORCE_EXIT_TIME})`);
+        console.error(`[Error]: Force shutdown. Couldn't close all services in time (${FORCE_EXIT_TIME})`);
         process.exit(1);
     }, 20000);
 
@@ -109,19 +109,19 @@ function gracefulShutdown(signal) {
         try {
             if(redisClient.isOpen) {
                 await redisClient.quit();
-                console.log(`[INFO]: Redis has been closed.`);
+                console.log(`[Info]: Redis has been closed.`);
             }
             
             if( mongoose.connection.readyState !== 0 ) {
                 await mongoose.connection.close();
-                console.log(`[INFO]: MongoDB connection closed.`);
+                console.log(`[Info]: MongoDB connection closed.`);
             }
 
-            console.log(`[INFO]: All services closed. Exiting...`);
+            console.log(`[Info]: All services closed. Exiting...`);
             clearTimeout(forceExitTimeout);
             process.exit(0);
         } catch(error) {
-            console.error(`[ERROR]: Error during graceful shutdown: ${error}`);
+            console.error(`[Error]: Error during graceful shutdown: ${error}`);
             clearTimeout(forceExitTimeout);
             process.exit(1)
         }
