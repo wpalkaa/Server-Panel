@@ -4,8 +4,7 @@ import UsersList from "./components/UsersList/UsersList";
 
 async function getUsers() {
     try {
-        const baseURL = process.env.NEXT_PUBLIC_SERVER_URL;
-        const API_URL = new URL('/api/users', baseURL);
+        const API_URL = `${process.env.BACKEND_URL}/api/users`
 
         const response = await fetch(API_URL);
 
@@ -19,7 +18,7 @@ async function getUsers() {
         return data.data || []; 
 
     } catch (error) {
-        console.error("Error: Couldn't fetch users data:\n", error);
+        console.error("[Error]: Couldn't fetch users data:\n", error);
         return [];
     };
 }

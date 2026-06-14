@@ -38,9 +38,6 @@ services:
     container_name: frontend
     networks:
       - proxy-net
-    environment:
-      - SECRET_KEY_FILE=/run/secrets/jwt_auth
-      - BACKEND_URL=${BACKEND_URL}
     env_file:
       - .env.frontend
       - .env.secret.frontend
@@ -65,8 +62,8 @@ services:
   
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: backend
     env_file:
       - .env.backend

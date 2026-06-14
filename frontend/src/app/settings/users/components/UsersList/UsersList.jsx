@@ -30,8 +30,7 @@ export default function UsersList( {users: allUsers, isAdmin} ) {
     useEffect(() => {
         async function fetchFilteredUsers() {
             try {
-                const baseURL = process.env.NEXT_PUBLIC_SERVER_URL;
-                const API_URL = new URL('/api/users', baseURL);
+                const API_URL = `/api/users`
 
                 const response = await fetch(`${API_URL}/?search=${searchValue}`);
 
@@ -45,7 +44,7 @@ export default function UsersList( {users: allUsers, isAdmin} ) {
                 setUsers(data.data)
 
             } catch (error) {
-                console.error("Error: Couldn't fetch users data:\n", error.message);
+                console.error("Error: Couldn't fetch users data:\n", error);
                 setUsers([]);
             };
         }

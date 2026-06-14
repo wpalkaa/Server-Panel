@@ -17,8 +17,7 @@ export default function UserInfoCard({ userData, isAdmin, clientLogin }) {
         e.preventDefault();
         
         try {
-            const baseURL = process.env.NEXT_PUBLIC_SERVER_URL;
-            const API_URL = new URL(`/api/users/delete/${userData._id}`, baseURL);
+            const API_URL = `/api/users/delete/${userData._id}`;
 
             const response = await axios.delete(API_URL, { withCredentials: true});
             router.push('/settings/users');

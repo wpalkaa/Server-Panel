@@ -73,8 +73,7 @@ export default function FilesPage() {
         setIsLoading(true);
 
         try {
-            const baseURL = process.env.NEXT_PUBLIC_SERVER_URL;
-            const API_URL = new URL( `/api/files/listFiles`, baseURL );
+            const API_URL = `/api/files/listFiles`
 
             const response = await axios.post(API_URL, {path} )
             const data = response.data;
@@ -115,8 +114,7 @@ export default function FilesPage() {
         setIsLoading(true);
 
         try {
-            const baseURL = process.env.NEXT_PUBLIC_SERVER_URL;
-            const API_URL = new URL( `/api/files/getFileInfo`, baseURL );
+            const API_URL = `/api/files/getFileInfo`
 
             const response = await axios.post(API_URL, {path} )
             const data = response.data;
@@ -140,7 +138,7 @@ export default function FilesPage() {
         setIsLoading(true);
 
         try {
-            const API_URL = new URL(`/api/files/rename`, process.env.NEXT_PUBLIC_SERVER_URL);
+            const API_URL = `/api/files/rename`
             
             console.log(filePath)
             const response = await axios.patch(API_URL, { path: filePath, newName: newName} );
@@ -164,9 +162,9 @@ export default function FilesPage() {
 
     async function downloadFile(file, filePath) {
         try {
-            const API_URL = new URL(`/api/files/download`, process.env.NEXT_PUBLIC_SERVER_URL);
-            const response = await axios.post(API_URL, { path: filePath }, { responseType: 'blob' });
+            const API_URL = `/api/files/download`
 
+            const response = await axios.post(API_URL, { path: filePath }, { responseType: 'blob' });
 
             // Creating <a> link to download the file
             const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -193,7 +191,7 @@ export default function FilesPage() {
         setIsLoading(true);
 
         try {
-            const API_URL = new URL(`/api/files/delete`, process.env.NEXT_PUBLIC_SERVER_URL);
+            const API_URL = `/api/files/delete`
             
             console.log(filePath)
             const response = await axios.delete(API_URL, { data: { path: filePath } } );
@@ -218,7 +216,7 @@ export default function FilesPage() {
         setIsLoading(true);
 
         try {
-            const API_URL = new URL(`/api/files/create`, process.env.NEXT_PUBLIC_SERVER_URL);
+            const API_URL = `/api/files/create`
             
             console.log(filePath)
             const response = await axios.post(API_URL, { path: filePath, name: fileName, isDirectory } );

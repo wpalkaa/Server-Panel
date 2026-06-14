@@ -2,9 +2,9 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
 
-COPY package*.json .
+COPY backend/package*.json .
 
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # ============ PROD ============
 FROM node:20-alpine AS prod
@@ -15,7 +15,7 @@ RUN apk add --no-cache wget
 RUN addgroup -S app && adduser -S app -G app
 
 COPY --from=deps --chown=app:app /app/node_modules /app/node_modules
-COPY --chown=app:app . .
+COPY --chown=app:app backend/ .
 
 USER app
 HEALTHCHECK --interval=10s --timeout=10s --start-period=5s --retries=5 \
