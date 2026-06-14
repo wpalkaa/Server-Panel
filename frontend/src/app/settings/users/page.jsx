@@ -19,7 +19,7 @@ async function getUsers() {
         return data.data || []; 
 
     } catch (error) {
-        console.error("Error: Couldn't fetch users data:\n", error.message);
+        console.error("Error: Couldn't fetch users data:\n", error);
         return [];
     };
 }

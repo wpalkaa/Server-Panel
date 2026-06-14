@@ -33,8 +33,6 @@ export default function LoginForm() {
         // Login validation
         if( !values.login ) 
             errors.login = lang.errors.noLogin;
-        // else if( values.login.length < LIMITS.LOGIN_MIN || values.login.length > LIMITS.LOGIN_MAX) 
-        //     errors.login = lang.errors.invalidLoginLength;
         else if( allowedRegex.test(values.login) )
             errors.login = lang.errors.illegalSymbols;
 

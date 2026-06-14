@@ -33,13 +33,17 @@ services:
 
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: frontend/Dockerfile
     container_name: frontend
     networks:
       - proxy-net
     environment:
       - SECRET_KEY_FILE=/run/secrets/jwt_auth
+      - BACKEND_URL=${BACKEND_URL}
+    env_file:
+      - .env.frontend
+      - .env.secret.frontend
     secrets:
       - jwt_auth
     depends_on:
@@ -64,15 +68,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: backend
-    environment:
-      # - BACKEND_PORT=${BACKEND_PORT}
-      - REDIS_URL=${REDIS_URL}
-      - WEB_HOST='http://nginx'
-      - PORT=3000
-      - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongodb:27017/database
-      - BROKER_URL=mqtt://mqtt:1883
-      - JWT_SECRET_FILE=/run/secrets/jwt_auth
+    env_file:
+      - .env.backend
     networks:
       - proxy-net
       - app-net

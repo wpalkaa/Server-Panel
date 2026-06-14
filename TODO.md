@@ -11,9 +11,3 @@
 - KOD 500 w listfiles kiedy jest to plik.txt a nie katalog
 
 - Zmienic pobieranie i dodawanie usera do listy, przy wejściu i wyjściu z niej się buguje przez coś. Trzeba tego stora całego
-
-
-
-
-
-- Ogarnąć Redisa

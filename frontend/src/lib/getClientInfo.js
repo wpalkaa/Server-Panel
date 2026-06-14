@@ -1,41 +1,24 @@
 
-import { cookies } from "next/headers";
-import { jwtVerify } from "jose";
+import { auth0 } from "@/lib/auth0";
 
 export async function getUsername() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('user_session');
+    const session = await auth0.getSession();
 
-    const user = {};
+    if (!session) return { name: null };
 
-    // Get username from session cookie
-    if (token) {
-        try {
-            const secret = new TextEncoder().encode(process.env.SECRET_KEY);
-            const { payload } = await jwtVerify(token.value, secret);
-            user.name = payload.login;
-        } catch (error){
-            console.error(`[Error]: Couldn't get client username:\n${error}`)
-            user.name = "Unknown";
-        }
-    }
+    const name = session.user.name || session.user.nickname || session.user.email || "Unknown";
 
-    return user;
+    return { name };
 }
 
 export async function getGroup() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('user_session');
+    const session = await auth0.getSession();
 
-    if(!token) return "Unknown";
+    if (!session) return "user";
 
-    try {
-        const secret = new TextEncoder().encode(process.env.SECRET_KEY);
-        const { payload } = await jwtVerify(token.value, secret);
-        
-        return payload.group;
-    } catch(error) {
-        console.error(`[Error]: Couldn't get client group:\n${error}`);
-        return "Unknown";
-    }
+    // Custom claim set via Auth0 Action, e.g.:
+    //   event.accessToken.setCustomClaim('https://server-panel/group', event.user.app_metadata.group)
+    const group = session.user["https://server-panel/group"] || "user";
+
+    return group;
 }

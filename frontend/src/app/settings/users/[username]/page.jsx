@@ -8,7 +8,8 @@ import './UserInfo.css';
 
 async function getUserData(username) {
     try {
-        const API_URL = new URL(`/api/users/${username}`, process.env.NEXT_PUBLIC_SERVER_URL);
+        const API_URL = new URL(`/api/users/${username}`, process.env.BACKEND_URL);
+        console.log("request: ", API_URL)
         const response = await fetch(API_URL);
 
         if(!response.ok) return null;
@@ -17,7 +18,9 @@ async function getUserData(username) {
 
         return data.data;
     } catch(error) {
-        //
+        const API_URL = new URL(`/api/users/${username}`, process.env.BACKEND_URL);
+        console.error("APUURL:", API_URL, "ENV:", process.env.BACKEND_URL);
+        console.error(`[Error]: Couldn't fetch user data for - ${username}:`, error);
         return null;
     }
 }

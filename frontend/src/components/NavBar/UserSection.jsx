@@ -1,28 +1,19 @@
 'use client';
 
 import { useState } from 'react'
-import { useRouter } from "next/navigation";
 
 import { useTranslation } from "@/context/LanguageProvider";
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 
-import axios from 'axios';
 
 export default function UserSection({ username }) {
 
     const [needConfirm, setNeedConfirm] = useState(false);
 
     const { lang } = useTranslation();
-    const router = useRouter();
 
     async function handleLogout() {
-        try {
-            await axios.patch('/next-api/auth/logout');
-
-            router.refresh();
-        } catch (error) {
-            console.error(error);
-        }
+        window.location.href = "/auth/logout";
     }
     
     return (
