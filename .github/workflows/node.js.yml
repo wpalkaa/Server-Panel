@@ -1,5 +1,5 @@
 
-name: Node.js CI
+name: Auth0 backend CI
 
 on:
   push:
