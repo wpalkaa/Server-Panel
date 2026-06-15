@@ -2,7 +2,7 @@ const axios = require('axios');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const https = require('https');
 
-const API_URL = 'https://localhost:13001/api'
+const API_URL = 'https://localhost:3000/api'
 const TIMEOUT = 500;
 
 const agent = new https.Agent({ rejectUnauthorized: false })

@@ -2,6 +2,8 @@ const request = require('supertest');
 const express = require('express');
 const fs = require('fs');
 
+const checkJwt = require('../../src/middleware/checkJwt');
+const verifyAdmin = require('../../src/middleware/verifyAdmin');
 const fileController = require('../../src/controllers/fileController');
 const fileRoutes = require('../../src/routes/fileRoutes');
 const { isNameValid, getTargetPath } = require('../../src/utils/files');
@@ -27,6 +29,8 @@ jest.mock('archiver', () => {
 });
 
 jest.mock('../../src/utils/files');
+jest.mock('../../src/middleware/checkJwt', () => jest.fn((req, res, next) => next()));
+jest.mock('../../src/middleware/verifyAdmin', () => jest.fn((req, res, next) => next()));
 
 const app = express();
 app.use(express.json());
@@ -509,6 +513,40 @@ describe('/api/files', () => {
                 message: 'server'
             });
         });
+    });
 
+    describe('Auth0 Security Tests', () => {
+        afterEach(() => {
+            jest.clearAllMocks();
+            // Przywracamy domyślne zachowanie (przepuszczanie), żeby nie zepsuć innych testów
+            checkJwt.mockImplementation((req, res, next) => next());
+            verifyAdmin.mockImplementation((req, res, next) => next());
+        });
+
+        it('Should return 401 Unauthorized if checkJwt fails (missing/invalid token)', async () => {
+            checkJwt.mockImplementationOnce((req, res, next) => {
+                return res.status(401).json({ success: false, message: 'Unauthorized - No tokens claims found' });
+            });
+
+            const response = await request(app).post(`${API_URL}/listFiles`).send({ path: '/' });
+
+            expect(response.statusCode).toBe(401);
+            expect(response.body.success).toBe(false);
+            expect(checkJwt).toHaveBeenCalled();
+        });
+
+        it('Should return 403 Forbidden if verifyAdmin fails (user is not admin)', async () => {
+            checkJwt.mockImplementationOnce((req, res, next) => next());
+            
+            verifyAdmin.mockImplementationOnce((req, res, next) => {
+                return res.status(403).json({ success: false, message: 'Forbidden - Requires admin group' });
+            });
+
+            const response = await request(app).delete(`${API_URL}/delete`).send({ path: '/test.txt' });
+
+            expect(response.statusCode).toBe(403);
+            expect(response.body.success).toBe(false);
+            expect(verifyAdmin).toHaveBeenCalled();
+        });
     });
 });

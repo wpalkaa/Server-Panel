@@ -1,19 +1,16 @@
-const jwt = require('jsonwebtoken');
-const verifyAdmin = require('../../src/middleware/verifyAdmin')
-
-jest.mock('jsonwebtoken');
-
-
-
+const verifyAdmin = require('../../src/middleware/verifyAdmin');
 
 describe('verifyAdmin', () => {
     let req, res, next;
+    
+    const MOCK_AUDIENCE = 'http://mock';
 
-    beforeEach( () => {
-        req = {
-            cookies: {}
-        };
+    beforeAll(() => {
+        process.env = { AUTH0_AUDIENCE: MOCK_AUDIENCE };
+    });
 
+    beforeEach(() => {
+        req = {};
         res = {
             status: jest.fn().mockReturnThis(),
             json: jest.fn()
@@ -21,50 +18,59 @@ describe('verifyAdmin', () => {
         next = jest.fn();
     });
 
-    afterEach( () => {
+    afterEach(() => {
         jest.clearAllMocks();
     });
 
-
-    it('Everything ok', () => {
-        req.cookies.user_session = 'token';
-        jwt.verify.mockReturnValue({ group: 'admin' })
+    it('Everything ok - User is admin', () => {
+        req.auth = {
+            payload: {
+                [`${MOCK_AUDIENCE}/group`]: 'admin'
+            }
+        };
 
         verifyAdmin(req, res, next);
 
-        expect(jwt.verify).toHaveBeenCalled();
         expect(next).toHaveBeenCalled();
-    })
+        expect(res.status).not.toHaveBeenCalled();
+    });
 
-    it('No session cookie', () => {
+    it('No claims - checkJwt failed or missing', () => {
+        // req.auth undefined
         verifyAdmin(req, res, next);
 
-        expect(jwt.verify).not.toHaveBeenCalled();
         expect(next).not.toHaveBeenCalled();
-        expect(res.status).toHaveBeenCalledWith(401)
+        expect(res.status).toHaveBeenCalledWith(404);
         expect(res.json).toHaveBeenCalledWith({
             success: false,
-            message: "Unauthenticated"
-        })
-    })
-
-    it('Unauthorized', () => {
-        req.cookies.user_session = 'token';
-        jwt.verify.mockReturnValue({ group: "user" });
-
-        verifyAdmin(req, res, next);
-
-        expect(jwt.verify).toHaveBeenCalled();
-        expect(res.status).toHaveBeenCalledWith(403);
-        expect(res.json).toHaveBeenCalledWith({
-            success: false,
-            message: 'Unauthorized'
+            message: "Unauthorized - No tokens claims found"
         });
     });
 
-    it('Something else', () => {
-        req.cookies.user_session = 'token';
-        jwt.verify.mockImplementation( () => {throw new Error()} );
+    it('Unauthorized - User is not admin', () => {
+        req.auth = {
+            payload: {
+                [`${MOCK_AUDIENCE}/group`]: 'user' // wrong group
+            }
+        };
+
+        verifyAdmin(req, res, next);
+
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(403);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Forbidden - Requires admin group"
+        });
+    });
+
+    it('Unauthorized - Group property is completely missing', () => {
+        req.auth = {
+            payload: {
+                // No group key
+                "some-other-claim": "123"
+            }
+        };
         
         verifyAdmin(req, res, next);
 
@@ -72,7 +78,7 @@ describe('verifyAdmin', () => {
         expect(res.status).toHaveBeenCalledWith(403);
         expect(res.json).toHaveBeenCalledWith({
             success: false,
-            message: 'Unauthorized'
+            message: "Forbidden - Requires admin group"
         });
-    })
-})
+    });
+});
