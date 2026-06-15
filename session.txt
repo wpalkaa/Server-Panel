@@ -1,0 +1,22 @@
+ session:  {
+frontend  |   user: {
+frontend  |     given_name: 'Wojtek',
+frontend  |     family_name: 'PAŁKA',
+frontend  |     nickname: 'wojtek.sosnowa',
+frontend  |     name: 'Wojtek PAŁKA',
+frontend  |     picture: 'https://lh3.googleusercontent.com/a/ACg8ocKha23axXb7d9E3XidOhRlRljv4Qvoci3lwQQ00KCvVkEnQKEtB=s96-c',
+frontend  |     email: 'wojtek.sosnowa@gmail.com',
+frontend  |     email_verified: true,
+frontend  |     sub: 'google-oauth2|100490320139072340364'
+frontend  |   },
+frontend  |   tokenSet: {
+frontend  |     accessToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imx3X3JpUTFtZXdaNEJNNDd1bDdCYSJ9.eyJodHRwOi8vc2VydmVyLXBhbmVsL2dyb3VwIjoiYWRtaW4iLCJpc3MiOiJodHRwczovL2Rldi0zZGdrcW95dzUwZnY2dnFiLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDEwMDQ5MDMyMDEzOTA3MjM0MDM2NCIsImF1ZCI6WyJodHRwOi8vYXBpLnNlcnZlci1wYW5lbC5jb20iLCJodHRwczovL2Rldi0zZGdrcW95dzUwZnY2dnFiLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE3ODE1MzM0NTYsImV4cCI6MTc4MTYxOTg1Niwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImF6cCI6IjJMTGt2SFBqZWlBS2lmb3RTcnQ0eEoweG12dmZGV2dJIiwicGVybWlzc2lvbnMiOlsiYWRkOnVzZXJzIiwiZGVsZXRlOnVzZXJzIiwicmVuYW1lOnVzZXJzIl19.oHBclXmaeG8QJPAAUPQXEYZvM4LD9e_srvFIfVGR4JZ2aNip5xb_4n5NeSv8XpAocvLYFR6NW5SqEg7-MivvswFwapVKcP1-lHoHV1A74QeWSz-w-C8nsvoB8LqQuBN_pa5jA_LA-5mlaVO6-DaRWqHPycfahEfKIMmLbVs2VaY5nfcYMoDsPrKjKtyPZ-4hzqTsek0hr18Ny9W32YvkAjYnOna8EI2EOp8DSQkoo4ZjS6sHkSbRLo5N0_EXfWMNnFDmg5poUxcGnaIFNKxgKE7o87JO2ZaCBrpDe8PlhZFu1NzsHJgx6tXTHIAVUR21hs65IRGQrF1cAgP-LlBWFw',
+frontend  |     idToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imx3X3JpUTFtZXdaNEJNNDd1bDdCYSJ9.eyJodHRwOi8vc2VydmVyLXBhbmVsL2dyb3VwIjoiYWRtaW4iLCJnaXZlbl9uYW1lIjoiV29qdGVrIiwiZmFtaWx5X25hbWUiOiJQQcWBS0EiLCJuaWNrbmFtZSI6IndvanRlay5zb3Nub3dhIiwibmFtZSI6IldvanRlayBQQcWBS0EiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS2hhMjNheFhiN2Q5RTNYaWRPaFJsUmxqdjRRdm9jaTNsd1FRMDBLQ3ZWa0VuUUtFdEI9czk2LWMiLCJ1cGRhdGVkX2F0IjoiMjAyNi0wNi0xNVQxNDoyNDoxNS44MzNaIiwiZW1haWwiOiJ3b2p0ZWsuc29zbm93YUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6Ly9kZXYtM2Rna3FveXc1MGZ2NnZxYi51cy5hdXRoMC5jb20vIiwiYXVkIjoiMkxMa3ZIUGplaUFLaWZvdFNydDR4SjB4bXZ2ZkZXZ0kiLCJzdWIiOiJnb29nbGUtb2F1dGgyfDEwMDQ5MDMyMDEzOTA3MjM0MDM2NCIsImlhdCI6MTc4MTUzMzQ1NiwiZXhwIjoxNzgxNTY5NDU2LCJzaWQiOiJwazJ3VjJ3QUhvcjVDU0xnUjBTY3ZHUndPclFULXBCZCIsIm5vbmNlIjoid2xKYjYzU2JmM2pnQmdWRGZlcnpqcWZXZWdvT19JSTVlalR6NVhuRUEyYyJ9.dIZQ7BqQZY6ya5_hwvn0eFTj_kDLfVY_foPHB95MGSSgtZPeVkiRPZ9vTFbnfGLluHfRqH4EKFtBswOAVUWeWm1jqM24sosCz7RHhDVcckXkHOnHpEdS0DgX2bOpxFZU4pkm4eAA_7na9vaTDkx_Q_jUPGsxp1gOxWDlr0P34uNNZgNFppyXxQp6Ul2Z8pEoWLPD_pz5TvnqCFN_ZXkVyEQ5L4AEmHtAuogFXI-BbevXgGkCNMNNT01YEb72ww-mZZhx_GTrwLwYq-NJAjUjVZfO1kRbH8ABPsNZ4iukHVO6VPVs7YCX9b653P-6NKPiY-sQ1l69oKV7kdseI3GGLg',
+frontend  |     scope: 'openid profile email',
+frontend  |     requestedScope: 'openid profile email offline_access',
+frontend  |     audience: 'http://api.server-panel.com',
+frontend  |     expiresAt: 1781619887
+frontend  |   },
+frontend  |   internal: { sid: 'pk2wV2wAHor5CSLgR0ScvGRwOrQT-pBd', createdAt: 1781533487 },
+frontend  |   exp: 1781620211
+frontend  | }

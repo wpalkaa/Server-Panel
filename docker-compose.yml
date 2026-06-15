@@ -41,8 +41,6 @@ services:
     env_file:
       - .env.frontend
       - .env.secret.frontend
-    secrets:
-      - jwt_auth
     depends_on:
       backend:
         condition: service_healthy
@@ -67,6 +65,7 @@ services:
     container_name: backend
     env_file:
       - .env.backend
+      - .env.secret.backend
     networks:
       - proxy-net
       - app-net

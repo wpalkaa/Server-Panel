@@ -16,9 +16,8 @@ export async function getGroup() {
 
     if (!session) return "user";
 
-    // Custom claim set via Auth0 Action, e.g.:
-    //   event.accessToken.setCustomClaim('https://server-panel/group', event.user.app_metadata.group)
-    const group = session.user["https://server-panel/group"] || "user";
+    // const group = session.user["https://server-panel/group"] || "user";
+    const group = session.user[`${process.env.NEXT_PUBLIC_AUTH0_AUDIENCE}/group`] || "user";
 
     return group;
 }

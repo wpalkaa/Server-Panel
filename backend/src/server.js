@@ -5,17 +5,13 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 
 const redis = require('redis');
-
 const mongoose = require('mongoose');
-// const socket = require('./socket');
 const MQTTConnect = require('./mqtt');
 const cookieParser = require('cookie-parser');
-const fs = require('fs')
-const bcrypt = require('bcryptjs');
 
-const authRoutes = require('./routes/authRoutes');
 const fileRoutes = require('./routes/fileRoutes');
 const usersRoutes = require('./routes/usersRoutes');
+
 const User = require('./models/User');
 
 
@@ -23,16 +19,15 @@ const FORCE_EXIT_TIME = 20000 // 20 seconds
 
 // Initialize Express and HTTP server
 const app = express();
-
 const server = http.createServer(app);
 
 // Redis
 const redisClient = redis.createClient({ url: process.env.REDIS_URL });
 
-redisClient.on('error', (err) => console.log(`[ERROR]: Redis Client Error: ${err}`));
+redisClient.on('error', (err) => console.log(`[Error]: Redis Client Error: ${err}`));
 redisClient.connect()
-    .then(() => console.log(`[INFO]: Connected to redis.`))
-    .catch((err) => console.error(`[ERROR]: Failed to connect to Redis: ${err}`));
+    .then(() => console.log(`[Info]: Connected to redis.`))
+    .catch((err) => console.error(`[Error]: Failed to connect to Redis: ${err}`));
 
 
 // Middleware
@@ -46,15 +41,12 @@ app.use(cookieParser());
 
 
 // Routes
-app.use( '/api/auth', authRoutes );
 app.use( '/api/files', fileRoutes );
 app.use( '/api/users', usersRoutes)
 
 app.get('/api/health', (req, res) => {
     res.status(200).send("OK");
 });
-// // WebSocket
-// socket( io );
 
 // MQTT
 MQTTConnect();
@@ -127,7 +119,7 @@ function gracefulShutdown(signal) {
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
-const PORT = process.env.BACKEND_PORT;
+const PORT = process.env.BACKEND_PORT || 3000;
 
 server.listen(PORT, () => {
     console.log(`[Info]: HTTP server and WebSocket are listening on port ${PORT}`);

@@ -317,13 +317,34 @@ export default function FilesPage() {
     }
 
     // ============ useEffect ============
-    useEffect( () => {
+    useEffect(() => {
         let isMounted = true;
 
-        fetchFiles(currentPath, isMounted);
-        fetchFileInfo(currentPath, isMounted);
+        async function initializeAndFetch() {
+            try {
+                setIsLoading(true);
+                
+                const tokenResponse = await axios.get('/api/auth/token');
+                const token = tokenResponse.data.accessToken;
 
-        return () => isMounted = false;
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+                if (isMounted) {
+                    await fetchFiles(currentPath, isMounted);
+                    await fetchFileInfo(currentPath, isMounted);
+                }
+            } catch (error) {
+                if (isMounted) {
+                    setError("Odmowa dostępu. Zaloguj się ponownie.");
+                }
+            } finally {
+                if (isMounted) setIsLoading(false);
+            }
+        }
+
+        initializeAndFetch();
+
+        return () => { isMounted = false; };
     }, [currentPath]);
 
 
