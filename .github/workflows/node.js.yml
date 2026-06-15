@@ -3,17 +3,16 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "Auth0" ]
     paths:
       - "backend/**"
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "Auth0" ]
     paths:
       - "backend/**"
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     services:
@@ -21,6 +20,14 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+      mqtt:
+        image: eclipse-mosquitto:1.6.15
+        ports:
+          - 1883:1883
 
     strategy:
       matrix:
@@ -28,28 +35,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: 'backend/package-lock.json'
 
     - name: Install dependencies
-      run: npm install
       working-directory: backend
-
-    - name: Generate SSL Certificates
-      run: |
-        openssl req -x509 -newkey rsa:2048 -keyout localhost-key.pem -out localhost.pem -days 365 -nodes -subj '/CN=localhost'
-      working-directory: backend
-
-    - name: Run server
-      run: node src/server.js &
-      working-directory: backend
-
-    - name: Wait for server to start
-      run: sleep 5
+      run: npm ci
 
     - name: Run tests
-      run: npm test 
+      env:
+        REDIS_URL: redis://redis:6379
+        WEB_HOST: http://nginx
+        MONGODB_URI: mongodb://mongodb:27017/database
+        BACKEND_PORT: 3000
       working-directory: backend
+      run: npm test 
