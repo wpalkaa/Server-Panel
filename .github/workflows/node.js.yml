@@ -3,13 +3,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "Auth0" ]
-    paths:
-      - "backend/**"
-  pull_request:
-    branches: [ "main", "Auth0" ]
-    paths:
-      - "backend/**"
+    branches: "Auth0"
 
 jobs:
   build:
