@@ -2,12 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from "@/context/LanguageProvider";
+import { useUser } from '@auth0/nextjs-auth0/client';
 import './HomePage.css';
 
 export default function HomePage( { username } ) {
 
     const [currentDate, setCurrentDate] = useState(new Date());
     const { lang, locale } = useTranslation();
+
+    const { user } = useUser();
+
+    const imgHref = user?.picture;
 
     useEffect( () => {
         setCurrentDate(new Date());
@@ -25,7 +30,7 @@ export default function HomePage( { username } ) {
                 <h1 className="welcome-message">{`${lang.mainPage.welcomeMessage} ${username}`}!</h1>
                 
                 <div className="photo-block">
-                    <img src="default-avatar-icon.jpg"></img>
+                    {imgHref ? (<img src={imgHref} alt="Profile picture"/>) : (<img src="default-avatar-icon.jpg" alt="Default avatar"/>)}
                 </div>
 
                 <div className="date">

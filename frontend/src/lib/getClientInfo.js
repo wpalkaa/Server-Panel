@@ -16,7 +16,6 @@ export async function getGroup() {
 
     if (!session) return "user";
 
-    // const group = session.user["https://server-panel/group"] || "user";
     const group = session.user[`${process.env.NEXT_PUBLIC_AUTH0_AUDIENCE}/group`] || "user";
 
     return group;
