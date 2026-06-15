@@ -49,9 +49,8 @@ jobs:
 
     - name: Run tests
       env:
-        REDIS_URL: redis://redis:6379
-        WEB_HOST: http://nginx
-        MONGODB_URI: mongodb://mongodb:27017/database
+        REDIS_URL: redis://localhost:6379
+        MONGODB_URI: mongodb://localhost:27017/database
         BACKEND_PORT: 3000
       working-directory: backend
       run: npm test 
