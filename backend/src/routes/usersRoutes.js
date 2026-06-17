@@ -9,6 +9,6 @@ router.get('/:login', usersController.getUserData);
 router.delete('/delete/:id', verifyAdmin, usersController.deleteUser);
 router.delete('/delete/noauth/:id', usersController.deleteUser);
 
-router.post('/create', usersController.createUser);
+router.post('/create', verifyAdmin, usersController.createUser);
 
 module.exports = router;
