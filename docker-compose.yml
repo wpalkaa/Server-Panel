@@ -34,6 +34,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+      - NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
+      - NEXT_PUBLIC_MQTT_BROKER_URL=${NEXT_PUBLIC_MQTT_BROKER_URL}
     container_name: frontend
     networks:
       - proxy-net
