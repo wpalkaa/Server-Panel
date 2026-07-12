@@ -15,7 +15,6 @@ services:
       - backend
       - redis
       - mqtt
-      - adminer
       - mongodb
     deploy:
       resources:
@@ -38,8 +37,8 @@ services:
     container_name: frontend
     networks:
       - proxy-net
-    environment:
-      - SECRET_KEY_FILE=/run/secrets/jwt_auth
+    env_file:
+      - .env.frontend
     secrets:
       - jwt_auth
     depends_on:
@@ -64,15 +63,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: backend
-    environment:
-      # - BACKEND_PORT=${BACKEND_PORT}
-      - REDIS_URL=${REDIS_URL}
-      - WEB_HOST='http://nginx'
-      - PORT=3000
-      - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongodb:27017/database
-      - BROKER_URL=mqtt://mqtt:1883
-      - JWT_SECRET_FILE=/run/secrets/jwt_auth
+    env_file:
+      - .env.backend
     networks:
       - proxy-net
       - app-net
@@ -144,26 +136,6 @@ services:
         reservations:
           cpus: '0.50'
           memory: 256M
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-
-  adminer:
-    image: adminer:latest
-    container_name: adminer
-    networks:
-      - db-net
-      - proxy-net
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 256M
-        reservations:
-          cpus: '0.10'
-          memory: 64M
     logging:
       driver: "json-file"
       options:

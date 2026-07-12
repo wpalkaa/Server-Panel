@@ -127,7 +127,7 @@ function gracefulShutdown(signal) {
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
-const PORT = process.env.PORT;
+const PORT = process.env.BACKEND_PORT;
 
 server.listen(PORT, () => {
     console.log(`[Info]: HTTP server and WebSocket are listening on port ${PORT}`);
