@@ -1,13 +1,21 @@
+# dotenv environment variable files
+# .env
+# .env.*
+# !.env.backend
+# !.env.frontend
+# !.env.secret.frontend.example
+# !.env.secret.backend.example
+
 # MongoDB
-backend/data/db/
+backend/
 mongod.lock
 *.wt
 *.bson
 storage.bson
 
 # TLS certificates
-localhost.pem
-localhost-key.pem
+# localhost.pem
+# localhost-key.pem
 
 # Logs
 logs
@@ -75,11 +83,6 @@ web_modules/
 
 # Yarn Integrity file
 .yarn-integrity
-
-# dotenv environment variable files
-#.env
-# .env.*
-# !.env.example
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
